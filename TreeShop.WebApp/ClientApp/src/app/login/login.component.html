@@ -1,0 +1,36 @@
+
+<ng-progress #progressBar color="red"></ng-progress>
+
+<div id="divLogin" class="text-center">
+    <h2 class="text-upper-case">{{'login.title'| translate}}</h2>
+
+</div>
+
+
+  <form name="form" (ngSubmit)="login()" #f="ngForm" novalidate>
+    <mat-form-field appearance="outline">
+      <mat-label>{{'login.userName'| translate}}</mat-label>
+      <input matInput placeholder="{{'login.userName'| translate}}" [(ngModel)]="model.username" #username="ngModel" required  [ngModelOptions]="{standalone: true}">
+      <mat-icon matSuffix></mat-icon>
+      <mat-error *ngIf="username.hasError('required')">
+        {{'login.userNameRequired'| translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label> {{'login.password'| translate}}</mat-label>
+      <input type="password" matInput placeholder="{{'login.password'| translate}}" #password="ngModel" [(ngModel)]="model.password" required [ngModelOptions]="{standalone: true}">
+      <mat-icon matSuffix></mat-icon>
+      <mat-error *ngIf="password.hasError('required')">
+        {{'login.passwordRequired'| translate}}
+      </mat-error>
+    </mat-form-field>
+   <div  class="example-button-row float-right">
+    <button  id="login-button" mat-raised-button color="primary" type="submit"  [disabled]="preventAbuse"> {{'login.loginButton'| translate}}</button>
+    <p>{{'login.isRegister'| translate}}</p>
+    <a href="javascript:void(0)" color="accent" style="width: 50%;">{{'login.registerButton'| translate}}</a>
+   </div>
+
+  </form>
+  <!-- <footer><a href="javascript:void(0)" target="_blank"><img src="../../assets/img/parking.png"></a>
+    <p>You Gotta Love <a href="javascript:void(0)" target="_blank">Google</a></p>
+  </footer> -->

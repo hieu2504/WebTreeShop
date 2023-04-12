@@ -1,0 +1,140 @@
+mat-toolbar {
+  background: #004a9f;
+  color: white;
+}
+mat-sidenav {
+  margin: 16px;
+  width: 280px;
+  border-right: none;
+  background: #002b5c;
+  color: white;
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+}
+
+.content {
+  height: calc(100vh - 98px);
+  border-radius: 10px;
+  margin: 16px;
+  margin-left: 32px;
+
+
+  font-size: 2rem;
+  color: lightgray;
+}
+
+mat-sidenav-container {
+  margin-top: 65px;
+  height: calc(100vh - 65px);
+}
+
+.menu-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  font-size: 1rem;
+}
+.menu-button mat-icon {
+  margin-right: 8px;
+}
+.avatar {
+  margin-top: 16px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-size: 100% ;
+  background-size: cover;
+  place-items: center;
+}
+
+.avatar-logout{
+  margin-top: 10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  line-height: 64px;
+  background-size: 100% ;
+  background-size: cover;
+  place-items: center;
+}
+.name {
+  margin-top: 8px;
+  font-weight: normal;
+}
+.designation {
+  margin-top: 2px;
+  font-size: 0.7rem;
+  color: lightgrey;
+}
+mat-divider {
+  margin-top: 16px;
+  margin-bottom: 16px;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+#profile-name {
+  text-decoration: none;
+  color: white;
+  margin-left: 5px;
+
+}
+
+#profile-name span{
+  font-size: 1rem;
+}
+.lang-check{
+  font-size: 16px;
+}
+
+.example-tree-invisible {
+  display: none;
+}
+
+.example-tree ul,
+.example-tree li {
+  margin-top: 0;
+  margin-bottom: 0;
+  list-style-type: none;
+
+}
+
+/*
+ * This padding sets alignment of the nested nodes.
+ */
+.example-tree .mat-nested-tree-node div[role=group] {
+  padding-left: 15px;
+}
+
+.example-tree div[role=group] > .mat-tree-node {
+  padding-left: 15px;
+}
+
+.menu-children{
+  margin-left: -55px;
+}
+.menu-button a{
+  color: #ffff;
+  text-decoration: none;
+}
+.menu-button{
+  justify-content: center;
+}
+.mat-tree-node{
+  height: 30px;
+}
+.mat-tree{
+  background: #002b5c;
+}
+.mat-tree-node, .mat-nested-tree-node {
+  background: #002b5c;
+  color: rgb(247 244 244 / 87%);
+}
+.mat-menu-item {
+  background: transparent;
+  color: rgb(249 246 246 / 87%);
+}
+.tree-main{
+    width: 94%;
+}

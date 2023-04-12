@@ -18,8 +18,12 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
 import { FlexLayoutModule } from '@angular/flex-layout';
-
-
+import { MatMenuModule } from '@angular/material/menu';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import { LayoutModule } from '@angular/cdk/layout';
+import { MatListModule } from '@angular/material/list';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
 @NgModule({
   declarations: [],
@@ -42,7 +46,13 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     ReactiveFormsModule,
     FormsModule,
     MatChipsModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    MatMenuModule,
+    MatToolbarModule,
+    MatSidenavModule,
+    LayoutModule,
+    MatListModule,
+    MatSlideToggleModule,
   ],
   exports:[
     MatCardModule,
@@ -63,7 +73,15 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     FormsModule,
     MatChipsModule,
     MatTreeModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    MatMenuModule,
+
+
+    MatToolbarModule,
+    MatSidenavModule,
+    LayoutModule,
+    MatListModule,
+    MatSlideToggleModule,
   ]
 })
 export class MaterialModule { }

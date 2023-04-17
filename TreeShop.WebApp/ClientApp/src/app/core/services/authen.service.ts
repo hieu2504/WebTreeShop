@@ -26,7 +26,6 @@ export class AuthenService {
       .pipe(
         map(res => {
           this.user = res;
-          console.log(this.user.user);
           if (this.user) {
             localStorage.removeItem(SystemConstants.CURRENT_USER);
             localStorage.removeItem(SystemConstants.CURRENT_USER_ROLE);

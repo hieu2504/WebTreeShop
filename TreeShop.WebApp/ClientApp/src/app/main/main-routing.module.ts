@@ -16,10 +16,10 @@ const routes: Routes = [{
         ]
       },
     },
-    // {
-    //   path: 'home', loadChildren: () => import("./home/home.module").then(m => m.HomeModule),
+    {
+      path: 'home', loadChildren: () => import("./home/home.module").then(m => m.HomeModule),
 
-    // },
+    },
     // {
     //   path: 'app-group', loadChildren: () => import("./app-group/app-group.module").then(m => m.AppGroupModule),
 

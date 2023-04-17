@@ -1,4 +1,3 @@
-import { TranslateService } from '@ngx-translate/core';
 import { Injectable } from '@angular/core';
 
 
@@ -14,7 +13,7 @@ export class PaginatorCustomService {
   lastButton!:string;
   preButton!:string;
 
-  constructor(private translateService: TranslateService) {
+  constructor() {
 
     this.setTitle();
 
@@ -22,21 +21,12 @@ export class PaginatorCustomService {
 
    private setTitle(){
 
-    this.translateService.get('messageSystem.itemsPerPageLabel').subscribe((data)=>{
-      this.setLable= data;
-    });
-    this.translateService.get('button.firstButton').subscribe((data)=>{
-      this.firstButton= data;
-    });
-    this.translateService.get('button.nextButton').subscribe((data)=>{
-      this.nextButton= data;
-    });
-    this.translateService.get('button.lastButton').subscribe((data)=>{
-      this.lastButton= data;
-    });
-    this.translateService.get('button.preButton').subscribe((data)=>{
-      this.preButton= data;
-    });
+
+    this.setLable= "Số bản ghi trên 1 trang";
+    this.firstButton= "Trang đầu";
+    this.nextButton= "Trang tiếp";
+    this.lastButton= "Trang cuối";
+    this.preButton= "Trang trước";
    }
 
 }

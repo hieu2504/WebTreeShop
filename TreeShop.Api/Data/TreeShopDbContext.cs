@@ -23,7 +23,6 @@ namespace TreeShop.Api.Data
         public virtual DbSet<AppRole> AppRoles { get; set; } = null!;
         public virtual DbSet<AppUserRole> AppUserRoles { get; set; } = null!;
         public virtual DbSet<Category> Categories { get; set; } = null!;
-        public virtual DbSet<Customer> Customers { get; set; } = null!;
         public virtual DbSet<NewsPost> NewsPosts { get; set; } = null!;
         public virtual DbSet<Order> Orders { get; set; } = null!;
         public virtual DbSet<OrderDetail> OrderDetails { get; set; } = null!;

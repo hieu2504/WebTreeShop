@@ -9,5 +9,9 @@ namespace TreeShop.Api.Data
         {
         }
         public string? FullName { get; set; }
+        public string? Address { get; set; }
+        public string? Image { get; set; }
+        public int Type { get; set; }
+
     }
 }

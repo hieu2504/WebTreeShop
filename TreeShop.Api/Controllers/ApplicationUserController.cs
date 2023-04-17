@@ -109,8 +109,15 @@ namespace TreeShop.Api.Controllers
 
                 return Ok(new
                 {
-                    token = "Bearer " + new JwtSecurityTokenHandler().WriteToken(token),
-                    expiration = token.ValidTo
+                    access_token = "Bearer " + new JwtSecurityTokenHandler().WriteToken(token),
+                    expiration = token.ValidTo,
+                    id = user.Id,
+                    username = user.UserName,
+                    fullname = user.FullName,
+                    email = user.Email,
+                    address = user.Address,
+                    phonenumber = user.PhoneNumber,
+                    image = user.Image
                 });
             }
             return Unauthorized();

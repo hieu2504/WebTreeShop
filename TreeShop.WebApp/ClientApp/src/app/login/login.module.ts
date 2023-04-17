@@ -1,8 +1,14 @@
-import { NgModule } from '@angular/core';
+import { NgModule,CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { LoginRoutingModule } from './login-routing.module';
 import { LoginComponent } from './login.component';
+import { MaterialModule } from '../main/material/material.module';
+import { AuthenService } from '../core/services/authen.service';
+import { NotificationService } from '../core/services/notification.service';
+import { DataService } from '../core/services/data.service';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -11,7 +17,14 @@ import { LoginComponent } from './login.component';
   ],
   imports: [
     CommonModule,
-    LoginRoutingModule
-  ]
+    LoginRoutingModule,
+    MaterialModule,
+    FormsModule,
+    ReactiveFormsModule,
+    HttpClientModule
+  ],
+  providers:[AuthenService, NotificationService, DataService],
+  schemas:[CUSTOM_ELEMENTS_SCHEMA],
+  exports:[]
 })
 export class LoginModule { }

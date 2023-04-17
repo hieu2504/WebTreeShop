@@ -14,7 +14,7 @@ namespace TreeShop.Api.Data
         }
         [Key]
         public int OrderId { get; set; }
-        [ForeignKey("Customers")]
+        [ForeignKey("AppUsers")]
         public int? CustomerId { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime? OrderDate { get; set; }
@@ -31,8 +31,6 @@ namespace TreeShop.Api.Data
         [MaxLength(500)]
         public string? ShippingAddress { get; set; }
         public string? Note { get; set; }
-
-        public virtual Customer? Customer { get; set; }
         public virtual TransactStatus? TransactStatus { get; set; }
         public virtual Payment? Payments { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }

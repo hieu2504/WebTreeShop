@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
 import { MessageConstants } from './../common/message.constants';
 import { map } from 'rxjs/operators';
 import { throwError } from 'rxjs';
+import { UrlApiService } from './url-api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,13 +18,13 @@ import { throwError } from 'rxjs';
 export class DataService {
   //private headers: HttpHeaders;
   constructor(private _http: HttpClient, private _router: Router, private _authenService: AuthenService,
-    private _notificationService: NotificationService, private _utilityService: UltillityService) { }
+    private _notificationService: NotificationService, private _utilityService: UltillityService, private _urlApi:UrlApiService) { }
 
   get(url: string) {
     let headers = new HttpHeaders()
       .set('content-type', 'application/json')
       .set('Access-Control-Allow-Origin', '*').delete("Authorization").append("Authorization", this._authenService.getLoggedInUser().access_token);
-    return this._http.get(SystemConstants.BASE_API + url, { 'headers': headers }).pipe(map(extractData => extractData));
+    return this._http.get(this._urlApi.getUrlApiDatabse() + url, { 'headers': headers }).pipe(map(extractData => extractData));
   }
 
   post(uri: string, data?: any) {
@@ -31,33 +32,33 @@ export class DataService {
       .set('content-type', 'application/json')
 
       .set('Access-Control-Allow-Origin', '*').delete("Authorization").append("Authorization", this._authenService.getLoggedInUser().access_token);
-    return this._http.post(SystemConstants.BASE_API + uri, data, { 'headers': headers }).pipe(map(extractData => extractData));
+    return this._http.post(this._urlApi.getUrlApiDatabse() + uri, data, { 'headers': headers }).pipe(map(extractData => extractData));
   }
   put(uri: string, data?: any) {
     let headers = new HttpHeaders()
       .set('content-type', 'application/json')
       .set('responseType', 'text')
       .set('Access-Control-Allow-Origin', '*').delete("Authorization").append("Authorization",  this._authenService.getLoggedInUser().access_token);
-    return this._http.put(SystemConstants.BASE_API + uri, data, { 'headers': headers },).pipe(map(extractData => extractData));
+    return this._http.put(this._urlApi.getUrlApiDatabse() + uri, data, { 'headers': headers },).pipe(map(extractData => extractData));
   }
   delete(uri: string, key: string, id: string) {
     let headers = new HttpHeaders()
       .set('content-type', 'application/json')
       .set('Access-Control-Allow-Origin', '*').delete("Authorization").append("Authorization",  this._authenService.getLoggedInUser().access_token);
-    return this._http.delete(SystemConstants.BASE_API + uri + "/?" + key + "=" + id, { 'headers': headers })
+    return this._http.delete(this._urlApi.getUrlApiDatabse() + uri + "/?" + key + "=" + id, { 'headers': headers })
       .pipe(map(extractData => extractData));
   }
   deleteById(uri: string) {
     let headers = new HttpHeaders()
       .set('content-type', 'application/json')
       .set('Access-Control-Allow-Origin', '*').delete("Authorization").append("Authorization", this._authenService.getLoggedInUser().access_token);
-    return this._http.delete(SystemConstants.BASE_API + uri, { 'headers': headers })
+    return this._http.delete(this._urlApi.getUrlApiDatabse() + uri, { 'headers': headers })
       .pipe(map(extractData => extractData));
   }
   postFile(uri: string, data?: any) {
     let newHeader = new HttpHeaders();
     newHeader.append("Authorization", this._authenService.getLoggedInUser().access_token);
-    return this._http.post(SystemConstants.BASE_API + uri, data, { 'headers': newHeader })
+    return this._http.post(this._urlApi.getUrlApiDatabse() + uri, data, { 'headers': newHeader })
       .pipe(map(extractData => extractData));
   }
 

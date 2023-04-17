@@ -6,7 +6,7 @@ export default class Validation {
       const control = controls.get(controlName);
       const checkControl = controls.get(checkControlName);
 
-      if (checkControl!.errors && !checkControl!.errors.matching) {
+      if (checkControl!.errors && !checkControl!.errors['matching']) {
         return null;
       }
 

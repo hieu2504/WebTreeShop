@@ -1,3 +1,4 @@
+import { CheckRoleMenuDirective } from '../core/common/check-role-menu.directive';
 import { NO_ERRORS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -16,7 +17,8 @@ import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
-    MainComponent
+    MainComponent,
+    CheckRoleMenuDirective
   ],
   imports: [
     CommonModule,
@@ -24,7 +26,7 @@ import { FormsModule } from '@angular/forms';
     FormsModule,
     MainRoutingModule,
     MaterialModule,
-    FlexLayoutModule
+    FlexLayoutModule,
   ],
   providers:[UltillityService, AuthenService, AuthGuard,DataService,NotificationService ],
   schemas:[NO_ERRORS_SCHEMA]

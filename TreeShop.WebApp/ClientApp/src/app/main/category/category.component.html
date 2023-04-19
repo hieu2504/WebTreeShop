@@ -138,10 +138,7 @@
       </div>
     </div>
   </div>
-  <div class="col-md-3">
-    <input type="file" #file placeholder="Choose file" (change)="uploadFile(file.files)" style="display:none;" multiple>
-    <button type="button" class="btn btn-success" (click)="file.click()">Upload File</button>
-  </div>
+
   <!-- <div class="mat-elevation-z8 table-container">
     <div class="res-table-container">
       <table mat-table [dataSource]="dataSource" matSort>
@@ -197,7 +194,7 @@
       </table>
     </div> -->
 
-    <!-- <mat-paginator [pageSizeOptions]="pageSizeOptions" pageSize="pageSize" (page)="onChangePage($event)"
+  <!-- <mat-paginator [pageSizeOptions]="pageSizeOptions" pageSize="pageSize" (page)="onChangePage($event)"
       [pageIndex]="page" [length]="totalRow" showFirstLastButtons [disabled]="false"
       aria-label="Select page of appRoles elements">
     </mat-paginator> -->
@@ -210,8 +207,8 @@
   <form action="" (submit)="addData()" [formGroup]="form">
     <h2 mat-dialog-title>dádada</h2>
     <mat-dialog-content class="mat-typography">
-      <div fxLayout="row" fxLayoutGap="8px">
-        <div fxFlex="50" class="action-blurb" fxFlexOffset="0">
+      <div fxLayout.gt-md="row" fxLayout.gt-sm="column" fxLayoutGap.gt-md="8px">
+        <div fxFlex.gt-md="50" fxFlex.gt-sm="100" class="action-blurb">
           <mat-form-field appearance="outline">
             <mat-label>Tên loại sản phẩm</mat-label>
             <input matInput placeholder="Tên loại sản phẩm" formControlName="name" #name maxlength="250">
@@ -219,7 +216,7 @@
             <mat-error *ngIf="f('name','required')">Tên loại sản phẩm không được bỏ trống!</mat-error>
           </mat-form-field>
         </div>
-        <div fxFlex="50" class="action-blurb">
+        <div fxFlex.gt-md="50" fxFlex.gt-sm="100" class="action-blurb">
           <mat-form-field appearance="outline">
             <mat-label>Mã sản phẩm</mat-label>
             <input matInput placeholder="Mã sản phẩm" formControlName="code" #code maxlength="100">
@@ -232,36 +229,26 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Mô tả</mat-label>
-        <textarea rows="3"  matInput placeholder="Mô tả" formControlName="description" #description maxlength="500"></textarea>
+        <textarea rows="3" matInput placeholder="Mô tả" formControlName="description" #description
+          maxlength="500"></textarea>
         <mat-hint align="end">{{description.value.length}} / 500</mat-hint>
       </mat-form-field>
 
-
-      <div>
-        <fieldset>
-          <legend>Ảnh</legend>
-          <div align="center">
-            <input accept="image/*" type="file"  id="getFile" #fileInput
-              style="display:none">
-            <!-- <div *ngIf="getValidForm.image.value ==='' || getValidForm.image.value === null">
-              <img src="../../../assets/images/img_null.jpg" class="image-preview">
-            </div> -->
-            <div class="image-div">
-              <div class="image-preview">
-                <!-- <img src="{{'data:image/jpg;base64,' + getValidForm.image.value}}" class="image-preview"> -->
-                <a href="javascript:void(0)" class="remove-image" (click)="fileInput.value=''">
-                  <mat-icon>close</mat-icon>
-                </a>
-              </div>
-            </div>
-            <a href="javascript:void(0)" onclick="document.getElementById('getFile').click()">
-              <i class="material-icons">file_upload</i>
-            </a>
-          </div>
-        </fieldset>
+      <mat-form-field appearance="outline">
+        <mat-label>Vị trí (từ bé đến lớn)</mat-label>
+        <input rows="3" matInput placeholder="Vị trí" formControlName="description" #description
+          maxlength="500" type="number">
+      </mat-form-field>
+      <div style="border: 1px solid rgba(194, 194, 194, 0.87); padding: 5px; border-radius: 8px;">
+        <input type="file" accept="image/*" #file placeholder="Choose file" (change)="uploadFile(file.files)"
+          multiple>
+          <!-- <button mat-raised-button color="primary" (click)="file.click()">Chọn ảnh</button> -->
+        <!-- <button type="button" class="btn btn-success" (click)="file.click()">Upload File</button> -->
       </div>
+
+
     </mat-dialog-content>
-    <mat-checkbox formControlName="isActive">Hiệu lực </mat-checkbox>
+    <mat-checkbox style="margin-top: 8px;" formControlName="isActive">Hiệu lực </mat-checkbox>
     <mat-dialog-actions align="center">
       <button mat-stroked-button color="warn" mat-dialog-close type="button">Đóng</button>
       <!-- <button mat-stroked-button color="primary" [disabled]="preventAbuse" type="submit">Lưu</button> -->

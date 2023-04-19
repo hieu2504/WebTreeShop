@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Data;
+using System.Net.Http.Headers;
 using TreeShop.Api.Data;
 using TreeShop.Api.Service;
 using TreeShop.Api.ViewModel;
@@ -18,12 +20,14 @@ namespace TreeShop.Api.Controllers
         private readonly ICategoryService _categoryService;
 
         private readonly IMapper _mapper;
+        public static IWebHostEnvironment _environment;
 
 
-        public CategoryController(ICategoryService categoryService, IMapper mapper)
+        public CategoryController(ICategoryService categoryService, IMapper mapper, IWebHostEnvironment environment)
         {
             _categoryService = categoryService;
             _mapper = mapper;
+            _environment = environment;
         }
         #endregion Initial
 
@@ -52,11 +56,41 @@ namespace TreeShop.Api.Controllers
         /// </summary>
         /// <param name="categoryViewModel"></param>
         /// <returns></returns>
-        [HttpPost("Create")]
+        [HttpPost("Create"),DisableRequestSizeLimit]
+        [AllowAnonymous]
         public async Task<IActionResult> Create(CategoryViewModel categoryViewModel)
         {
             if (ModelState.IsValid)
             {
+                //try
+                //{
+                //    var fileName = "\\Images\\" + categoryViewModel.IconNew.FileName;
+                //    if (categoryViewModel.IconNew.Length > 0)
+                //    {
+                //        if (!Directory.Exists(_environment.WebRootPath + "\\Images"))
+                //        {
+                //            Directory.CreateDirectory(_environment.WebRootPath + "\\Images\\");
+                //        }
+                //        using (FileStream filestream = System.IO.File.Create(_environment.WebRootPath + "\\Images\\" + categoryViewModel.IconNew.FileName))
+                //        {
+                //            categoryViewModel.IconNew.CopyTo(filestream);
+                //            filestream.Flush();
+                //            //  return "\\Upload\\" + objFile.files.FileName;
+                //        }
+                //    }
+                //}
+                //catch (Exception ex)
+                //{
+                //    throw;
+                //}
+                //return Ok("Thanh cong");
+
+
+
+
+
+
+
                 var model = _mapper.Map<CategoryViewModel, Category>(categoryViewModel);
                 try
                 {
@@ -73,6 +107,84 @@ namespace TreeShop.Api.Controllers
             {
                 return BadRequest(ModelState);
             }
+        }
+
+        [HttpPost("CreateNew"), DisableRequestSizeLimit]
+        [AllowAnonymous]
+        public async Task<IActionResult> CreateNew()
+        {
+            try
+            {
+                var file = Request.Form.Files[0];
+                var folderName = Path.Combine("Resources", "Images");
+                var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+                if(file.Length > 0)
+                {
+                    var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                    var fullPath = Path.Combine(pathToSave, fileName);
+                    var dbPath = Path.Combine(folderName, fileName);
+                    using (var steam = new FileStream(fullPath, FileMode.Create))
+                    {
+                        file.CopyTo(steam);
+                    }
+                    return Ok(new { dbPath });
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch(Exception ex)
+            {
+                return BadRequest();
+            }
+        }
+
+
+        [HttpPost("CreateNew1"), DisableRequestSizeLimit]
+        public async Task<ActionResult> Post([FromForm] FileUploadAPI objFile)
+        {
+            try
+            {
+
+                //var imgName = "\\Images\\" + objFile.files.FileName;
+                //if (objFile.files.Length > 0)
+                //{
+                //    if (!Directory.Exists(_environment.WebRootPath + "\\Images"))
+                //    {
+                //        Directory.CreateDirectory(_environment.WebRootPath + "\\Images\\");
+                //    }
+                //    using (FileStream filestream = System.IO.File.Create(_environment.WebRootPath + "\\Images\\" + objFile.files.FileName))
+                //    {
+                //        objFile.files.CopyTo(filestream);
+                //        filestream.Flush();
+                //        //  return "\\Upload\\" + objFile.files.FileName;
+                //    }
+                //}
+
+                foreach(var item in objFile.lstFiles)
+                {
+                    var imgName = "\\Images\\" + item.FileName;
+                    if (item.Length > 0)
+                    {
+                        if (!Directory.Exists(_environment.WebRootPath + "\\Images"))
+                        {
+                            Directory.CreateDirectory(_environment.WebRootPath + "\\Images\\");
+                        }
+                        using (FileStream filestream = System.IO.File.Create(_environment.WebRootPath + "\\Images\\" + item.FileName))
+                        {
+                            item.CopyTo(filestream);
+                            filestream.Flush();
+                            //  return "\\Upload\\" + objFile.files.FileName;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return Ok("ABC");
         }
 
         /// <summary>

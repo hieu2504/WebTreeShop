@@ -20,10 +20,10 @@ const routes: Routes = [{
       path: 'home', loadChildren: () => import("./home/home.module").then(m => m.HomeModule),
 
     },
-    // {
-    //   path: 'app-group', loadChildren: () => import("./app-group/app-group.module").then(m => m.AppGroupModule),
+    {
+      path: 'category', loadChildren: () => import("./category/category.module").then(m => m.CategoryModule),
 
-    // },
+    },
     // {
     //   path: 'app-role', loadChildren: () => import("./app-role/app-role.module").then(m => m.AppRoleModule),
 

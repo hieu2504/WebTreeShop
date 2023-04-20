@@ -25,3 +25,6 @@ input[type=file]::file-selector-button {
 input[type=file]::file-selector-button:hover {
   background: #0d45a5;
 }
+.chose-file-image{
+  border: 1px solid rgba(194, 194, 194, 0.87); padding: 5px; border-radius: 8px;
+}

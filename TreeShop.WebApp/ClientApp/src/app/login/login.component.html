@@ -16,7 +16,7 @@
     </mat-form-field>
     <mat-form-field appearance="outline">
       <mat-label>Mật khẩu</mat-label>
-      <input type="password" matInput  placeholder="Mật khẩu" #password="ngModel" [(ngModel)]="model.password" required [ngModelOptions]="{standalone: true}">
+      <input type="password" matInput placeholder="Mật khẩu" #password="ngModel" [(ngModel)]="model.password" required [ngModelOptions]="{standalone: true}">
       <mat-icon matSuffix></mat-icon>
       <mat-error *ngIf="password.hasError('required')">
         Mật khẩu không được bỏ trống!

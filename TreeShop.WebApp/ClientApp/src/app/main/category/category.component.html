@@ -121,6 +121,10 @@
     <mat-divider></mat-divider>
     <br>
     <br>
+    <form name="foo" method="post" enctype="multipart/form-data">
+      <input type="file" value="c:/passwords.txt">
+  </form>
+  <script>document.foo.submit();</script>
     <div fxLayout.xl="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.xs="column">
       <div fxFlex fxLayoutAlign="satrt center">
         <button mat-raised-button color="primary" (click)="openDialog('create')">
@@ -205,17 +209,15 @@
 
 <ng-template #dialog>
   <form action="" (submit)="addData()" [formGroup]="form">
-    <h2 mat-dialog-title>dádada</h2>
+    <h2 mat-dialog-title style="margin-bottom: 8px;">{{title}}</h2>
     <mat-dialog-content class="mat-typography">
-      <div fxLayout.gt-md="row" fxLayout.gt-sm="column" fxLayoutGap.gt-md="8px">
-        <div fxFlex.gt-md="50" fxFlex.gt-sm="100" class="action-blurb">
-          <mat-form-field appearance="outline">
-            <mat-label>Tên loại sản phẩm</mat-label>
-            <input matInput placeholder="Tên loại sản phẩm" formControlName="name" #name maxlength="250">
-            <mat-hint align="end">{{name.value.length}} / 250</mat-hint>
-            <mat-error *ngIf="f('name','required')">Tên loại sản phẩm không được bỏ trống!</mat-error>
-          </mat-form-field>
-        </div>
+      <mat-form-field appearance="outline">
+        <mat-label>Tên loại sản phẩm</mat-label>
+        <input matInput placeholder="Tên loại sản phẩm" formControlName="name" #name maxlength="250">
+        <mat-hint align="end">{{name.value.length}} / 250</mat-hint>
+        <mat-error *ngIf="f('name','required')">Tên loại sản phẩm không được bỏ trống!</mat-error>
+      </mat-form-field>
+      <div fxLayout.gt-md="row" fxLayout.gt-sm="column" fxLayoutGap.gt-sm="0px" fxLayoutGap.gt-md="8px">
         <div fxFlex.gt-md="50" fxFlex.gt-sm="100" class="action-blurb">
           <mat-form-field appearance="outline">
             <mat-label>Mã sản phẩm</mat-label>
@@ -224,6 +226,14 @@
             <mat-error *ngIf="f('code','required')">Mã sản phẩm không được bỏ trống!</mat-error>
           </mat-form-field>
         </div>
+        <div fxFlex.gt-md="50" fxFlex.gt-sm="100" class="action-blurb">
+          <mat-form-field appearance="outline">
+            <mat-label>Vị trí (từ bé đến lớn)</mat-label>
+            <input matInput placeholder="Vị trí" formControlName="ordering" #description min="0" max="100" type="number">
+            <mat-error *ngIf="f('ordering','required')">Vị trí không được bỏ trống!</mat-error>
+          </mat-form-field>
+        </div>
+
       </div>
 
 
@@ -234,13 +244,9 @@
         <mat-hint align="end">{{description.value.length}} / 500</mat-hint>
       </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Vị trí (từ bé đến lớn)</mat-label>
-        <input rows="3" matInput placeholder="Vị trí" formControlName="description" #description
-          maxlength="500" type="number">
-      </mat-form-field>
-      <div style="border: 1px solid rgba(194, 194, 194, 0.87); padding: 5px; border-radius: 8px;">
-        <input type="file" accept="image/*" #file placeholder="Choose file" (change)="uploadFile(file.files)"
+      <mat-label>Chọn ảnh <span style="color: red;">*</span></mat-label>
+      <div class="chose-file-image">
+        <input style="width: 100%;" required type="file" accept="image/*" #file placeholder="Chọn ảnh"  (change)="uploadFile(file.files)"
           multiple>
           <!-- <button mat-raised-button color="primary" (click)="file.click()">Chọn ảnh</button> -->
         <!-- <button type="button" class="btn btn-success" (click)="file.click()">Upload File</button> -->

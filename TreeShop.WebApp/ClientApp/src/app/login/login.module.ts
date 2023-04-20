@@ -9,6 +9,7 @@ import { NotificationService } from '../core/services/notification.service';
 import { DataService } from '../core/services/data.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { HttpClientModule } from '@angular/common/http';
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    MatAutocompleteModule
   ],
   providers:[AuthenService, NotificationService, DataService],
   schemas:[CUSTOM_ELEMENTS_SCHEMA],

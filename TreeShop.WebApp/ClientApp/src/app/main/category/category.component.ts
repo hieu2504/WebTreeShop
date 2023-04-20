@@ -21,6 +21,7 @@ export class CategoryComponent implements OnInit {
   form: FormGroup;
   progress!: number ;
   message!: string ;
+  title: string = "Thêm mới";
   @ViewChild('dialog') dialogTemplate!: TemplateRef<any>;
 
   constructor(private formBuilder: FormBuilder, private dialog: MatDialog, private http: HttpClient) {
@@ -32,7 +33,7 @@ export class CategoryComponent implements OnInit {
         ],
         description: [''],
         ordering: [1,Validators.required],
-        isActive: [true, Validators.required]
+        isActive: [true, Validators.required],
       }
 
     );
@@ -62,12 +63,15 @@ export class CategoryComponent implements OnInit {
   openDialog(action: string, item?: any, config?: MatDialogConfig) {
     // this.model = {};
     // this.action = action;
-    config = { width: '750px' }
+    config = { width: '750px', autoFocus: false }
 
     const dialogRef = this.dialog.open(this.dialogTemplate, config);
     dialogRef.afterClosed().subscribe(result => {
       this.onReset();
     });
+    if(action == 'create'){
+      this.title = "Thêm mới";
+    }
   }
   addData(){
 

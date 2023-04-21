@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { UrlConstants } from '../core/common/url.constants';
 import { MessageConstants } from '../core/common/message.constants';
 import { SystemConstants } from '../core/common/system.constants';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-login',
@@ -21,7 +22,8 @@ export class LoginComponent implements OnInit {
 
 
 
-  constructor(private authenService: AuthenService,private notificationService: NotificationService, private router: Router, private httpClient:HttpClient) {
+  constructor(private authenService: AuthenService,private notificationService: NotificationService,
+    private router: Router, private httpClient:HttpClient, private spinner: NgxSpinnerService) {
   }
 
 
@@ -29,13 +31,21 @@ export class LoginComponent implements OnInit {
     if(!this.validate()){
       return;
     }
+    this.spinner.show();
     this.preventAbuse = true;
     this.authenService.login(this.model).subscribe(data => {
+      this.spinner.hide();
       console.log(data);
+      if(data.type == 1){
         this.router.navigate([UrlConstants.HOME]); this.preventAbuse = false;
+      }else{
+        // trang bán hàng
+      }
+
 
      },
       err => {
+        this.spinner.hide();
         if (err.status === 401) {
           this.notificationService.printErrorMessage(MessageConstants.SYS_ERROR_LOGIN_FAILSE);
         }

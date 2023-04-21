@@ -11,7 +11,13 @@
         public DateTime? CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
         public string? Icon { get; set; }
-        public IFormFile? IconNew { get; set; }
+        public IFormFile? Files { get; set; }
+    }
+
+    public class FileUploadAPI1
+    {
+        public string? Code { get; set; }
+
     }
 
     public class FileUploadAPI

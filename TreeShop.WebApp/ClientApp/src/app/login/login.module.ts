@@ -10,6 +10,7 @@ import { DataService } from '../core/services/data.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    NgxSpinnerModule
   ],
   providers:[AuthenService, NotificationService, DataService],
   schemas:[CUSTOM_ELEMENTS_SCHEMA],

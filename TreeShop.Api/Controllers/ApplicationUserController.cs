@@ -117,7 +117,8 @@ namespace TreeShop.Api.Controllers
                     email = user.Email,
                     address = user.Address,
                     phonenumber = user.PhoneNumber,
-                    image = user.Image
+                    image = user.Image,
+                    type = user.Type
                 });
             }
             return Unauthorized();

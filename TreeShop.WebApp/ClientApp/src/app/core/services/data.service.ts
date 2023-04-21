@@ -32,7 +32,7 @@ export class DataService {
       .set('content-type', 'application/json')
 
       .set('Access-Control-Allow-Origin', '*').delete("Authorization").append("Authorization", this._authenService.getLoggedInUser().access_token);
-    return this._http.post(this._urlApi.getUrlApiDatabse() + uri, data, { 'headers': headers }).pipe(map(extractData => extractData));
+    return this._http.post(this._urlApi.getUrlApiDatabse() + uri, data, { 'headers': headers}).pipe(map(extractData => extractData));
   }
   put(uri: string, data?: any) {
     let headers = new HttpHeaders()

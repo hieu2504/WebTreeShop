@@ -58,42 +58,29 @@ namespace TreeShop.Api.Controllers
         /// <returns></returns>
         [HttpPost("Create"),DisableRequestSizeLimit]
         [AllowAnonymous]
-        public async Task<IActionResult> Create(CategoryViewModel categoryViewModel)
+        public async Task<IActionResult> Create([FromForm] CategoryViewModel categoryViewModel)
         {
             if (ModelState.IsValid)
             {
-                //try
-                //{
-                //    var fileName = "\\Images\\" + categoryViewModel.IconNew.FileName;
-                //    if (categoryViewModel.IconNew.Length > 0)
-                //    {
-                //        if (!Directory.Exists(_environment.WebRootPath + "\\Images"))
-                //        {
-                //            Directory.CreateDirectory(_environment.WebRootPath + "\\Images\\");
-                //        }
-                //        using (FileStream filestream = System.IO.File.Create(_environment.WebRootPath + "\\Images\\" + categoryViewModel.IconNew.FileName))
-                //        {
-                //            categoryViewModel.IconNew.CopyTo(filestream);
-                //            filestream.Flush();
-                //            //  return "\\Upload\\" + objFile.files.FileName;
-                //        }
-                //    }
-                //}
-                //catch (Exception ex)
-                //{
-                //    throw;
-                //}
-                //return Ok("Thanh cong");
-
-
-
-
-
-
-
+                
                 var model = _mapper.Map<CategoryViewModel, Category>(categoryViewModel);
                 try
                 {
+                    var imgName = "\\Images\\" + categoryViewModel.Files.FileName;
+                    if (categoryViewModel.Files.Length > 0)
+                    {
+                        if (!Directory.Exists(_environment.WebRootPath + "\\Images"))
+                        {
+                            Directory.CreateDirectory(_environment.WebRootPath + "\\Images\\");
+                        }
+                        using (FileStream filestream = System.IO.File.Create(_environment.WebRootPath + "\\Images\\" + categoryViewModel.Files.FileName))
+                        {
+                            categoryViewModel.Files.CopyTo(filestream);
+                            filestream.Flush();
+                            //  return "\\Upload\\" + objFile.files.FileName;
+                        }
+                    }
+                    model.Icon = imgName;
                     model.CreatedDate = DateTime.Now;
                     await _categoryService.Add(model);
                     return CreatedAtAction(nameof(Create), new { id = model.CatId }, model);

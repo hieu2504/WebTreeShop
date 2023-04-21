@@ -26,7 +26,6 @@ import { FormsModule } from '@angular/forms';
     FormsModule,
     MainRoutingModule,
     MaterialModule,
-    FlexLayoutModule,
   ],
   providers:[UltillityService, AuthenService, AuthGuard,DataService,NotificationService ],
   schemas:[NO_ERRORS_SCHEMA]

@@ -121,10 +121,6 @@
     <mat-divider></mat-divider>
     <br>
     <br>
-    <form name="foo" method="post" enctype="multipart/form-data">
-      <input type="file" value="c:/passwords.txt">
-  </form>
-  <script>document.foo.submit();</script>
     <div fxLayout.xl="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.xs="column">
       <div fxFlex fxLayoutAlign="satrt center">
         <button mat-raised-button color="primary" (click)="openDialog('create')">
@@ -257,7 +253,7 @@
     <mat-checkbox style="margin-top: 8px;" formControlName="isActive">Hiệu lực </mat-checkbox>
     <mat-dialog-actions align="center">
       <button mat-stroked-button color="warn" mat-dialog-close type="button">Đóng</button>
-      <!-- <button mat-stroked-button color="primary" [disabled]="preventAbuse" type="submit">Lưu</button> -->
+      <button mat-stroked-button color="primary" [disabled]="preventAbuse" type="submit">Lưu</button>
     </mat-dialog-actions>
   </form>
 

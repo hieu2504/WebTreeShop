@@ -1,15 +1,3 @@
-p {
-  font-family: Lato;
-}
-
-#root {
-  padding: 30px;
-}
-
-.register-form {
-  max-width: 350px;
-  margin: auto;
-}
 
 input[type=file]::file-selector-button {
   margin-right: 20px;
@@ -27,4 +15,7 @@ input[type=file]::file-selector-button:hover {
 }
 .chose-file-image{
   border: 1px solid rgba(194, 194, 194, 0.87); padding: 5px; border-radius: 8px;
+}
+th.mat-header-cell, td.mat-cell, td.mat-footer-cell{
+  padding: 8px !important;
 }

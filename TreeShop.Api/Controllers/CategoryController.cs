@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Net.Http.Headers;
 using TreeShop.Api.Data;
+using TreeShop.Api.Infrastructure.Core;
 using TreeShop.Api.Service;
 using TreeShop.Api.ViewModel;
 
@@ -67,7 +68,7 @@ namespace TreeShop.Api.Controllers
                 try
                 {
                     var imgName = "\\Images\\" + categoryViewModel.Files.FileName;
-                    if (categoryViewModel.Files.Length > 0)
+                    if (categoryViewModel.Files != null)
                     {
                         if (!Directory.Exists(_environment.WebRootPath + "\\Images"))
                         {
@@ -175,21 +176,40 @@ namespace TreeShop.Api.Controllers
         }
 
         /// <summary>
-        /// Sua loai san pham
+        /// Them moi loai san pham
         /// </summary>
         /// <param name="categoryViewModel"></param>
         /// <returns></returns>
-        [HttpPut("Update")]
-        public async Task<IActionResult> Update(CategoryViewModel categoryViewModel)
+        [HttpPost("Update"), DisableRequestSizeLimit]
+        [AllowAnonymous]
+        public async Task<IActionResult> Update([FromForm] CategoryViewModel categoryViewModel)
         {
             if (ModelState.IsValid)
             {
-                var mapping = _mapper.Map<CategoryViewModel, Category>(categoryViewModel);
+
+                var model = _mapper.Map<CategoryViewModel, Category>(categoryViewModel);
                 try
                 {
-                    mapping.UpdatedDate = DateTime.Now;
-                    await _categoryService.Update(mapping);
-                    return CreatedAtAction(nameof(Update), new { id = mapping.CatId }, mapping);
+                    
+                    if (categoryViewModel.Files !=null)
+                    {
+                        var imgName = "\\Images\\" + categoryViewModel.Files.FileName;
+                        if (!Directory.Exists(_environment.WebRootPath + "\\Images"))
+                        {
+                            Directory.CreateDirectory(_environment.WebRootPath + "\\Images\\");
+                        }
+                        using (FileStream filestream = System.IO.File.Create(_environment.WebRootPath + "\\Images\\" + categoryViewModel.Files.FileName))
+                        {
+                            categoryViewModel.Files.CopyTo(filestream);
+                            filestream.Flush();
+                            //  return "\\Upload\\" + objFile.files.FileName;
+                        }
+                        model.Icon = imgName;
+                    }
+                    
+                    model.UpdatedDate = DateTime.Now;
+                    await _categoryService.Update(model);
+                    return CreatedAtAction(nameof(Update), new { id = model.CatId }, model);
                 }
                 catch (Exception ex)
                 {
@@ -199,6 +219,31 @@ namespace TreeShop.Api.Controllers
             else
             {
                 return BadRequest(ModelState);
+            }
+        }
+
+        [HttpGet("getlistpaging")]
+        public async Task<IActionResult> GetListPaging(int page = 0, int pageSize = 10, string? keyword = null)
+        {
+            try
+            {
+                var model = await _categoryService.GetAll(keyword);
+                int totalRow = 0;
+                totalRow = model.Count();
+                model = model.Skip(page * pageSize).Take(pageSize);
+                var result = _mapper.Map<IEnumerable<Category>, IEnumerable<CategoryViewModel>>(model);
+                var responseData = new PaginationSet<CategoryViewModel>()
+                {
+                    Items = result,
+                    Page = page,
+                    TotalCount = totalRow,
+                    TotalPages = (int)Math.Ceiling((decimal)totalRow / pageSize)
+                };
+                return Ok(responseData);
+            }
+            catch (Exception dex)
+            {
+                return BadRequest(dex);
             }
         }
 

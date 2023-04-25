@@ -11,6 +11,7 @@ namespace TreeShop.Api.Service
         Task<Category> Add(Category category);
         Task<Category> Update(Category category);
         Task<Category> Delete(int id);
+        Task<IQueryable<Category>> GetAll(string keyword);
     }
     public class CategoryService : ICategoryService
     {
@@ -25,6 +26,10 @@ namespace TreeShop.Api.Service
             if (await _categoryRepository.CheckContainsAsync(x => x.Name == category.Name))
             {
                 throw new NameDuplicatedException("Tên loại sản phẩm đã tồn tại!");
+            }
+            if (await _categoryRepository.CheckContainsAsync(x => x.Code == category.Code))
+            {
+                throw new NameDuplicatedException("Mã loại sản phẩm đã tồn tại!");
             }
             return await _categoryRepository.AddASync(category);
         }
@@ -44,10 +49,29 @@ namespace TreeShop.Api.Service
             return await _categoryRepository.GetByIdAsync(id);
         }
 
-        public async Task<Category> Update(Category kiosk)
+        public async Task<Category> Update(Category category)
         {
-            
-            return await _categoryRepository.UpdateASync(kiosk);
+            if (await _categoryRepository.CheckContainsAsync(x => x.Name == category.Name && x.CatId != category.CatId))
+            {
+                throw new NameDuplicatedException("Tên loại sản phẩm đã tồn tại!");
+            }
+            if (await _categoryRepository.CheckContainsAsync(x => x.Code == category.Code && x.CatId != category.CatId))
+            {
+                throw new NameDuplicatedException("Mã loại sản phẩm đã tồn tại!");
+            }
+            return await _categoryRepository.UpdateASync(category);
+        }
+
+        public async Task<IQueryable<Category>> GetAll(string keyword)
+        {
+            if (string.IsNullOrEmpty(keyword))
+            {
+                return await _categoryRepository.GetAllAsync();
+            }
+            else
+            {
+                return await _categoryRepository.GetAllAsync(x => x.Name.Contains(keyword) || x.Description.Contains(keyword));
+            }
         }
     }
 }

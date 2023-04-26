@@ -98,6 +98,7 @@ this.loadData();
 
       this.title = "Thêm mới";
     }else{
+      debugger
       this.filesToUpload = [];
       this.title = 'Chỉnh sửa';
       this.model.catId = item.catId;

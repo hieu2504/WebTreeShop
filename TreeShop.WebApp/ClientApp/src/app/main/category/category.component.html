@@ -272,7 +272,7 @@
       <div style="margin-top: 14px;" *ngIf="action=='create' ? false : true ">
         <mat-label>Ảnh hiện tại</mat-label>
         <div>
-          <img src="{{urlImage}}{{model.icon}}" width="25px" height="25px" alt="" srcset="">
+          <img *ngIf="model.icon != null" src="{{urlImage + model.icon}}" width="25px" height="25px" alt="" srcset="">
         </div>
 
       </div>

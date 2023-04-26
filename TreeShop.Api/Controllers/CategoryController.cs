@@ -67,14 +67,14 @@ namespace TreeShop.Api.Controllers
                 var model = _mapper.Map<CategoryViewModel, Category>(categoryViewModel);
                 try
                 {
-                    var imgName = "\\Images\\" + categoryViewModel.Files.FileName;
+                    var imgName = "\\Images\\" + DateTime.Now.ToString("yyyyMMddHHmmss") + categoryViewModel.Files.FileName;
                     if (categoryViewModel.Files != null)
                     {
                         if (!Directory.Exists(_environment.WebRootPath + "\\Images"))
                         {
                             Directory.CreateDirectory(_environment.WebRootPath + "\\Images\\");
                         }
-                        using (FileStream filestream = System.IO.File.Create(_environment.WebRootPath + "\\Images\\" + categoryViewModel.Files.FileName))
+                        using (FileStream filestream = System.IO.File.Create(_environment.WebRootPath + imgName))
                         {
                             categoryViewModel.Files.CopyTo(filestream);
                             filestream.Flush();
@@ -193,18 +193,26 @@ namespace TreeShop.Api.Controllers
                     
                     if (categoryViewModel.Files !=null)
                     {
-                        var imgName = "\\Images\\" + categoryViewModel.Files.FileName;
+
+                        var imgName = "\\Images\\" + DateTime.Now.ToString("yyyyMMddHHmmss") + categoryViewModel.Files.FileName;
                         if (!Directory.Exists(_environment.WebRootPath + "\\Images"))
                         {
                             Directory.CreateDirectory(_environment.WebRootPath + "\\Images\\");
                         }
-                        using (FileStream filestream = System.IO.File.Create(_environment.WebRootPath + "\\Images\\" + categoryViewModel.Files.FileName))
+                        using (FileStream filestream = System.IO.File.Create(_environment.WebRootPath + imgName))
                         {
                             categoryViewModel.Files.CopyTo(filestream);
                             filestream.Flush();
                             //  return "\\Upload\\" + objFile.files.FileName;
                         }
+                        string path = _environment.WebRootPath + model.Icon;
+                        FileInfo file = new FileInfo(path);
+                        if (file.Exists)//check file exsit or not  
+                        {
+                            file.Delete();
+                        }
                         model.Icon = imgName;
+
                     }
                     
                     model.UpdatedDate = DateTime.Now;
@@ -302,7 +310,13 @@ namespace TreeShop.Api.Controllers
                     {
                         try
                         {
-                            await _categoryService.Delete(item);
+                            var model = await _categoryService.Delete(item);
+                            string path = _environment.WebRootPath + model.Icon;
+                            FileInfo file = new FileInfo(path);
+                            if (file.Exists)//check file exsit or not  
+                            {
+                                file.Delete();
+                            }
                             countSuccess++;
                         }
                         catch (Exception)

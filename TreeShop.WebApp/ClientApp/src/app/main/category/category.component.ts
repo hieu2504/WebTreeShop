@@ -27,7 +27,7 @@ export class CategoryComponent implements OnInit {
   //   acceptTerms: new FormControl(false),
   // });
   // submitted = false;
-  form: FormGroup;
+  form!: FormGroup;
   progress!: number ;
   message!: string ;
   title: string = "Thêm mới";
@@ -53,6 +53,10 @@ export class CategoryComponent implements OnInit {
     private http: HttpClient, private dataService: DataService,
     private notificationService: NotificationService,private pagin: PaginatorCustomService, private spinner: NgxSpinnerService) {
     this.urlImage = SystemConstants.URL_IMAGE;
+
+  }
+
+  ngOnInit(): void {
     this.form = this.formBuilder.group(
       {
         name: ['', Validators.required],
@@ -64,9 +68,6 @@ export class CategoryComponent implements OnInit {
       }
 
     );
-  }
-
-  ngOnInit(): void {
 this.loadData();
   }
 
@@ -94,10 +95,11 @@ this.loadData();
     });
     this.action = action;
     if(action == 'create'){
+
       this.title = "Thêm mới";
     }else{
+      this.filesToUpload = [];
       this.title = 'Chỉnh sửa';
-      console.log(item);
       this.model.catId = item.catId;
       this.spinner.show();
       this.dataService.get('Category/getbyid/' + this.model.catId).subscribe((data: any) => {
@@ -120,7 +122,6 @@ this.loadData();
     this.spinner.show();
     this.dataService.get('Category/getlistpaging?page=' + this.page + '&pageSize=' + this.pageSize + '&keyword=' + this.keyword).subscribe((data: any) => {
       this.dataSource = new MatTableDataSource(data.items);
-      console.log(this.dataSource)
       this.totalRow = data.totalCount;
       this.spinner.hide();
     }, err => {
@@ -133,7 +134,6 @@ this.loadData();
   search() {
     this.dataService.get('Category/getlistpaging?page=' + this.page + '&pageSize=' + this.pageSize + '&keyword=' + this.keyword).subscribe((data: any) => {
       this.dataSource = new MatTableDataSource(data.items);
-      console.log(this.dataSource)
       this.totalRow = data.totalCount;
     }, err => {
       this.notificationService.printErrorMessage('Không tải được danh sách!');

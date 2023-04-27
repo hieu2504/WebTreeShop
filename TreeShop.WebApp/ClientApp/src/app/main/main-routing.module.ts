@@ -24,10 +24,10 @@ const routes: Routes = [{
       path: 'category', loadChildren: () => import("./category/category.module").then(m => m.CategoryModule),
 
     },
-    // {
-    //   path: 'app-role', loadChildren: () => import("./app-role/app-role.module").then(m => m.AppRoleModule),
+    {
+      path: 'app-role', loadChildren: () => import("./app-role/app-role.module").then(m => m.AppRoleModule),
 
-    // },
+    },
     // {path:'app-user',loadChildren:()=>import('./app-user/app-user.module').then(x=>x.AppUserModule)},
     // {path:'app-menu',loadChildren:()=>import('./app-menu/app-menu.module').then(x=>x.AppMenuModule)}
   ]

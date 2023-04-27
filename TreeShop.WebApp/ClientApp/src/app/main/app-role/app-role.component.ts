@@ -28,16 +28,13 @@ export class AppRoleComponent implements OnInit {
     'name',
     'description',
     'createdDate',
-    'createdBy',
     'action',
   ];
   dataSource = new MatTableDataSource<any>();
-  preventAbuse = false;
   page = 0;
   keyword: string = '';
   totalRow: number = 0;
   totalPage: number = 0;
-  roleParents: any;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('dialog') dialogTemplate!: TemplateRef<any>;
@@ -48,10 +45,8 @@ export class AppRoleComponent implements OnInit {
   pageSizeOptions: number[] = [10, 25, 50, 100];
   pageSize = this.pageSizeOptions[0];
   isAllChecked = false;
-  parentName: any;
   filteredOptions!: Observable<any[]>;
   users: any;
-  roleParentControl = new FormControl();
 
   constructor(
     private dataService: DataService,
@@ -70,31 +65,20 @@ export class AppRoleComponent implements OnInit {
         '',
         Validators.compose([Validators.required, Validators.maxLength(100)]),
       ],
-      parentId: '',
-      createdBy: '',
-      updatedBy: '',
-      deletedBy: '',
-      createdDate: '',
-      updatedDate: '',
-      isDeleted: '',
-      icon: ['', Validators.compose([Validators.maxLength(100)])],
-      link: ['', Validators.compose([Validators.maxLength(100)])],
-      activeLink: ['', Validators.compose([Validators.maxLength(100)])],
-      order_By: [''],
+
     });
   }
 
   ngOnInit(): void {
     this.getAllRoles();
-    this.getRoles();
   }
 
-  private _filter(value: any): any[] {
-    const filterValue = value?.toLowerCase();
-    return this.roleParents.filter((option: any) =>
-      option?.description.toLowerCase().includes(filterValue)
-    );
-  }
+  // private _filter(value: any): any[] {
+  //   const filterValue = value?.toLowerCase();
+  //   return this.roleParents.filter((option: any) =>
+  //     option?.description.toLowerCase().includes(filterValue)
+  //   );
+  // }
 
   openDialog(action: string, item?: any, config?: MatDialogConfig) {
     this.action = action;
@@ -104,25 +88,8 @@ export class AppRoleComponent implements OnInit {
     } else {
       this.title = 'Chỉnh sửa';
       this.form.controls['id'].setValue(item.id);
-      let itemFilter = this.dataSource.filteredData.filter(
-        (x: any) => x.id == item.id
-      )[0];
-      // this.roleForm.controls['name'].setValue(itemFilter.name);
-      // this.roleForm.controls['description'].setValue(itemFilter.description);
-      // this.roleForm.controls['parentId'].setValue(itemFilter.parentId);
-      // this.roleForm.controls['createdDate'].setValue(itemFilter.createdDate);
-      // this.roleForm.controls['createdBy'].setValue(itemFilter.createdBy);
-      // this.roleForm.controls['updatedDate'].setValue(itemFilter.updatedDate);
-      // this.roleForm.controls['updatedBy'].setValue(itemFilter.updatedBy);
-      // this.roleForm.controls['icon'].setValue(itemFilter.icon);
-      // this.roleForm.controls['link'].setValue(itemFilter.link);
-      // this.roleForm.controls['activeLink'].setValue(itemFilter.activeLink);
-      // this.roleForm.controls['order_By'].setValue(itemFilter.order_By);
-      let parent = this.roleParents.filter(
-        (x: any) => x.id == item.parentId
-      )[0];
-      this.parentName = parent?.description;
-      this.roleParentControl.setValue(this.parentName);
+      this.form.controls['name'].setValue(item.name);
+      this.form.controls['description'].setValue(item.description);
     }
     const dialogRef = this.dialog.open(this.dialogTemplate, {
       width: '750px',
@@ -132,20 +99,10 @@ export class AppRoleComponent implements OnInit {
     });
   }
 
-  getRoles() {
-    this.dataService.get('approles/getall').subscribe(
-      (data: any) => {
-        this.roleParents = data;
-      },
-      (err) => {}
-    );
-  }
-
   getAllRoles() {
-    this.preventAbuse = true;
     this.dataService
       .get(
-        'approles/getlistpaging?page=' +
+        'ApplicationRoles/getlistpaging?page=' +
           this.page +
           '&pageSize=' +
           this.pageSize +
@@ -162,7 +119,6 @@ export class AppRoleComponent implements OnInit {
           this.notification.printErrorMessage(MessageConstants.GET_FAILSE_MSG);
         }
       );
-    this.preventAbuse = false;
   }
 
   applyFilter(event: Event) {
@@ -210,28 +166,17 @@ export class AppRoleComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-    this.preventAbuse = true;
     if (this.action == 'create') {
       let role = {
-        // name: this.form.controls['name'].value,
-        // description: this.form.controls['description'].value,
-        // parentId:
-        //   this.roleForm.controls['parentId'].value != ''
-        //     ? this.roleForm.controls['parentId'].value
-        //     : null,
-        // icon: this.roleForm.controls['icon'].value,
-        // link: this.roleForm.controls['link'].value,
-        // activeLink: this.roleForm.controls['activeLink'].value,
-        // order_By: this.roleForm.controls['order_By'].value,
-        // createdBy: user.id,
+         name: this.form.controls['name'].value,
+         description: this.form.controls['description'].value,
       };
-      this.dataService.post('approles/create', role).subscribe(
+      this.dataService.post('ApplicationRoles/create', role).subscribe(
         (data) => {
           this.notification.printSuccessMessage(
             MessageConstants.CREATED_OK_MSG
           );
           this.getAllRoles();
-          this.getRoles();
           this.dialog.closeAll();
           this.onReset();
         },
@@ -262,7 +207,6 @@ export class AppRoleComponent implements OnInit {
         (data) => {
           this.notification.printSuccessMessage(MessageConstants.UPDATED_OK_MSG);
           this.getAllRoles();
-          this.getRoles();
           this.dialog.closeAll();
           this.onReset();
         },
@@ -273,15 +217,12 @@ export class AppRoleComponent implements OnInit {
     }
 
     this.onReset();
-    this.preventAbuse = false;
   }
 
   onReset() {
-    // this.parentName=undefined;
     this.action == '';
     this.dialog.closeAll();
     this.form.reset();
-    this.roleParentControl.reset();
   }
 
   removeData() {
@@ -297,7 +238,6 @@ export class AppRoleComponent implements OnInit {
   }
 
   deleteItemConfirm(id: string) {
-    this.preventAbuse = true;
     this.dataService
       .delete('approles/deletemulti', 'checkedList', id)
       .subscribe(
@@ -307,7 +247,6 @@ export class AppRoleComponent implements OnInit {
           );
           this.selection.clear();
           this.getAllRoles();
-          this.getRoles();
         },
         (err) => {
           this.notification.printErrorMessage(
@@ -315,7 +254,6 @@ export class AppRoleComponent implements OnInit {
           );
         }
       );
-    this.preventAbuse = false;
   }
 
   ngAfterViewInit() {
@@ -331,4 +269,5 @@ export class AppRoleComponent implements OnInit {
     this.pageSize = pe.pageSize;
     this.getAllRoles();
   }
+
 }

@@ -9,6 +9,8 @@ import {MatButtonModule} from '@angular/material/button';
 import { MaterialModule } from './main/material/material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { AuthGuard } from './core/guards/auth.guard';
+import { HttpClientModule } from '@angular/common/http';
 @NgModule({
   declarations: [
     AppComponent
@@ -16,12 +18,13 @@ import { NgxSpinnerModule } from 'ngx-spinner';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     MaterialModule,
     ReactiveFormsModule,
     NgxSpinnerModule
   ],
-  providers: [],
+  providers: [AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

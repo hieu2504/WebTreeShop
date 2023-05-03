@@ -24,6 +24,7 @@ const routes: Routes = [{path:'',component:AppRoleComponent}]
     HttpClientModule,
     NgxSpinnerModule,
     [RouterModule.forChild(routes)],
+
   ],
   providers:[AuthenService, NotificationService, DataService],
   schemas:[CUSTOM_ELEMENTS_SCHEMA],

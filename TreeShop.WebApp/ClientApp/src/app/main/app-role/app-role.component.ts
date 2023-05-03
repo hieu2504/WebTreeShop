@@ -10,6 +10,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { Observable } from 'rxjs';
 import { MessageConstants } from 'src/app/core/common/message.constants';
 import { DataService } from 'src/app/core/services/data.service';
@@ -36,7 +37,6 @@ export class AppRoleComponent implements OnInit {
   totalRow: number = 0;
   totalPage: number = 0;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('dialog') dialogTemplate!: TemplateRef<any>;
   selection = new SelectionModel<any>(true, []);
   form!: FormGroup;
@@ -53,7 +53,8 @@ export class AppRoleComponent implements OnInit {
     public dialog: MatDialog,
     private notification: NotificationService,
     private pagin: PaginatorCustomService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private spinner: NgxSpinnerService
   ) {
     this.form = this.formBuilder.group({
       id: '',
@@ -65,7 +66,6 @@ export class AppRoleComponent implements OnInit {
         '',
         Validators.compose([Validators.required, Validators.maxLength(100)]),
       ],
-
     });
   }
 
@@ -100,6 +100,7 @@ export class AppRoleComponent implements OnInit {
   }
 
   getAllRoles() {
+    this.spinner.show();
     this.dataService
       .get(
         'ApplicationRoles/getlistpaging?page=' +
@@ -112,7 +113,29 @@ export class AppRoleComponent implements OnInit {
       .subscribe(
         (data: any) => {
           this.dataSource = new MatTableDataSource(data.items);
-          this.dataSource.sort = this.sort;
+          this.totalRow = data.totalCount;
+          this.spinner.hide();
+        },
+        (err) => {
+          this.spinner.hide();
+          this.notification.printErrorMessage(MessageConstants.GET_FAILSE_MSG);
+        }
+      );
+  }
+
+  search() {
+    this.dataService
+      .get(
+        'ApplicationRoles/getlistpaging?page=' +
+          this.page +
+          '&pageSize=' +
+          this.pageSize +
+          '&keyword=' +
+          this.keyword
+      )
+      .subscribe(
+        (data: any) => {
+          this.dataSource = new MatTableDataSource(data.items);
           this.totalRow = data.totalCount;
         },
         (err) => {
@@ -125,7 +148,7 @@ export class AppRoleComponent implements OnInit {
     //const filterValue = (event.target as HTMLInputElement).value;
     this.keyword = (event.target as HTMLInputElement).value;
     this.page = 0;
-    this.getAllRoles();
+    this.search();
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
@@ -168,8 +191,8 @@ export class AppRoleComponent implements OnInit {
     }
     if (this.action == 'create') {
       let role = {
-         name: this.form.controls['name'].value,
-         description: this.form.controls['description'].value,
+        name: this.form.controls['name'].value,
+        description: this.form.controls['description'].value,
       };
       this.dataService.post('ApplicationRoles/create', role).subscribe(
         (data) => {
@@ -205,7 +228,9 @@ export class AppRoleComponent implements OnInit {
       };
       this.dataService.put('approles/update', role).subscribe(
         (data) => {
-          this.notification.printSuccessMessage(MessageConstants.UPDATED_OK_MSG);
+          this.notification.printSuccessMessage(
+            MessageConstants.UPDATED_OK_MSG
+          );
           this.getAllRoles();
           this.dialog.closeAll();
           this.onReset();
@@ -269,5 +294,4 @@ export class AppRoleComponent implements OnInit {
     this.pageSize = pe.pageSize;
     this.getAllRoles();
   }
-
 }

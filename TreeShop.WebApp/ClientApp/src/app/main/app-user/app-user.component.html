@@ -1,1 +1,46 @@
-<p>app-user works!</p>
+<!-- <h3>Tooltip on the Select All Checkbox</h3>
+<p>
+  <mat-form-field color="outline">
+    <mat-label>Quyền người dùng</mat-label>
+    <mat-select [formControl]="bankMultiCtrl" placeholder="Quyền người dùng" [multiple]="true" #multiSelect>
+      <mat-option>
+        <ngx-mat-select-search [showToggleAllCheckbox]="true" (toggleAll)="toggleSelectAll($event)"
+          [formControl]="bankMultiFilterCtrl" [toggleAllCheckboxTooltipMessage]="tooltipMessage"
+          [toogleAllCheckboxTooltipPosition]="'above'" placeholderLabel="Tìm kiếm..." noEntriesFoundLabel="Không tìm thấy tùy chọn"></ngx-mat-select-search>
+      </mat-option>
+      <mat-option *ngFor="let bank of filteredBanksMulti | async" [value]="bank">
+        {{bank.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</p> -->
+
+
+<p>
+  <mat-form-field color="accent">
+    <mat-label>Quyền người dùng</mat-label>
+    <mat-select
+      [formControl]="bankMultiCtrl"
+      placeholder="Banks"
+      [multiple]="true"
+      #multiSelect
+    >
+      <mat-option>
+        <ngx-mat-select-search
+          [showToggleAllCheckbox]="true"
+          (toggleAll)="toggleSelectAll($event)"
+          [formControl]="bankMultiFilterCtrl"
+          [toggleAllCheckboxTooltipMessage]="tooltipMessage"
+          [toggleAllCheckboxTooltipPosition]="'above'" placeholderLabel="Tìm kiếm..." noEntriesFoundLabel="Không tìm thấy tùy chọn"
+        ></ngx-mat-select-search>
+      </mat-option>
+      <mat-option
+        *ngFor="let bank of filteredBanksMulti | async"
+        [value]="bank"
+      >
+        {{ bank.description }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</p>
+

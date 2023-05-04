@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using TreeShop.Api.Data;
 using TreeShop.Api.Infrastructure.Core;
 using TreeShop.Api.Infrastructure.Extention;
@@ -119,6 +120,102 @@ namespace TreeShop.Api.Controllers
             else
             {
                 return BadRequest(ModelState);
+            }
+        }
+
+        /// <summary>
+        /// Chỉnh sửa quyền
+        /// </summary>
+        /// <param name="AppRoleViewModel"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPut("update")]
+        //[Authorize(Roles = "UpdateRole")]
+        public async Task<IActionResult> Update(AppRoleViewModel AppRoleViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var appRole = await _applicationRoleService.GetDetail(AppRoleViewModel.Id);
+                try
+                {
+                    appRole.UpdateApplicationRole(AppRoleViewModel, "update");
+                    var result = await _applicationRoleService.Update(appRole);
+                    return CreatedAtAction(nameof(Update), result);
+                }
+                catch (NameDuplicatedException dex)
+                {
+                    return BadRequest(dex);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex);
+                }
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
+        }
+
+        /// <summary>
+        /// Xóa quyền
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpDelete("delete/{id}")]
+        //[Authorize(Roles = "DeleteRole")]
+        public async Task<IActionResult> Delete(string id)
+        {
+            try
+            {
+                var result = await _applicationRoleService.Delete(id);
+                return CreatedAtAction(nameof(Delete), result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        /// <summary>
+        /// Xóa nhiều bản ghi
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="checkedList">List id cần xóa</param>
+        /// <returns></returns>
+        [HttpDelete("deletemulti")]
+        //[Authorize(Roles = "DeleteRole")]
+        public async Task<IActionResult> DeleteMulti(string checkedList)
+        {
+            try
+            {
+                int countSuccess = 0;
+                int countError = 0;
+                List<string> result = new List<string>();
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
+                List<string> listItem = JsonConvert.DeserializeObject<List<string>>(checkedList);
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+                foreach (var item in listItem)
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                {
+                    try
+                    {
+                        await _applicationRoleService.Delete(item);
+                        countSuccess++;
+                    }
+                    catch (Exception)
+                    {
+                        countError++;
+                    }
+                }
+                result.Add("Xoá thành công: " + countSuccess);
+                result.Add("Lỗi: " + countError);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
             }
         }
 

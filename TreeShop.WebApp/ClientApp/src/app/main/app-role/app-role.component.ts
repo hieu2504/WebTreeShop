@@ -87,6 +87,7 @@ export class AppRoleComponent implements OnInit {
       this.title = 'Thêm mới';
     } else {
       this.title = 'Chỉnh sửa';
+      console.log(item)
       this.form.controls['id'].setValue(item.id);
       this.form.controls['name'].setValue(item.name);
       this.form.controls['description'].setValue(item.description);
@@ -112,9 +113,9 @@ export class AppRoleComponent implements OnInit {
       )
       .subscribe(
         (data: any) => {
+          this.spinner.hide();
           this.dataSource = new MatTableDataSource(data.items);
           this.totalRow = data.totalCount;
-          this.spinner.hide();
         },
         (err) => {
           this.spinner.hide();
@@ -190,6 +191,7 @@ export class AppRoleComponent implements OnInit {
       return;
     }
     if (this.action == 'create') {
+      this.spinner.show();
       let role = {
         name: this.form.controls['name'].value,
         description: this.form.controls['description'].value,
@@ -204,29 +206,18 @@ export class AppRoleComponent implements OnInit {
           this.onReset();
         },
         (err) => {
-          this.notification.printErrorMessage(
-            MessageConstants.CREATE_FAILSE_MSG
-          );
+          this.spinner.hide();
+          this.notification.printErrorMessage(err.error.message);
         }
       );
     } else if (this.action == 'edit') {
+      this.spinner.show();
       let role = {
-        // name: this.roleForm.controls['name'].value,
-        // description: this.roleForm.controls['description'].value,
-        // parentId:
-        //   this.roleForm.controls['parentId'].value != ''
-        //     ? this.roleForm.controls['parentId'].value
-        //     : null,
-        // id: this.roleForm.controls['id'].value,
-        // updatedBy: user.id,
-        // createdDate: this.roleForm.controls['createdDate'].value,
-        // createdBy: this.roleForm.controls['createdBy'].value,
-        // icon: this.roleForm.controls['icon'].value,
-        // link: this.roleForm.controls['link'].value,
-        // activeLink: this.roleForm.controls['activeLink'].value,
-        // order_By: this.roleForm.controls['order_By'].value,
+        id: this.form.controls['id'].value,
+        name: this.form.controls['name'].value,
+        description: this.form.controls['description'].value,
       };
-      this.dataService.put('approles/update', role).subscribe(
+      this.dataService.put('ApplicationRoles/update', role).subscribe(
         (data) => {
           this.notification.printSuccessMessage(
             MessageConstants.UPDATED_OK_MSG
@@ -236,12 +227,11 @@ export class AppRoleComponent implements OnInit {
           this.onReset();
         },
         (err) => {
-          this.notification.printErrorMessage(err);
+          this.spinner.hide();
+          this.notification.printErrorMessage(err.error.message);
         }
       );
     }
-
-    this.onReset();
   }
 
   onReset() {
@@ -264,7 +254,7 @@ export class AppRoleComponent implements OnInit {
 
   deleteItemConfirm(id: string) {
     this.dataService
-      .delete('approles/deletemulti', 'checkedList', id)
+      .delete('ApplicationRoles/deletemulti', 'checkedList', id)
       .subscribe(
         (response) => {
           this.notification.printSuccessMessage(

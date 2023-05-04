@@ -30,7 +30,6 @@ namespace TreeShop.Api.Infrastructure.Extention
             appRole.Name = appRoleViewModel.Name;
             appRole.Description = appRoleViewModel.Description;
             appRole.NormalizedName = appRoleViewModel.Name;
-            appRole.CreatedDate = appRoleViewModel.CreatedDate;
         }
     }
 }

@@ -30,7 +30,7 @@ namespace TreeShop.Api.Service
         public async Task<AppRole> Add(AppRole appRole)
         {
             if (await _applicationRoleRepository.CheckContainsAsync(r => r.Description == appRole.Description || r.Name == appRole.Name))
-                throw new NameDuplicatedException("Tên không được trùng.");
+                throw new NameDuplicatedException("Tên và mô tả không được trùng.");
             return await _applicationRoleRepository.AddASync(appRole);
         }
 
@@ -59,8 +59,8 @@ namespace TreeShop.Api.Service
 
         public async Task<AppRole> Update(AppRole appRole)
         {
-            if (await _applicationRoleRepository.CheckContainsAsync(x => x.Description == appRole.Description && x.Name == appRole.Name && x.Id != appRole.Id))
-                throw new NameDuplicatedException("Tên không được trùng.");
+            if (await _applicationRoleRepository.CheckContainsAsync(x => (x.Description == appRole.Description || x.Name == appRole.Name) && x.Id != appRole.Id))
+                throw new NameDuplicatedException("Tên và mô tả không được trùng.");
             return await _applicationRoleRepository.UpdateASync(appRole);
         }
     }

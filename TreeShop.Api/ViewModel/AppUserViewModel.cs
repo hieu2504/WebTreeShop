@@ -10,6 +10,8 @@ namespace TreeShop.Api.ViewModel
         public string? Address { get; set; }
         public string? Image { get; set; }
         public int Type { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
         public List<string> LstRoleId { get; set; }
     }
 }

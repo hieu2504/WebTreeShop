@@ -12,6 +12,8 @@ namespace TreeShop.Api.Data
         public string? Address { get; set; }
         public string? Image { get; set; }
         public int Type { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
 
     }
 }

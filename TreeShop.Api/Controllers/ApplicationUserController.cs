@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using TreeShop.Api.Data;
+using TreeShop.Api.Infrastructure.Core;
 using TreeShop.Api.Infrastructure.Extention;
 using TreeShop.Api.Service;
 using TreeShop.Api.ViewModel;
@@ -23,13 +25,15 @@ namespace TreeShop.Api.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly IApplicationUserService _applicationUserService;
         private readonly IConfiguration _configuration;
+        private readonly IMapper _mapper;
         //private readonly ITAccountService _iTAccountService;
 
-        public ApplicationUserController( UserManager<AppUser> userManager, IApplicationUserService applicationUserService, IConfiguration configuration)
+        public ApplicationUserController( UserManager<AppUser> userManager, IApplicationUserService applicationUserService, IConfiguration configuration, IMapper mapper)
         {
             _userManager = userManager;
             _applicationUserService = applicationUserService;
             _configuration = configuration;
+            _mapper = mapper;
             //_iTAccountService = tAccountService;
         }
 
@@ -218,6 +222,44 @@ namespace TreeShop.Api.Controllers
             else
             {
                 return BadRequest(ModelState);
+            }
+        }
+
+
+        /// <summary>
+        /// Get danh sách user phân trang
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="page">Trang thứ</param>
+        /// <param name="pageSize">Số bản ghi hiển thị trong 1 trang</param>
+        /// <param name="filter">Từ khóa tìm kiếm</param>
+        /// <returns></returns>
+        [HttpGet("getlistpaging")]
+        //[Authorize(Roles = "ViewRole")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetListPaging(int page = 0, int pageSize = 100, string? keyword = null)
+        {
+            try
+            {
+                int totalRow = 0;
+                var model = (await _applicationUserService.GetAll(keyword)).Where(x=>x.Type == 1);
+                totalRow = model.Count();
+                var paging = model.OrderByDescending(x => x.UpdatedDate).Skip(page * pageSize).Take(pageSize);
+                IEnumerable<AppUserViewModel> modelVm = _mapper.Map<IEnumerable<AppUser>, IEnumerable<AppUserViewModel>>(paging);
+
+                PaginationSet<AppUserViewModel> pagedSet = new PaginationSet<AppUserViewModel>()
+                {
+                    Page = page,
+                    TotalCount = totalRow,
+                    TotalPages = (int)Math.Ceiling((decimal)totalRow / pageSize),
+                    Items = modelVm
+                };
+
+                return Ok(pagedSet);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
             }
         }
     }

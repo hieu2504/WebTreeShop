@@ -19,7 +19,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { SelectionModel } from '@angular/cdk/collections';
 import { NgxSpinnerService } from 'ngx-spinner';
 
-export interface AppUser {
+export interface AppRole {
   id: string;
   name: string;
   description: string;
@@ -31,19 +31,17 @@ export interface AppUser {
   styleUrls: ['./app-user.component.css'],
 })
 export class AppUserComponent implements OnInit, AfterViewInit, OnDestroy {
-  /** list of banks */
-  protected appUsers!: AppUser[];
+  /** list of role */
+  protected appRoles!: AppRole[];
 
-  /** control for the selected bank for multi-selection */
+  /** control for the selected role for multi-selection */
   public roleMultiCtrl: FormControl = new FormControl();
 
   /** control for the MatSelect filter keyword multi-selection */
-  public bankMultiFilterCtrl: FormControl = new FormControl();
+  public roleMultiFilterCtrl: FormControl = new FormControl();
 
   /** list of banks filtered by search keyword */
-  public filteredBanksMulti: ReplaySubject<AppUser[]> = new ReplaySubject<
-    AppUser[]
-  >(1);
+  public filteredRolesMulti: ReplaySubject<AppRole[]> = new ReplaySubject<AppRole[]>(1);
 
   public tooltipMessage = 'Chọn tất cả / Bỏ chọn tất cả';
 
@@ -129,7 +127,7 @@ export class AppUserComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   toggleSelectAll(selectAllValue: boolean) {
-    this.filteredBanksMulti
+    this.filteredRolesMulti
       .pipe(take(1), takeUntil(this._onDestroy))
       .subscribe((val) => {
         if (selectAllValue) {
@@ -152,27 +150,27 @@ export class AppUserComponent implements OnInit, AfterViewInit, OnDestroy {
         // the form control (i.e. _initializeSelection())
         // this needs to be done after the filteredBanks are loaded initially
         // and after the mat-option elements are available
-        this.multiSelect.compareWith = (a: AppUser, b: AppUser) =>
+        this.multiSelect.compareWith = (a: AppRole, b: AppRole) =>
           a && b && a.id === b.id;
       });
   }
 
   protected filterBanksMulti() {
-    if (!this.appUsers) {
+    if (!this.appRoles) {
       return;
     }
     // get the search keyword
-    let search = this.bankMultiFilterCtrl.value;
+    let search = this.roleMultiFilterCtrl.value;
     if (!search) {
-      this.filteredBanksMulti.next(this.appUsers.slice());
+      this.filteredRolesMulti.next(this.appRoles.slice());
       return;
     } else {
       search = search.toLowerCase();
     }
-    // filter the banks
-    this.filteredBanksMulti.next(
-      this.appUsers.filter(
-        (appUser) => appUser.name.toLowerCase().indexOf(search) > -1
+    // filter the roles
+    this.filteredRolesMulti.next(
+      this.appRoles.filter(
+        (appRole) => appRole.name.toLowerCase().indexOf(search) > -1
       )
     );
   }
@@ -181,21 +179,21 @@ export class AppUserComponent implements OnInit, AfterViewInit, OnDestroy {
     this.dataService.get('ApplicationRoles/getall').subscribe(
       (data: any) => {
         console.log(data);
-        this.appUsers = data;
+        this.appRoles = data;
         console.log(data);
 
         // set initial selection
-        for (let i = 0; i < this.appUsers.length; i++) {
+        for (let i = 0; i < this.appRoles.length; i++) {
           if (this.appUserRole.length > 0) {
-            console.log(this.appUserRole.includes(this.appUsers[i].id));
-            if (this.appUserRole.includes(this.appUsers[i].id)) {
-              this.appUserChecked.push(this.appUsers[i]);
+            console.log(this.appUserRole.includes(this.appRoles[i].id));
+            if (this.appUserRole.includes(this.appRoles[i].id)) {
+              this.appUserChecked.push(this.appRoles[i]);
             }
           }
         }
         this.roleMultiCtrl.setValue(this.appUserChecked);
-        // load the initial bank list
-        this.filteredBanksMulti.next(this.appUsers.slice());
+        // load the initial role list
+        this.filteredBanksMulti.next(this.appRoles.slice());
 
         // listen for search field value changes
         this.bankMultiFilterCtrl.valueChanges

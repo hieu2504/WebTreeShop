@@ -220,32 +220,32 @@ namespace TreeShop.Api.Controllers
         }
 
 
-        /// <summary>
-        /// Thêm mới quyền
-        /// </summary>
-        /// <param name="request"></param>
-        /// <param name="AppRoleViewModel"></param>
-        /// <returns></returns>
-        [HttpGet("getrolebyuserid")]
-        //[Authorize(Roles = "CreateRole")]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetRoleByUserId()
-        {
-            return Ok("Adhihi");
-        }
+        ///// <summary>
+        ///// Thêm mới quyền
+        ///// </summary>
+        ///// <param name="request"></param>
+        ///// <param name="AppRoleViewModel"></param>
+        ///// <returns></returns>
+        //[HttpGet("getrolebyuserid")]
+        ////[Authorize(Roles = "CreateRole")]
+        //[AllowAnonymous]
+        //public async Task<IActionResult> GetRoleByUserId()
+        //{
+        //    return Ok("Adhihi");
+        //}
 
 
-        /// <summary>
-        /// Thêm mới quyền
-        /// </summary>
-        /// <param name="request"></param>
-        /// <param name="AppRoleViewModel"></param>
-        /// <returns></returns>
-        [HttpPost("getrolebyuserid1")]
-        [Authorize(Roles = "CreateRole234")]
-        public async Task<IActionResult> GetRoleByUserId1(string userId)
-        {
-            return Ok("Adhihi");
-        }
+        ///// <summary>
+        ///// Thêm mới quyền
+        ///// </summary>
+        ///// <param name="request"></param>
+        ///// <param name="AppRoleViewModel"></param>
+        ///// <returns></returns>
+        //[HttpPost("getrolebyuserid1")]
+        //[Authorize(Roles = "CreateRole234")]
+        //public async Task<IActionResult> GetRoleByUserId1(string userId)
+        //{
+        //    return Ok("Adhihi");
+        //}
     }
 }

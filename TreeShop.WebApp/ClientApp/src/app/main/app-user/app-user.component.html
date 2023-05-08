@@ -126,11 +126,11 @@
         <mat-select [formControl]="roleMultiCtrl" placeholder="Banks" [multiple]="true" #multiSelect>
           <mat-option>
             <ngx-mat-select-search [showToggleAllCheckbox]="true" (toggleAll)="toggleSelectAll($event)"
-              [formControl]="bankMultiFilterCtrl" [toggleAllCheckboxTooltipMessage]="tooltipMessage"
+              [formControl]="roleMultiFilterCtrl" [toggleAllCheckboxTooltipMessage]="tooltipMessage"
               [toggleAllCheckboxTooltipPosition]="'above'" placeholderLabel="Tìm kiếm..."
               noEntriesFoundLabel="Không tìm thấy tùy chọn"></ngx-mat-select-search>
           </mat-option>
-          <mat-option *ngFor="let bank of filteredBanksMulti | async" [value]="bank">
+          <mat-option *ngFor="let bank of filteredRolesMulti | async" [value]="bank">
             {{ bank.description }}
           </mat-option>
         </mat-select>

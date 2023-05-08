@@ -142,7 +142,7 @@ export class AppUserComponent implements OnInit, AfterViewInit, OnDestroy {
    * Sets the initial value after the filteredBanks are loaded initially
    */
   protected setInitialValue() {
-    this.filteredBanksMulti
+    this.filteredRolesMulti
       .pipe(take(1), takeUntil(this._onDestroy))
       .subscribe(() => {
         // setting the compareWith property to a comparison function
@@ -193,10 +193,10 @@ export class AppUserComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         this.roleMultiCtrl.setValue(this.appUserChecked);
         // load the initial role list
-        this.filteredBanksMulti.next(this.appRoles.slice());
+        this.filteredRolesMulti.next(this.appRoles.slice());
 
         // listen for search field value changes
-        this.bankMultiFilterCtrl.valueChanges
+        this.roleMultiFilterCtrl.valueChanges
           .pipe(takeUntil(this._onDestroy))
           .subscribe(() => {
             this.filterBanksMulti();
@@ -265,7 +265,7 @@ export class AppUserComponent implements OnInit, AfterViewInit, OnDestroy {
   search() {
     this.dataService
       .get(
-        'ApplicationRoles/getlistpaging?page=' +
+        'ApplicationUser/getlistpaging?page=' +
           this.page +
           '&pageSize=' +
           this.pageSize +

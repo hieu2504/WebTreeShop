@@ -18,6 +18,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { SelectionModel } from '@angular/cdk/collections';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { UrlConstants } from 'src/app/core/common/url.constants';
 
 export interface AppRole {
   id: string;
@@ -45,7 +46,8 @@ export class AppUserComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public tooltipMessage = 'Chọn tất cả / Bỏ chọn tất cả';
 
-  @ViewChild('multiSelect', { static: true }) multiSelect!: MatSelect;
+  @ViewChild('multiSelect', { static: true })
+  multiSelect!: MatSelect;
 
   /** Subject that emits when the component has been destroyed. */
   protected _onDestroy = new Subject<void>();
@@ -92,14 +94,17 @@ export class AppUserComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {
     this.form = this.formBuilder.group({
       id: '',
-      name: [
-        '',
-        Validators.compose([Validators.required, Validators.maxLength(50)]),
-      ],
-      description: [
-        '',
-        Validators.compose([Validators.required, Validators.maxLength(100)]),
-      ],
+      userName: ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
+      password: ['', Validators.compose([Validators.required,Validators.maxLength(50), Validators.minLength(6)])],
+      fullName: ['', Validators.compose([Validators.required, Validators.maxLength(100)])],
+      phoneNumber: '',
+      email: ['', Validators.compose([Validators.email, Validators.maxLength(50)])],
+      image: '',
+      createdDate: '',
+      createdBy: '',
+      updatedBy: '',
+      updatedDate: ''
+      //emId:['', Validators.compose([Validators.required])]
     });
 
   }
@@ -118,7 +123,7 @@ export class AppUserComponent implements OnInit, AfterViewInit, OnDestroy {
     this.paginator._intl.nextPageLabel = this.pagin.nextButton;
     this.paginator._intl.lastPageLabel = this.pagin.lastButton;
     this.paginator._intl.previousPageLabel = this.pagin.preButton;
-    this.setInitialValue();
+
   }
 
   ngOnDestroy() {
@@ -142,6 +147,7 @@ export class AppUserComponent implements OnInit, AfterViewInit, OnDestroy {
    * Sets the initial value after the filteredBanks are loaded initially
    */
   protected setInitialValue() {
+
     this.filteredRolesMulti
       .pipe(take(1), takeUntil(this._onDestroy))
       .subscribe(() => {
@@ -178,15 +184,12 @@ export class AppUserComponent implements OnInit, AfterViewInit, OnDestroy {
   getAllRoles() {
     this.dataService.get('ApplicationRoles/getall').subscribe(
       (data: any) => {
-        console.log(data);
         this.appRoles = data;
-        console.log(data);
 
         // set initial selection
         for (let i = 0; i < this.appRoles.length; i++) {
           if (this.appUserRole.length > 0) {
-            console.log(this.appUserRole.includes(this.appRoles[i].id));
-            if (this.appUserRole.includes(this.appRoles[i].id)) {
+            if (this.appUserRole.includes(this.appRoles[i].name)) {
               this.appUserChecked.push(this.appRoles[i]);
             }
           }
@@ -208,25 +211,43 @@ export class AppUserComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
+  getRoleByUserID(userId: any){
+    this.dataService.get('AppUserRole/getuserroleid?userId=' + userId).subscribe(
+      (data: any) => {
 
-  // private _filter(value: any): any[] {
-  //   const filterValue = value?.toLowerCase();
-  //   return this.roleParents.filter((option: any) =>
-  //     option?.description.toLowerCase().includes(filterValue)
-  //   );
-  // }
+        this.appUserRole = data;
+        this.getAllRoles();
+      },
+      (err) => {
+        this.notification.printErrorMessage(MessageConstants.GET_FAILSE_MSG);
+      }
+    );
+  }
 
   openDialog(action: string, item?: any, config?: MatDialogConfig) {
     this.action = action;
-
+    this.getAllRoles();
+    this.appUserRole = [];
+    this.appUserChecked = [];
     if (action == 'create') {
       this.title = 'Thêm mới';
     } else {
+
       this.title = 'Chỉnh sửa';
       console.log(item)
+      this.form.controls["password"].setValidators([Validators.minLength(6), Validators.maxLength(50)]);
       this.form.controls['id'].setValue(item.id);
-      this.form.controls['name'].setValue(item.name);
-      this.form.controls['description'].setValue(item.description);
+      this.form.controls['userName'].setValue(item.userName);
+      this.form.controls['fullName'].setValue(item.fullName);
+      this.form.controls['image'].setValue(item.image);
+      this.form.controls['email'].setValue(item.email);
+      this.form.controls['phoneNumber'].setValue(item.phoneNumber);
+      this.form.controls['createdDate'].setValue(item.createdDate);
+      this.form.controls['updatedDate'].setValue(item.updatedDate);
+
+      this.getRoleByUserID(item.id);
+
+
     }
     const dialogRef = this.dialog.open(this.dialogTemplate, {
       width: '750px',
@@ -250,7 +271,7 @@ export class AppUserComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe(
         (data: any) => {
           this.spinner.hide();
-          debugger
+
           this.dataSource = new MatTableDataSource(data.items);
           this.totalRow = data.totalCount;
           console.log(data);
@@ -330,45 +351,58 @@ export class AppUserComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     if (this.action == 'create') {
       this.spinner.show();
-      let role = {
-        name: this.form.controls['name'].value,
-        description: this.form.controls['description'].value,
-      };
-      this.dataService.post('ApplicationRoles/create', role).subscribe(
-        (data) => {
-          this.notification.printSuccessMessage(
-            MessageConstants.CREATED_OK_MSG
-          );
-          this.getAllRoles();
-          this.dialog.closeAll();
-          this.onReset();
-        },
-        (err) => {
-          this.spinner.hide();
-          this.notification.printErrorMessage(err.error.message);
-        }
-      );
+
+      this.appUserRole = [];
+      for (let i = 0; i < this.roleMultiCtrl.value.length; i++) {
+        this.appUserRole.push(this.roleMultiCtrl.value[i].name);
+      }
+      let user = {
+        userName: this.form.controls['userName'].value,
+        fullName: this.form.controls['fullName'].value,
+        passwordHash: this.form.controls['password'].value,
+        phoneNumber: this.form.controls['phoneNumber'].value,
+        email: this.form.controls['email'].value,
+        image: this.form.controls['image'].value != '' ? this.form.controls['image'].value : null,
+        lstRoleId: this.appUserRole,
+        type: 1
+      }
+      this.dataService.post('ApplicationUser/create', user).subscribe(data => {
+
+        this.spinner.hide();
+        this.notification.printSuccessMessage('Thêm mới thành công');
+        this.onReset();
+        this.getAllUser();
+
+      }, err => {
+        this.spinner.hide();
+        this.notification.printErrorMessage(err.error.message);
+      });
     } else if (this.action == 'edit') {
       this.spinner.show();
-      let role = {
+      for (let i = 0; i < this.roleMultiCtrl.value.length; i++) {
+        this.appUserRole.push(this.roleMultiCtrl.value[i].name);
+      }
+      let user = {
         id: this.form.controls['id'].value,
-        name: this.form.controls['name'].value,
-        description: this.form.controls['description'].value,
-      };
-      this.dataService.put('ApplicationRoles/update', role).subscribe(
-        (data) => {
-          this.notification.printSuccessMessage(
-            MessageConstants.UPDATED_OK_MSG
-          );
-          this.getAllRoles();
-          this.dialog.closeAll();
-          this.onReset();
-        },
-        (err) => {
-          this.spinner.hide();
-          this.notification.printErrorMessage(err.error.message);
-        }
-      );
+        userName: this.form.controls['userName'].value,
+        fullName: this.form.controls['fullName'].value,
+        passwordHash: this.form.controls['password'].value,
+        phoneNumber: this.form.controls['phoneNumber'].value,
+        email: this.form.controls['email'].value,
+        image: this.form.controls['image'].value != '' ? this.form.controls['image'].value : null,
+        lstRoleId: this.appUserRole,
+        type: 1
+      }
+      this.dataService.post('ApplicationUser/update', user).subscribe(data => {
+        this.spinner.hide();
+        this.notification.printSuccessMessage('Chỉnh sửa thành công');
+        this.onReset();
+        this.getAllUser();
+
+      }, err => {
+        this.spinner.hide();
+        this.notification.printErrorMessage(err.error.message);
+      });
     }
   }
 
@@ -392,14 +426,15 @@ export class AppUserComponent implements OnInit, AfterViewInit, OnDestroy {
 
   deleteItemConfirm(id: string) {
     this.dataService
-      .delete('ApplicationRoles/deletemulti', 'checkedList', id)
+      .delete('ApplicationUser/deletemulti', 'checkedList', id)
       .subscribe(
-        (response) => {
+        (response:any) => {
+          console.log(response)
           this.notification.printSuccessMessage(
-            MessageConstants.DELETED_OK_MSG
+            response[0] + " bản ghi"
           );
           this.selection.clear();
-          this.getAllRoles();
+          this.getAllUser();
         },
         (err) => {
           this.notification.printErrorMessage(
@@ -409,10 +444,25 @@ export class AppUserComponent implements OnInit, AfterViewInit, OnDestroy {
       );
   }
 
-
   onChangePage(pe: PageEvent) {
     this.page = pe.pageIndex;
     this.pageSize = pe.pageSize;
     this.getAllRoles();
+  }
+
+  imagePreview(e: any) {
+    const file = (e.target as HTMLInputElement).files![0];
+    const reader = new FileReader();
+    reader.onload = () => {
+      let base64String = reader.result as string;
+      let img = base64String.split('base64,')[1];
+      this.form.controls['image'].setValue(img);
+    }
+    reader.readAsDataURL(file);
+
+  }
+
+  clearImage() {
+    this.form.controls['image'].setValue('');
   }
 }

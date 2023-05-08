@@ -24,16 +24,20 @@ namespace TreeShop.Api.Controllers
 
         private readonly UserManager<AppUser> _userManager;
         private readonly IApplicationUserService _applicationUserService;
+        private readonly IApplicationRoleService _applicationRoleService;
+        private readonly IApplicationUserRoleService _applicationUserRoleService;
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
         //private readonly ITAccountService _iTAccountService;
 
-        public ApplicationUserController( UserManager<AppUser> userManager, IApplicationUserService applicationUserService, IConfiguration configuration, IMapper mapper)
+        public ApplicationUserController( UserManager<AppUser> userManager, IApplicationUserService applicationUserService, IConfiguration configuration, IMapper mapper, IApplicationRoleService applicationRoleService, IApplicationUserRoleService applicationUserRoleService)
         {
             _userManager = userManager;
             _applicationUserService = applicationUserService;
+            _applicationRoleService = applicationRoleService;
             _configuration = configuration;
             _mapper = mapper;
+            _applicationUserRoleService = applicationUserRoleService;
             //_iTAccountService = tAccountService;
         }
 
@@ -192,7 +196,7 @@ namespace TreeShop.Api.Controllers
                 {
                     AppUser appUser = await _userManager.FindByIdAsync(AppUserViewModel.Id);
                     var oldUserName = appUser.UserName;
-                    //appUser.UpdateUser(applicationUserViewModel, "update");
+                    appUser.UpdateUser(AppUserViewModel, "update");
                     if (!string.IsNullOrEmpty(AppUserViewModel.PasswordHash))
                     {
                         appUser.PasswordHash = _userManager.PasswordHasher.HashPassword(appUser, AppUserViewModel.PasswordHash);
@@ -200,6 +204,11 @@ namespace TreeShop.Api.Controllers
                     var result = await _userManager.UpdateAsync(appUser);
                     if (result.Succeeded)
                     {
+                        var listRole = await _applicationRoleService.GetAll();
+                        foreach (var role in listRole)
+                        {
+                            await _userManager.RemoveFromRoleAsync(appUser, role.Name);
+                        }
                         var listAppRole = AppUserViewModel.LstRoleId;
                         if (listAppRole.Count != 0)
                         {
@@ -256,6 +265,54 @@ namespace TreeShop.Api.Controllers
                 };
 
                 return Ok(pagedSet);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+
+        /// <summary>
+        /// Xóa nhiều tài khoản
+        /// </summary>
+        /// <param name="checkedList"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpDelete("deletemulti")]
+        //[Authorize(Roles = "DeleteUser")]
+        public async Task<IActionResult> DeleteMulti(string checkedList)
+        {
+            try
+            {
+                
+                int countSuccess = 0;
+                int countError = 0;
+                List<string> result = new List<string>();
+                var listItem = JsonConvert.DeserializeObject<List<string>>(checkedList);
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+                foreach (var item in listItem)
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+                {
+                    try
+                    {
+                        var lstRole = await _applicationUserRoleService.GetAllUserRole(item);
+                        AppUser appUser = await _userManager.FindByIdAsync(item);
+                        foreach (var role in lstRole)
+                        {
+                            await _userManager.RemoveFromRoleAsync(appUser, role);
+                        }
+                        var res = await _userManager.DeleteAsync(appUser);
+                        countSuccess++;
+                    }
+                    catch (Exception)
+                    {
+                        countError++;
+                    }
+                }
+                result.Add("Xóa thành công: " + countSuccess);
+                result.Add("Lỗi" + countError);
+                return Ok(result);
             }
             catch (Exception ex)
             {

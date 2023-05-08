@@ -7,17 +7,24 @@ namespace TreeShop.Api.Infrastructure.Extention
     {
         public static void UpdateUser(this AppUser appUser, AppUserViewModel appUserViewModel, string action = "add")
         {
-            if (action == "add")
+            if (action == "add") { 
                 appUser.Id = Guid.NewGuid().ToString();
+                appUser.CreatedDate = DateTime.Now; 
+                appUser.UpdatedDate = appUser.CreatedDate; 
+            }
             else
             {
                 appUser.Id = appUserViewModel.Id;
+                appUser.UpdatedDate = DateTime.Now;
             }
             appUser.Email = appUserViewModel.Email;
             appUser.UserName = appUserViewModel.UserName;
             appUser.PhoneNumber = appUserViewModel.PhoneNumber;
             appUser.NormalizedUserName = appUserViewModel.UserName;
             appUser.FullName = appUserViewModel.FullName;
+            appUser.Type = appUserViewModel.Type;
+            appUser.Image = appUserViewModel.Image;
+            
         }
 
 

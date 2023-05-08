@@ -1,6 +1,6 @@
 <mat-card>
   <div>
-    <mat-card-title color="primary">Danh sách quyền người dùng</mat-card-title>
+    <mat-card-title color="primary">Danh sách tài khoản quản trị</mat-card-title>
     <mat-divider></mat-divider>
     <br>
     <br>
@@ -102,28 +102,64 @@
     <mat-dialog-content class="mat-typography">
 
       <mat-form-field appearance="outline">
-        <mat-label>Tên quyền</mat-label>
-        <input matInput placeholder="Tên quyền" formControlName="name" #name maxlength="128" required>
-        <mat-hint align="end">{{name.value.length}} / 128</mat-hint>
-        <mat-error *ngIf="f('name').hasError('required')">
-          Tên quyền không được bỏ trống
+        <mat-label>Tài khoản</mat-label>
+        <input matInput placeholder="Tài khoản"
+          formControlName="userName" required #userName maxlength="20">
+        <mat-hint align="end">{{userName.value.length}} / 20</mat-hint>
+        <mat-error *ngIf="f('userName').hasError('required')">
+          Tài khoản không được bỏ trống
         </mat-error>
       </mat-form-field>
-
-
 
       <mat-form-field appearance="outline">
-        <mat-label>Mô tả</mat-label>
-        <input matInput placeholder="Mô tả" formControlName="description" #description maxlength="50" required>
-        <mat-hint align="end">{{description.value.length}} / 50</mat-hint>
-        <mat-error *ngIf="f('description').hasError('required')">
-          Mô tả không được bỏ trống
+        <mat-label>Mật khẩu</mat-label>
+        <input matInput placeholder="Mật khẩu"
+          formControlName="password" #password maxlength="50">
+        <mat-hint align="end">{{password.value.length}} / 50</mat-hint>
+        <mat-error *ngIf="f('password').hasError('required')">
+          Mật khẩu không được bỏ trống
+        </mat-error>
+        <mat-error *ngIf="f('password').hasError('minlength')">
+          Mật khẩu phải có ít nhất 6 kí tự
         </mat-error>
       </mat-form-field>
 
+
+       <mat-form-field appearance="outline">
+        <mat-label>Họ và tên</mat-label>
+        <input matInput placeholder="Họ và tên"
+          formControlName="fullName" #fullName maxlength="100" required>
+        <mat-hint align="end">{{fullName.value.length}} / 100</mat-hint>
+        <mat-error *ngIf="f('fullName').hasError('required')">
+          Họ và tên không được bỏ trống
+        </mat-error>
+      </mat-form-field>
+      <div fxLayout.gt-md="row" fxLayout.gt-sm="column" fxLayoutGap.gt-sm="0px" fxLayoutGap.gt-md="8px">
+        <div fxFlex>
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input type="email" matInput placeholder="Email"
+              formControlName="email" #email maxlength="50">
+            <mat-icon matPrefix>email</mat-icon>
+            <mat-hint align="end">{{email.value.length}} / 50</mat-hint>
+            <mat-error *ngIf="f('email').hasError('email')">
+              Email không đúng định dạng
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div fxFlex>
+          <mat-form-field appearance="outline" align="end">
+            <mat-label>Số điện thoại</mat-label>
+            <mat-icon matPrefix> phone</mat-icon>
+            <input type="tel" matInput placeholder="Số điện thoại"
+              maxlength="15" #phoneNumber formControlName="phoneNumber">
+            <mat-hint align="end">{{phoneNumber.value.length}} / 15</mat-hint>
+          </mat-form-field>
+        </div>
+      </div>
       <mat-form-field appearance="outline">
         <mat-label>Quyền người dùng</mat-label>
-        <mat-select [formControl]="roleMultiCtrl" placeholder="Banks" [multiple]="true" #multiSelect>
+        <mat-select [formControl]="roleMultiCtrl" placeholder="Quyền người dùng" [multiple]="true" #multiSelect>
           <mat-option>
             <ngx-mat-select-search [showToggleAllCheckbox]="true" (toggleAll)="toggleSelectAll($event)"
               [formControl]="roleMultiFilterCtrl" [toggleAllCheckboxTooltipMessage]="tooltipMessage"
@@ -135,6 +171,30 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
+      <div align="center">
+        <fieldset>
+          <legend>Ảnh</legend>
+          <button type="button" mat-stroked-button
+            onclick="document.getElementById('getFile').click()">Tải ảnh lên</button>
+          <input type="file" (change)="imagePreview($event)" id="getFile"  #fileInput style="display:none">
+          <div *ngIf="f('image').value ==='' || f('image').value === null">
+            <img src="../../../assets/images/user-none.png" class="image-preview">
+          </div>
+          <div class="image-div" *ngIf="f('image').value !=='' && f('image').value !==null">
+            <div class="image-preview">
+              <img src="{{'data:image/jpg;base64,' + f('image').value}}"
+              class="image-preview">
+              <a href="javascript:void(0)" class="remove-image" (click)="fileInput.value='';clearImage()">
+                <mat-icon>close</mat-icon>
+              </a>
+            </div>
+
+          </div>
+
+        </fieldset>
+      </div>
+
+
 
     </mat-dialog-content>
     <mat-dialog-actions align="center">
@@ -146,6 +206,19 @@
   </form>
 
 </ng-template>
+<mat-form-field color="outline" *ngIf="false">
+  <mat-label>Quyền người dùng</mat-label>
+  <mat-select [formControl]="roleMultiCtrl" placeholder="Quyền người dùng" [multiple]="true" #multiSelect>
+    <mat-option>
+      <ngx-mat-select-search [showToggleAllCheckbox]="true" (toggleAll)="toggleSelectAll($event)"
+        [formControl]="roleMultiFilterCtrl" [toggleAllCheckboxTooltipMessage]="tooltipMessage"
+        [toogleAllCheckboxTooltipPosition]="'above'" placeholderLabel="Tìm kiếm..." noEntriesFoundLabel="Không tìm thấy tùy chọn"></ngx-mat-select-search>
+    </mat-option>
+    <mat-option *ngFor="let bank of filteredRolesMulti | async" [value]="bank">
+      {{bank.name}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
 
 
 
@@ -170,19 +243,4 @@
 
 
 
-<!-- <h3>Tooltip on the Select All Checkbox</h3>
-<p>
-  <mat-form-field color="outline">
-    <mat-label>Quyền người dùng</mat-label>
-    <mat-select [formControl]="bankMultiCtrl" placeholder="Quyền người dùng" [multiple]="true" #multiSelect>
-      <mat-option>
-        <ngx-mat-select-search [showToggleAllCheckbox]="true" (toggleAll)="toggleSelectAll($event)"
-          [formControl]="bankMultiFilterCtrl" [toggleAllCheckboxTooltipMessage]="tooltipMessage"
-          [toogleAllCheckboxTooltipPosition]="'above'" placeholderLabel="Tìm kiếm..." noEntriesFoundLabel="Không tìm thấy tùy chọn"></ngx-mat-select-search>
-      </mat-option>
-      <mat-option *ngFor="let bank of filteredBanksMulti | async" [value]="bank">
-        {{bank.name}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-</p> -->
+

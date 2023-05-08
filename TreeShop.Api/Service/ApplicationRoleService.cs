@@ -17,6 +17,7 @@ namespace TreeShop.Api.Service
         Task<AppRole> Update(AppRole appRole);
 
         Task<AppRole> Delete(string id);
+
     }
     public class ApplicationRoleService : IApplicationRoleService
     {

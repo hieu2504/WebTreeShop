@@ -349,10 +349,11 @@ export class AppUserComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.form.invalid) {
       return;
     }
+    this.appUserRole = [];
     if (this.action == 'create') {
       this.spinner.show();
 
-      this.appUserRole = [];
+
       for (let i = 0; i < this.roleMultiCtrl.value.length; i++) {
         this.appUserRole.push(this.roleMultiCtrl.value[i].name);
       }

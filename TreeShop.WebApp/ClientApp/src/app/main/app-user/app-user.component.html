@@ -5,10 +5,10 @@
     <br>
     <br>
     <div fxLayout.xl="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.xs="column">
-      <div fxFlex fxLayoutAlign="satrt center"><button mat-raised-button color="primary" (click)="openDialog('create')">
+      <div fxFlex fxLayoutAlign="satrt center"><button class="custom-button" mat-raised-button color="primary" (click)="openDialog('create')">
           Thêm mới
         </button>
-        <button color="warn" mat-raised-button [disabled]="selection.selected.length==0" (click)="removeData()">
+        <button class="custom-button" color="warn" mat-raised-button [disabled]="selection.selected.length==0" (click)="removeData()">
           Xóa </button>
       </div>
       <div fxFlex></div>

@@ -1,120 +1,3 @@
-<!-- <div class="register-form">
-  <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <div class="form-group">
-      <label>Full Name</label>
-      <input
-        type="text"
-        formControlName="fullname"
-        class="form-control"
-        [ngClass]="{ 'is-invalid': submitted && f['fullname'].errors }"
-      />
-      <div *ngIf="submitted && f['fullname'].errors" class="invalid-feedback">
-        <div *ngIf="f['fullname'].errors['required']">Fullname is required</div>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label>Username</label>
-      <input
-        type="text"
-        formControlName="username"
-        class="form-control"
-        [ngClass]="{ 'is-invalid': submitted && f['username'].errors }"
-      />
-      <div *ngIf="submitted && f['username'].errors" class="invalid-feedback">
-        <div *ngIf="f['username'].errors['required']">Username is required</div>
-        <div *ngIf="f['username'].errors['minlength']">
-          Username must be at least 6 characters
-        </div>
-        <div *ngIf="f['username'].errors['maxlength']">
-          Username must not exceed 20 characters
-        </div>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label>Email</label>
-      <input
-        type="text"
-        formControlName="email"
-        class="form-control"
-        [ngClass]="{ 'is-invalid': submitted && f['email'].errors }"
-      />
-      <div *ngIf="submitted && f['email'].errors" class="invalid-feedback">
-        <div *ngIf="f['email'].errors['required']">Email is required</div>
-        <div *ngIf="f['email'].errors['email']">Email is invalid</div>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label>Password</label>
-      <input
-        type="password"
-        formControlName="password"
-        class="form-control"
-        [ngClass]="{ 'is-invalid': submitted && f['password'].errors }"
-      />
-      <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
-        <div *ngIf="f['password'].errors['required']">Password is required</div>
-        <div *ngIf="f['password'].errors['minlength']">
-          Password must be at least 6 characters
-        </div>
-        <div *ngIf="f['password'].errors['maxlength']">
-          Username must not exceed 40 characters
-        </div>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label>Confirm Password</label>
-      <input
-        type="password"
-        formControlName="confirmPassword"
-        class="form-control"
-        [ngClass]="{ 'is-invalid': submitted && f['confirmPassword'].errors }"
-      />
-      <div
-        *ngIf="submitted && f['confirmPassword'].errors"
-        class="invalid-feedback"
-      >
-        <div *ngIf="f['confirmPassword'].errors['required']">
-          Confirm Password is required
-        </div>
-        <div *ngIf="f['confirmPassword'].errors['matching']">
-          Confirm Password does not match
-        </div>
-      </div>
-    </div>
-
-    <div class="form-group form-check">
-      <input
-        type="checkbox"
-        formControlName="acceptTerms"
-        class="form-check-input"
-        [ngClass]="{ 'is-invalid': submitted && f['acceptTerms'].errors }"
-      />
-      <label for="acceptTerms" class="form-check-label"
-        >I have read and agree to the Terms</label
-      >
-      <div *ngIf="submitted && f['acceptTerms'].errors" class="invalid-feedback">
-        Accept Terms is required
-      </div>
-    </div>
-
-    <div class="form-group">
-      <button type="submit" class="btn btn-primary">Register</button>
-      <button
-        type="button"
-        (click)="onReset()"
-        class="btn btn-warning float-right"
-      >
-        Reset
-      </button>
-    </div>
-  </form>
-</div> -->
-
-
 <mat-card>
   <div>
     <mat-card-title color="primary">Loại sản phẩm</mat-card-title>
@@ -123,10 +6,10 @@
     <br>
     <div fxLayout.xl="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.xs="column">
       <div fxFlex fxLayoutAlign="satrt center">
-        <button mat-raised-button color="primary" (click)="openDialog('create')">
+        <button class="custom-button" mat-raised-button color="primary" (click)="openDialog('create')">
           Thêm mới
         </button>
-        <button color="warn" mat-raised-button [disabled]="selection.selected.length==0" (click)="removeData()">
+        <button class="custom-button" color="warn" mat-raised-button [disabled]="selection.selected.length==0" (click)="removeData()">
           Xóa </button>
       </div>
       <div fxFlex></div>

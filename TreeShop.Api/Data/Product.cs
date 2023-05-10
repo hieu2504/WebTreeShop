@@ -22,11 +22,11 @@ namespace TreeShop.Api.Data
         public int? Price { get; set; }
         public int? Discount { get; set; }
         [Column(TypeName = "datetime")]
-        public DateTime? DateCreated { get; set; }
+        public DateTime? CreatedDate { get; set; }
         [Column(TypeName = "datetime")]
-        public DateTime? DateModified { get; set; }
+        public DateTime? UpdatedDate { get; set; }
         public bool BestSellers { get; set; }
-        public bool HomeFlag { get; set; }
+        //public bool HomeFlag { get; set; }
         public bool? Active { get; set; }
         [MaxLength(255)]
         public string? Tags { get; set; }

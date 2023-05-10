@@ -1,3 +1,4 @@
+import { ProductModule } from './product/product.module';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MainComponent } from './main.component';
@@ -29,6 +30,7 @@ const routes: Routes = [{
 
     },
     {path:'app-user',loadChildren:()=>import('./app-user/app-user.module').then(x=>x.AppUserModule)},
+    {path:'product',loadChildren:()=>import('./product/product.module').then(x=>x.ProductModule)},
     // {path:'app-menu',loadChildren:()=>import('./app-menu/app-menu.module').then(x=>x.AppMenuModule)}
   ]
 }];

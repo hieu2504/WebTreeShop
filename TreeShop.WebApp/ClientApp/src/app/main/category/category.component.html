@@ -148,7 +148,7 @@
       <mat-label>Chọn ảnh <span *ngIf="action=='create' ? true : false " style="color: red;">*</span></mat-label>
       <div class="chose-file-image">
         <input style="width: 100%;" required type="file" accept="image/*" #file placeholder="Chọn ảnh"  (change)="uploadFile(file.files)"
-          multiple>
+          >
           <!-- <button mat-raised-button color="primary" (click)="file.click()">Chọn ảnh</button> -->
         <!-- <button type="button" class="btn btn-success" (click)="file.click()">Upload File</button> -->
       </div>

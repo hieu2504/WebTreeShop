@@ -4,74 +4,45 @@ using TreeShop.Api.Repository;
 
 namespace TreeShop.Api.Service
 {
-    public interface ICategoryService
+    public interface IProductImageService
     {
-        Task<IQueryable<Category>> GetAll();
-        Task<Category> GetById(int id);
-        Task<Category> Add(Category category);
-        Task<Category> Update(Category category);
-        Task<Category> Delete(int id);
-        Task<IQueryable<Category>> GetAll(string keyword);
+        Task<IQueryable<ProductImage>> GetAllByProId(int proId);
+        Task<ProductImage> GetById(int id);
+        Task<ProductImage> Add(ProductImage productImage);
+        Task<ProductImage> Update(ProductImage productImage);
+        Task<ProductImage> Delete(int id);
     }
-    public class CategoryService : ICategoryService
+    public class ProductImageService : IProductImageService
     {
-        private readonly ICategoryRepository _categoryRepository;
-        public CategoryService(ICategoryRepository categoryRepository)
+        private readonly IProductImageRepository _productImageRepository;
+        public ProductImageService(IProductImageRepository productImageRepository)
         {
-            _categoryRepository = categoryRepository;
+            _productImageRepository = productImageRepository;
         }
 
-        public async Task<Category> Add(Category category)
+        public async Task<ProductImage> Add(ProductImage productImage)
         {
-            if (await _categoryRepository.CheckContainsAsync(x => x.Name == category.Name))
-            {
-                throw new NameDuplicatedException("Tên loại sản phẩm đã tồn tại!");
-            }
-            if (await _categoryRepository.CheckContainsAsync(x => x.Code == category.Code))
-            {
-                throw new NameDuplicatedException("Mã loại sản phẩm đã tồn tại!");
-            }
-            return await _categoryRepository.AddASync(category);
+            return await _productImageRepository.AddASync(productImage);
         }
 
-        public async Task<Category> Delete(int id)
+        public async Task<ProductImage> Delete(int id)
         {
-            return await _categoryRepository.DeleteAsync(id);
+            return await _productImageRepository.DeleteAsync(id);
         }
 
-        public async Task<IQueryable<Category>> GetAll()
+        public async Task<IQueryable<ProductImage>> GetAllByProId(int proId)
         {
-            return await _categoryRepository.GetAllAsync(x => x.IsActive == true);
+            return await _productImageRepository.GetAllAsync(x => x.ProductId == proId);
         }
 
-        public async Task<Category> GetById(int id)
+        public async Task<ProductImage> GetById(int id)
         {
-            return await _categoryRepository.GetByIdAsync(id);
+            return await _productImageRepository.GetByIdAsync(id);
         }
 
-        public async Task<Category> Update(Category category)
+        public async Task<ProductImage> Update(ProductImage ProductImage)
         {
-            if (await _categoryRepository.CheckContainsAsync(x => x.Name == category.Name && x.CatId != category.CatId))
-            {
-                throw new NameDuplicatedException("Tên loại sản phẩm đã tồn tại!");
-            }
-            if (await _categoryRepository.CheckContainsAsync(x => x.Code == category.Code && x.CatId != category.CatId))
-            {
-                throw new NameDuplicatedException("Mã loại sản phẩm đã tồn tại!");
-            }
-            return await _categoryRepository.UpdateASync(category);
-        }
-
-        public async Task<IQueryable<Category>> GetAll(string keyword)
-        {
-            if (string.IsNullOrEmpty(keyword))
-            {
-                return await _categoryRepository.GetAllAsync();
-            }
-            else
-            {
-                return await _categoryRepository.GetAllAsync(x => x.Name.Contains(keyword) || x.Description.Contains(keyword));
-            }
+            return await _productImageRepository.UpdateASync(ProductImage);
         }
     }
 }

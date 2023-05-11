@@ -14,8 +14,11 @@ namespace TreeShop.Api.Data
         }
         [Key]
         public int ProductId { get; set; }
+        [MaxLength(100)]
+        public string? Code { get; set; }
+
         [MaxLength(250)]
-        public string? ProductName { get; set; }
+        public string? Name { get; set; }
         public string? Description { get; set; }
         [ForeignKey("Categories")]
         public int? CatId { get; set; }
@@ -27,7 +30,7 @@ namespace TreeShop.Api.Data
         public DateTime? UpdatedDate { get; set; }
         public bool BestSellers { get; set; }
         //public bool HomeFlag { get; set; }
-        public bool? Active { get; set; }
+        public bool? IsActive { get; set; }
         [MaxLength(255)]
         public string? Tags { get; set; }
         [MaxLength(255)]

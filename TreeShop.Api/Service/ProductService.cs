@@ -25,11 +25,11 @@ namespace TreeShop.Api.Service
         {
             if (await _productRepository.CheckContainsAsync(x => x.Name == Product.Name))
             {
-                throw new NameDuplicatedException("Tên loại sản phẩm đã tồn tại!");
+                throw new NameDuplicatedException("Tên sản phẩm đã tồn tại!");
             }
             if (await _productRepository.CheckContainsAsync(x => x.Code == Product.Code))
             {
-                throw new NameDuplicatedException("Mã loại sản phẩm đã tồn tại!");
+                throw new NameDuplicatedException("Mã sản phẩm đã tồn tại!");
             }
             return await _productRepository.AddASync(Product);
         }
@@ -53,11 +53,11 @@ namespace TreeShop.Api.Service
         {
             if (await _productRepository.CheckContainsAsync(x => x.Name == Product.Name && x.CatId != Product.CatId))
             {
-                throw new NameDuplicatedException("Tên loại sản phẩm đã tồn tại!");
+                throw new NameDuplicatedException("Tên sản phẩm đã tồn tại!");
             }
             if (await _productRepository.CheckContainsAsync(x => x.Code == Product.Code && x.CatId != Product.CatId))
             {
-                throw new NameDuplicatedException("Mã loại sản phẩm đã tồn tại!");
+                throw new NameDuplicatedException("Mã sản phẩm đã tồn tại!");
             }
             return await _productRepository.UpdateASync(Product);
         }
@@ -66,11 +66,11 @@ namespace TreeShop.Api.Service
         {
             if (string.IsNullOrEmpty(keyword))
             {
-                return await _ProductRepository.GetAllAsync();
+                return await _productRepository.GetAllAsync();
             }
             else
             {
-                return await _ProductRepository.GetAllAsync(x => x.Name.Contains(keyword) || x.Description.Contains(keyword));
+                return await _productRepository.GetAllAsync(x => x.Name.Contains(keyword) || x.Description.Contains(keyword));
             }
         }
     }

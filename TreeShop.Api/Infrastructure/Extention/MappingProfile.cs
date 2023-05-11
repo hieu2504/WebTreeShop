@@ -11,6 +11,7 @@ namespace TreeShop.Api.Infrastructure.Extention
             CreateMap<AppUser, AppUserViewModel>().ReverseMap();
             CreateMap<AppRole, AppRoleViewModel>().ReverseMap();
             CreateMap<Category, CategoryViewModel>().ReverseMap();
+            CreateMap<Product, ProductViewModel>().ReverseMap();
         }
     }
 }

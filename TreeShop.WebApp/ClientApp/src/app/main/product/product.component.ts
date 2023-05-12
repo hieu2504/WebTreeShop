@@ -19,7 +19,7 @@ export class ProductComponent implements OnInit {
 
   action: string = '';
   title: string = '';
-  displayedColumns: string[] = ['select', 'position', 'name', 'categoryName','title','description','price','quantity', 'status','action'];
+  displayedColumns: string[] = ['select', 'position', 'name', 'categoryName','code','title','tags','description','price','quantity', 'discount', 'bestSellers', 'isActive', 'createdDate', 'updatedDate','action'];
   dataSource = new MatTableDataSource<any>();
   page = 0;
   keyword: string = '';
@@ -34,19 +34,21 @@ export class ProductComponent implements OnInit {
   model: any;
   urlImage: any;
   filesToUpload: File[] = [];
-  constructor(private spinner: NgxSpinnerService,private dialog: MatDialog, private pagin: PaginatorCustomService, private formBuilder: FormBuilder, private dataService: DataService, private notification: NotificationService) {
+  formData = new FormData();
+
+  constructor(private spinner: NgxSpinnerService,private dialog: MatDialog, private pagin: PaginatorCustomService, private formBuilder: FormBuilder, private dataService: DataService, private notificationService: NotificationService) {
     this.form = this.formBuilder.group({
+      catId:['', Validators.compose([Validators.required])],
+      code: ['', Validators.compose([Validators.required])],
       name: ['', Validators.compose([Validators.required])],
       title: ['', Validators.compose([Validators.required])],
       description:'',
       quantity:['', Validators.compose([Validators.required])],
       price:['', Validators.compose([Validators.required])],
-      status: true,
-      image1:'',
-      image2:'',
-      image3:'',
-      image4:'',
-      categoryId:['', Validators.compose([Validators.required])]
+      tags: [''],
+      discount: [0],
+      isActive: true,
+      bestSellers: false
     });
     this.urlImage = SystemConstants.URL_IMAGE;
   }
@@ -59,7 +61,7 @@ export class ProductComponent implements OnInit {
     this.dataService.get('Category/GetAll').subscribe((data: any) => {
       this.prCas = data
     }, err => {
-      this.notification.printErrorMessage('Không tải được danh sách!');
+      this.notificationService.printErrorMessage('Không tải được danh sách!');
     });
   }
 
@@ -69,7 +71,17 @@ export class ProductComponent implements OnInit {
     config = { width: '750px' }
     if (action == 'create') {
       this.title = 'Thêm mới sản phẩm';
-      this.form.controls['status'].setValue(true);
+      this.form.controls['catId'].setValue('');
+      this.form.controls['code'].setValue('');
+      this.form.controls['name'].setValue('');
+      this.form.controls['title'].setValue('');
+      this.form.controls['description'].setValue('');
+      this.form.controls['quantity'].setValue('');
+      this.form.controls['price'].setValue('');
+      this.form.controls['tags'].setValue('');
+      this.form.controls['discount'].setValue(0);
+      this.form.controls['isActive'].setValue(true);
+      this.form.controls['bestSellers'].setValue(false);
       const dialogRef = this.dialog.open(this.dialogTemplate, config);
       dialogRef.afterClosed().subscribe(result => {
         this.onReset();
@@ -87,115 +99,124 @@ export class ProductComponent implements OnInit {
         this.form.controls['description'].setValue(this.model.description);
         this.form.controls['quantity'].setValue(this.model.quantity);
         this.form.controls['price'].setValue(this.model.price);
-        this.form.controls['status'].setValue(this.model.status);
-        this.form.controls['categoryId'].setValue(this.model.categoryId);
-        this.form.controls['image1'].setValue(this.model.image1);
-        this.form.controls['image2'].setValue(this.model.image2);
-        this.form.controls['image3'].setValue(this.model.image3);
-        this.form.controls['image4'].setValue(this.model.image4);
+        this.form.controls['isActive'].setValue(this.model.status);
+        this.form.controls['catId'].setValue(this.model.catId);
         const dialogRef = this.dialog.open(this.dialogTemplate, config);
         dialogRef.afterClosed().subscribe(result => {
           this.onReset();
         });
       }, err => {
-        this.notification.printErrorMessage('Không tải được danh sách!');
+        this.notificationService.printErrorMessage('Không tải được danh sách!');
         this.spinner.show();
       });
     }
   }
 
   loadData() {
-    this.dataService.get('product/getlistpaging?page=' + this.page + '&pageSize=' + this.pageSize + '&keyword=' + this.keyword).subscribe((data: any) => {
+    this.spinner.show();
+    this.dataService.get('Product/getlistpaging?page=' + this.page + '&pageSize=' + this.pageSize + '&keyword=' + this.keyword).subscribe((data: any) => {
       this.dataSource = new MatTableDataSource(data.items);
       this.totalRow = data.totalCount;
+      this.spinner.hide();
     }, err => {
-      this.notification.printErrorMessage('Không tải được danh sách!');
+      this.notificationService.printErrorMessage('Không tải được danh sách!');
+      this.spinner.hide();
     });
   }
 
-  addData() {
+  search() {
+    this.dataService.get('Product/getlistpaging?page=' + this.page + '&pageSize=' + this.pageSize + '&keyword=' + this.keyword).subscribe((data: any) => {
+      this.dataSource = new MatTableDataSource(data.items);
+      this.totalRow = data.totalCount;
+    }, err => {
+      this.notificationService.printErrorMessage('Không tải được danh sách!');
+    });
+  }
+
+  addData(){
     if (this.form.invalid) {
       return;
     }
-    if(this.form.controls['image1'].value == '' && this.form.controls['image2'].value == ''&& this.form.controls['image3'].value == ''&& this.form.controls['image4'].value == ''){
-      this.notification.printErrorMessage('Chọn ít nhất 1 ảnh!');
+    if(this.filesToUpload.length == 0 && this.action == 'create'){
+      this.notificationService.printErrorMessage('Ảnh không được bỏ trống!');
       return;
     }
-    this.model.name=this.form.controls['name'].value;
-    this.model.title=this.form.controls['title'].value;
-    this.model.description=this.form.controls['description'].value;
-    this.model.quantity=this.form.controls['quantity'].value;
-    this.model.price=this.form.controls['price'].value;
-    this.model.status=this.form.controls['status'].value;
-    this.model.categoryId=this.form.controls['categoryId'].value;
-    if(this.form.controls['image1'].value == ''){
-      this.form.controls['image1'].setValue(null) ;
-    }
-    if(this.form.controls['image2'].value == ''){
-      this.form.controls['image2'].setValue(null) ;
-    }
-    if(this.form.controls['image3'].value == ''){
-      this.form.controls['image3'].setValue(null) ;
-    }
-    if(this.form.controls['image4'].value == ''){
-      this.form.controls['image4'].setValue(null) ;
-    }
-    this.model.image1=this.form.controls['image1'].value;
-    this.model.image2=this.form.controls['image2'].value;
-    this.model.image3=this.form.controls['image3'].value;
-    this.model.image4=this.form.controls['image4'].value;
+    this.formData = new FormData();
+    this.formData.append("Code", this.form.controls['code'].value);
+    this.formData.append("Name", this.form.controls['name'].value);
+    this.formData.append("Description", this.form.controls['description'].value);
+    this.formData.append("CatId", this.form.controls['catId'].value);
+    this.formData.append("Price", this.form.controls['price'].value);
+    this.formData.append("Discount", this.form.controls['discount'].value);
+    this.formData.append("Tags", this.form.controls['tags'].value);
+    this.formData.append("Title", this.form.controls['title'].value);
+    this.formData.append("Quantity", this.form.controls['quantity'].value);
+    this.formData.append("IsActive", this.form.controls['isActive'].value);
+    this.formData.append("BestSellers", this.form.controls['bestSellers'].value);
+    Array.from(this.filesToUpload).map((file, index) => {
+      return this.formData.append('lstFiles', file);
+    });
+
+    // this.model.name=this.form.controls['name'].value;
+    // this.model.description=this.form.controls['description'].value;
+    // this.model.status=this.form.controls['status'].value;
+    // if(this.form.controls['image'].value == ''){
+    //   this.form.controls['image'].setValue(null) ;
+    // }
+    // this.model.image=this.form.controls['image'].value;
     this.spinner.show();
     if (this.action == 'create') {
-      this.dataService.post('product/create', this.model).subscribe(data => {
-        this.notification.printSuccessMessage('Thêm mới thành công');
-        this.spinner.hide();
+      this.dataService.postFile('Product/Create', this.formData).subscribe(data => {
+        this.notificationService.printSuccessMessage('Thêm mới thành công');
         this.loadData();
         this.onReset();
+
       }, (err:any) => {
+        this.notificationService.printErrorMessage(err.error.message);
         this.spinner.hide();
-        this.notification.printErrorMessage('Thêm mới thất bại!');
-        this.notification.printErrorMessage(err.error.message);
       });
     }
     else if (this.action == 'edit') {
-      this.dataService.put('product/update', this.model).subscribe(data => {
-        this.notification.printSuccessMessage('Chỉnh sửa thành công');
-        this.spinner.hide();
+      this.formData.append("CatId", this.model.catId);
+      this.formData.append("CreatedDate", this.model.createdDate);
+      this.formData.append("Icon", this.model.icon);
+      this.dataService.postFile('Category/Update', this.formData).subscribe(data => {
+        this.notificationService.printSuccessMessage('Chỉnh sửa thành công');
         this.loadData();
         this.onReset();
       }, (err:any) => {
+        this.notificationService.printErrorMessage(err.error.message);
         this.spinner.hide();
-        this.notification.printErrorMessage('Chỉnh sửa thất bại');
-        this.notification.printErrorMessage(err.error.message);
       });
     }
   }
+
   removeData() {
     let roleChecked: any[] = [];
     this.selection.selected.forEach((value: any) => {
       let id = value.id;
       roleChecked.push(id);
     });
-    this.notification.printConfirmationDialog('Bạn chắc chắn muốn xóa?', () => this.deleteItemConfirm(JSON.stringify(roleChecked)));
+    this.notificationService.printConfirmationDialog('Bạn chắc chắn muốn xóa?', () => this.deleteItemConfirm(JSON.stringify(roleChecked)));
   }
 
   deleteItemConfirm(id: string) {
     this.spinner.show();
     this.dataService.delete('product/deletemulti', 'checkedList', id).subscribe(response => {
-      this.notification.printSuccessMessage('Xóa thành công');
+      this.notificationService.printSuccessMessage('Xóa thành công');
       this.selection.clear();
       this.spinner.hide();
       this.loadData();
     }, err => {
       this.spinner.hide();
-      this.notification.printErrorMessage('Xóa thất bại');
+      this.notificationService.printErrorMessage('Xóa thất bại');
 
     });
   }
   applyFilter(event: Event) {
     this.keyword = (event.target as HTMLInputElement).value;
     this.page = 0;
-    this.loadData();
+    this.search();
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
@@ -252,59 +273,6 @@ export class ProductComponent implements OnInit {
     this.action == '';
     this.form.reset();
     this.dialog.closeAll();
-  }
-
-  clearImage() {
-    this.form.controls['image1'].setValue('');
-  }
-  clearImage2() {
-    this.form.controls['image2'].setValue('');
-  }
-  clearImage3() {
-    this.form.controls['image3'].setValue('');
-  }
-  clearImage4() {
-    this.form.controls['image4'].setValue('');
-  }
-  imagePreview(e: any) {
-    const file = (e.target as HTMLInputElement).files![0];
-    const reader = new FileReader();
-    reader.onload = () => {
-      let base64String = reader.result as string;
-      let img = base64String.split('base64,')[1];
-      this.form.controls['image1'].setValue(img);
-    }
-    reader.readAsDataURL(file);
-  }
-  imagePreview2(e: any) {
-    const file = (e.target as HTMLInputElement).files![0];
-    const reader = new FileReader();
-    reader.onload = () => {
-      let base64String = reader.result as string;
-      let img = base64String.split('base64,')[1];
-      this.form.controls['image2'].setValue(img);
-    }
-    reader.readAsDataURL(file);
-  }
-  imagePreview3(e: any) {
-    const file = (e.target as HTMLInputElement).files![0];
-    const reader = new FileReader();
-    reader.onload = () => {
-      let base64String = reader.result as string;
-      let img = base64String.split('base64,')[1];
-      this.form.controls['image3'].setValue(img);
-    }
-    reader.readAsDataURL(file);
-  }
-  imagePreview4(e: any) {
-    const file = (e.target as HTMLInputElement).files![0];
-    const reader = new FileReader();
-    reader.onload = () => {
-      let base64String = reader.result as string;
-      let img = base64String.split('base64,')[1];
-      this.form.controls['image4'].setValue(img);
-    }
-    reader.readAsDataURL(file);
   }
 
   uploadFile = (files:any) => {

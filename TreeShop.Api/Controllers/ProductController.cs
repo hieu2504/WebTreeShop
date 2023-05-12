@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TreeShop.Api.Data;
+using TreeShop.Api.Infrastructure.Core;
+using TreeShop.Api.MappingModel;
 using TreeShop.Api.Service;
 using TreeShop.Api.ViewModel;
 
@@ -42,29 +44,36 @@ namespace TreeShop.Api.Controllers
                 var model = _mapper.Map<ProductViewModel, Product>(productViewModel);
                 try
                 {
+                    model.CreatedDate = DateTime.Now;
+                    model.UpdatedDate = model.CreatedDate;
+
+                    var product = await _productService.Add(model);
                     
                     if (productViewModel.lstFiles != null)
                     {
-                        
-                    }
-                    var product = await _productService.Add(model);
-                    foreach (var item in productViewModel.lstFiles)
-                    {
-                        var imgName = "\\Images\\" + DateTime.Now.ToString("yyyyMMddHHmmss") + item.FileName;
-                        if (item.Length > 0)
+                        foreach (var item in productViewModel.lstFiles)
                         {
-                            if (!Directory.Exists(_environment.WebRootPath + "\\Images"))
+                            var imgName = "\\Images\\" + DateTime.Now.ToString("yyyyMMddHHmmss") + item.FileName;
+                            if (item.Length > 0)
                             {
-                                Directory.CreateDirectory(_environment.WebRootPath + "\\Images\\");
+                                if (!Directory.Exists(_environment.WebRootPath + "\\Images"))
+                                {
+                                    Directory.CreateDirectory(_environment.WebRootPath + "\\Images\\");
+                                }
+                                using (FileStream filestream = System.IO.File.Create(_environment.WebRootPath + imgName))
+                                {
+                                    item.CopyTo(filestream);
+                                    filestream.Flush();
+                                    //  return "\\Upload\\" + objFile.files.FileName;
+                                }
                             }
-                            using (FileStream filestream = System.IO.File.Create(_environment.WebRootPath + imgName))
-                            {
-                                item.CopyTo(filestream);
-                                filestream.Flush();
-                                //  return "\\Upload\\" + objFile.files.FileName;
-                            }
+                            ProductImage productImage = new ProductImage();
+                            productImage.ProductId = product.ProductId;
+                            productImage.ImageLink = imgName;
+                            await _productImageService.Add(productImage);
                         }
                     }
+                    
                         
                     return CreatedAtAction(nameof(Create), new { id = model.CatId }, model);
                 }
@@ -76,6 +85,31 @@ namespace TreeShop.Api.Controllers
             else
             {
                 return BadRequest(ModelState);
+            }
+        }
+
+
+        [HttpGet("getlistpaging")]
+        public async Task<IActionResult> GetListPaging(int page = 0, int pageSize = 10, string? keyword = null)
+        {
+            try
+            {
+                var model = await _productService.GetAllMapping(keyword);
+                int totalRow = 0;
+                totalRow = model.Count();
+                model = model.Skip(page * pageSize).Take(pageSize);
+                var responseData = new PaginationSet<ProductMappingModel>()
+                {
+                    Items = model,
+                    Page = page,
+                    TotalCount = totalRow,
+                    TotalPages = (int)Math.Ceiling((decimal)totalRow / pageSize)
+                };
+                return Ok(responseData);
+            }
+            catch (Exception dex)
+            {
+                return BadRequest(dex);
             }
         }
         #endregion

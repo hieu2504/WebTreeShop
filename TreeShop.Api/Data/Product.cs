@@ -23,7 +23,7 @@ namespace TreeShop.Api.Data
         [ForeignKey("Categories")]
         public int? CatId { get; set; }
         public int? Price { get; set; }
-        public int? Discount { get; set; }
+        public double? Discount { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime? CreatedDate { get; set; }
         [Column(TypeName = "datetime")]

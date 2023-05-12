@@ -6,10 +6,10 @@
     <br>
     <div fxLayout.xl="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.xs="column">
       <div fxFlex fxLayoutAlign="satrt center">
-        <button mat-raised-button color="primary" (click)="openDialog('create')">
+        <button class="custom-button" mat-raised-button color="primary" (click)="openDialog('create')">
           Thêm mới
         </button>
-        <button color="warn" mat-raised-button [disabled]="selection.selected.length==0" (click)="removeData()">
+        <button class="custom-button" color="warn" mat-raised-button [disabled]="selection.selected.length==0" (click)="removeData()">
           Xóa </button>
       </div>
       <div fxFlex></div>
@@ -26,12 +26,12 @@
       <table mat-table [dataSource]="dataSource" matSort>
 
         <ng-container matColumnDef="select">
-          <th mat-header-cell *matHeaderCellDef class="checkbox-col">
+          <th style="width: 7%; text-align: center !important;" mat-header-cell *matHeaderCellDef class="checkbox-col">
             <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
               [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
             </mat-checkbox>
           </th>
-          <td mat-cell *matCellDef="let row">
+          <td style="width: 7%; text-align: center !important;" mat-cell *matCellDef="let row">
             <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
               [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
             </mat-checkbox>
@@ -49,13 +49,23 @@
         </ng-container>
 
         <ng-container matColumnDef="categoryName">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Danh mục</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Loại sản phẩm</th>
           <td mat-cell *matCellDef="let element">{{element.categoryName}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="code">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Mã sản phẩm</th>
+          <td mat-cell *matCellDef="let element">{{element.code}}</td>
         </ng-container>
 
         <ng-container matColumnDef="title">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Tiêu đề</th>
           <td mat-cell *matCellDef="let element">{{element.title}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="tags">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Tag</th>
+          <td mat-cell *matCellDef="let element">{{element.tags}}</td>
         </ng-container>
 
         <ng-container matColumnDef="description">
@@ -73,10 +83,32 @@
           <td mat-cell *matCellDef="let element">{{element.quantity}}</td>
         </ng-container>
 
-        <ng-container matColumnDef="status">
+        <ng-container matColumnDef="discount">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Giảm giá</th>
+          <td mat-cell *matCellDef="let element">{{element.discount}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="createdDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Ngày tạo</th>
+          <td mat-cell *matCellDef="let element">{{element.createdDate|date:'yyyy/MM/dd HH:mm:ss'}}</td>
+        </ng-container>
+        <ng-container matColumnDef="updatedDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Ngày sửa</th>
+          <td mat-cell *matCellDef="let element">{{element.updatedDate|date:'yyyy/MM/dd HH:mm:ss'}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="bestSellers">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Bán chạy</th>
+          <td mat-cell *matCellDef="let element">
+            <mat-checkbox [checked]="element.bestSellers" [disableRipple]="true">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="isActive">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Hiệu lực</th>
           <td mat-cell *matCellDef="let element">
-            <mat-checkbox [checked]="element.status" [disableRipple]="true" (click)="$event.preventDefault()">
+            <mat-checkbox [checked]="element.isActive" [disableRipple]="true" (click)="$event.preventDefault()">
             </mat-checkbox>
           </td>
         </ng-container>
@@ -106,73 +138,116 @@
   <form action="" (submit)="addData()" [formGroup]="form">
     <h2 mat-dialog-title>{{title}}</h2>
     <mat-dialog-content class="mat-typography">
-      <mat-form-field appearance="outline">
-        <mat-label>Tên sản phẩm</mat-label>
-        <input matInput placeholder="Tên sản phẩm" formControlName="name" #name maxlength="100" required>
-        <mat-hint align="end">{{name.value.length}} / 100</mat-hint>
-        <mat-error *ngIf="f('name').hasError('required')">
-          Tên sản phẩm không được bỏ trống!
-        </mat-error>
-      </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Danh mục</mat-label>
-        <mat-select formControlName="categoryId">
-          <mat-option *ngFor="let prCa of prCas" [value]="prCa.id">
-            {{prCa.name}}
-          </mat-option>
-        </mat-select>
-        <mat-error *ngIf="f('categoryId').hasError('required')">
-          Danh mục không được bỏ trống!
-        </mat-error>
-      </mat-form-field>
+      <div fxLayout.gt-md="row" fxLayout.gt-sm="column" fxLayoutGap.gt-sm="0px" fxLayoutGap.gt-md="8px">
+        <div fxFlex.gt-md="50" fxFlex.gt-sm="100" class="action-blurb">
+          <mat-form-field appearance="outline">
+            <mat-label>Loại sản phẩm</mat-label>
+            <mat-select formControlName="catId" required>
+              <mat-option *ngFor="let prCa of prCas" [value]="prCa.catId">
+                {{prCa.name}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="f('catId').hasError('required')">
+              Loại sản phẩm không được bỏ trống!
+            </mat-error>
+          </mat-form-field>
+        </div>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Tiêu đề</mat-label>
-        <input matInput placeholder="Tiêu đề" formControlName="title" #title2 maxlength="100" required>
-        <mat-hint align="end">{{title2.value.length}} / 100</mat-hint>
-        <mat-error *ngIf="f('title').hasError('required')">
-          Tiêu đề không được bỏ trống!
-        </mat-error>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Giá</mat-label>
-        <input matInput placeholder="Giá" formControlName="price" #price type="number" required>
-        <mat-error *ngIf="f('price').hasError('required')">
-          Giá không được bỏ trống!
-        </mat-error>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Số lượng</mat-label>
-        <input matInput placeholder="Số lượng" formControlName="quantity" #quantity type="number" required>
-        <mat-error *ngIf="f('quantity').hasError('required')">
-          Số lượng không được bỏ trống!
-        </mat-error>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Mô tả</mat-label>
-        <input matInput placeholder="Mô tả" formControlName="description" #description maxlength="250">
-        <mat-hint align="end">{{description.value.length}} / 250</mat-hint>
-      </mat-form-field>
-      <mat-label>Chọn ảnh <span *ngIf="action=='create' ? true : false " style="color: red;">*</span></mat-label>
-      <div class="chose-file-image">
-        <input style="width: 100%;" required type="file" accept="image/*" #file placeholder="Chọn ảnh"
-          (change)="uploadFile(file.files)" multiple>
-        <!-- <button mat-raised-button color="primary" (click)="file.click()">Chọn ảnh</button> -->
-        <!-- <button type="button" class="btn btn-success" (click)="file.click()">Upload File</button> -->
+        <div fxFlex.gt-md="50" fxFlex.gt-sm="100" class="action-blurb">
+          <mat-form-field appearance="outline">
+            <mat-label>Tên sản phẩm</mat-label>
+            <input matInput placeholder="Tên sản phẩm" formControlName="name" #name maxlength="100" required>
+            <mat-hint align="end">{{name.value.length}} / 100</mat-hint>
+            <mat-error *ngIf="f('name').hasError('required')">
+              Tên sản phẩm không được bỏ trống!
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div fxLayout.gt-md="row" fxLayout.gt-sm="column" fxLayoutGap.gt-sm="0px" fxLayoutGap.gt-md="8px">
+        <div fxFlex.gt-md="50" fxFlex.gt-sm="100" class="action-blurb">
+          <mat-form-field appearance="outline">
+            <mat-label>Mã sản phẩm</mat-label>
+            <input matInput placeholder="Tiêu đề" formControlName="code" #code maxlength="100" required>
+            <mat-hint align="end">{{code.value.length}} / 100</mat-hint>
+            <mat-error *ngIf="f('code').hasError('required')">
+              Mã sản phẩm không được bỏ trống!
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div fxFlex.gt-md="50" fxFlex.gt-sm="100" class="action-blurb">
+          <mat-form-field appearance="outline">
+            <mat-label>Tiêu đề</mat-label>
+            <input matInput placeholder="Tiêu đề" formControlName="title" #title2 maxlength="100" required>
+            <mat-hint align="end">{{title2.value.length}} / 100</mat-hint>
+            <mat-error *ngIf="f('title').hasError('required')">
+              Tiêu đề không được bỏ trống!
+            </mat-error>
+          </mat-form-field>
+        </div>
       </div>
 
-      <div>
+      <div fxLayout.gt-md="row" fxLayout.gt-sm="column" fxLayoutGap.gt-sm="0px" fxLayoutGap.gt-md="8px">
+        <div fxFlex.gt-md="50" fxFlex.gt-sm="100" class="action-blurb">
+          <mat-form-field appearance="outline">
+            <mat-label>Tag</mat-label>
+            <input matInput placeholder="Tag" formControlName="tags" #tags maxlength="100">
+            <mat-hint align="end">{{tags.value.length}} / 100</mat-hint>
+          </mat-form-field>
+        </div>
+        <div fxFlex.gt-md="50" fxFlex.gt-sm="100" class="action-blurb">
+          <mat-form-field appearance="outline">
+            <mat-label>Giá</mat-label>
+            <input matInput placeholder="Giá" formControlName="price" #price type="number" required>
+            <mat-error *ngIf="f('price').hasError('required')">
+              Giá không được bỏ trống!
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div fxLayout.gt-md="row" fxLayout.gt-sm="column" fxLayoutGap.gt-sm="0px" fxLayoutGap.gt-md="8px">
+        <div fxFlex.gt-md="50" fxFlex.gt-sm="100" class="action-blurb">
+          <mat-form-field appearance="outline">
+            <mat-label>Số lượng</mat-label>
+            <input matInput placeholder="Số lượng" formControlName="quantity" #quantity type="number" required>
+            <mat-error *ngIf="f('quantity').hasError('required')">
+              Số lượng không được bỏ trống!
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div fxFlex.gt-md="50" fxFlex.gt-sm="100" class="action-blurb">
+          <mat-form-field appearance="outline">
+            <mat-label>Khuyến mãi(%)</mat-label>
+            <input matInput placeholder="Khuyến mãi" formControlName="discount" #discount type="number">
+          </mat-form-field>
+        </div>
+      </div>
+        <mat-form-field appearance="outline">
+          <mat-label>Mô tả</mat-label>
+          <input matInput placeholder="Mô tả" formControlName="description" #description maxlength="250">
+          <mat-hint align="end">{{description.value.length}} / 250</mat-hint>
+        </mat-form-field>
+
+      <mat-label>Chọn ảnh <span *ngIf="action=='create' ? true : false " style="color: red;">*</span></mat-label>
+          <div class="chose-file-image">
+            <input style="width: 100%;" required type="file" accept="image/*" #file placeholder="Chọn ảnh"
+              (change)="uploadFile(file.files)" multiple>
+            <!-- <button mat-raised-button color="primary" (click)="file.click()">Chọn ảnh</button> -->
+            <!-- <button type="button" class="btn btn-success" (click)="file.click()">Upload File</button> -->
+          </div>
+
+      <div style="margin-top: 14px;" *ngIf="action=='create' ? false : true ">
         <fieldset>
           <legend>Ảnh</legend>
           <div fxLayout="row" fxLayoutAlign="space-around center">
-            <div style="margin-top: 14px;" *ngIf="action=='create' ? false : true ">
-              <mat-label>Ảnh hiện tại</mat-label>
+            <div>
+              <!-- <mat-label>Ảnh hiện tại</mat-label> -->
               <div>
-                <img *ngIf="model.icon != null" src="{{urlImage + model.icon}}" width="25px" height="25px" alt="" srcset="">
+                <img *ngIf="model.icon != null" src="{{urlImage + model.icon}}" width="25px" height="25px" alt=""
+                  srcset="">
+                <button>X</button>
               </div>
 
             </div>
@@ -183,10 +258,11 @@
         </fieldset>
       </div>
     </mat-dialog-content>
-    <mat-checkbox formControlName="status">Hiệu lực </mat-checkbox>
+    <mat-checkbox style="margin-top: 12px; margin-right: 12px;" formControlName="isActive">Hiệu lực </mat-checkbox>
+    <mat-checkbox formControlName="bestSellers">Bán chạy</mat-checkbox>
     <mat-dialog-actions align="center">
-      <button mat-stroked-button color="warn" mat-dialog-close type="button">Đóng</button>
       <button mat-stroked-button color="primary" type="submit">Lưu</button>
+      <button mat-stroked-button color="warn" mat-dialog-close type="button">Đóng</button>
     </mat-dialog-actions>
   </form>
 

@@ -1,5 +1,6 @@
 ﻿using TreeShop.Api.Data;
 using TreeShop.Api.Infrastructure.Extention;
+using TreeShop.Api.MappingModel;
 using TreeShop.Api.Repository;
 
 namespace TreeShop.Api.Service
@@ -12,6 +13,7 @@ namespace TreeShop.Api.Service
         Task<Product> Update(Product product);
         Task<Product> Delete(int id);
         Task<IQueryable<Product>> GetAll(string keyword);
+        Task<IQueryable<ProductMappingModel>> GetAllMapping(string keyword);
     }
     public class ProductService : IProductService
     {
@@ -72,6 +74,11 @@ namespace TreeShop.Api.Service
             {
                 return await _productRepository.GetAllAsync(x => x.Name.Contains(keyword) || x.Description.Contains(keyword));
             }
+        }
+
+        public async Task<IQueryable<ProductMappingModel>> GetAllMapping(string keyword)
+        {
+            return await _productRepository.GetAllMapping(keyword);
         }
     }
 }

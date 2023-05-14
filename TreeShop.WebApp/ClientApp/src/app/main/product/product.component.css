@@ -22,3 +22,38 @@ th.mat-header-cell, td.mat-cell, td.mat-footer-cell{
 th{
   white-space: nowrap;
 }
+
+.containerImg {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+}
+
+.containerImg img {
+  width: 100%;
+  height: auto;
+}
+
+.containerImg .btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  background-color: #555;
+  color: white;
+  font-size: 16px;
+  padding: 12px 24px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.containerImg .btn:hover {
+  background-color: black;
+}
+
+.unImage{
+  opacity:  0.5;
+}

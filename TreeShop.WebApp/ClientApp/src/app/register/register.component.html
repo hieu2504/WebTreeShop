@@ -1,0 +1,126 @@
+<div id="divLogin" class="text-center">
+  <h2 class="text-upper-case">Đăng nhập</h2>
+    <form action="" (submit)="addData()" [formGroup]="form">
+      <h2 mat-dialog-title>{{title}}</h2>
+      <mat-dialog-content class="mat-typography">
+
+        <mat-form-field appearance="outline">
+          <mat-label>Tài khoản</mat-label>
+          <input matInput placeholder="Tài khoản"
+            formControlName="userName" required #userName maxlength="20">
+          <mat-hint align="end">{{userName.value.length}} / 20</mat-hint>
+          <mat-error *ngIf="f('userName').hasError('required')">
+            Tài khoản không được bỏ trống
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Mật khẩu</mat-label>
+          <input type="password" matInput placeholder="Mật khẩu"
+            formControlName="password" #password maxlength="50">
+          <mat-hint align="end">{{password.value.length}} / 50</mat-hint>
+          <mat-error *ngIf="f('password').hasError('required')">
+            Mật khẩu không được bỏ trống
+          </mat-error>
+          <mat-error *ngIf="f('password').hasError('minlength')">
+            Mật khẩu phải có ít nhất 6 kí tự
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Mật khẩu</mat-label>
+          <input type="password" matInput placeholder="Mật khẩu"
+            formControlName="confirmPassword" #confirmPassword maxlength="50">
+          <mat-hint align="end">{{confirmPassword.value.length}} / 50</mat-hint>
+          <mat-error *ngIf="f('confirmPassword').hasError('required')">
+            Xác nhận mật khẩu không được bỏ trống
+          </mat-error>
+          <mat-error *ngIf="f('confirmPassword').hasError('minlength')">
+            Xác nhận mật khẩu phải có ít nhất 6 kí tự
+          </mat-error>
+          <mat-error *ngIf="f('confirmPassword').hasError('confirmPasswordValidator')">Xác nhận mật khẩu không khớp</mat-error>
+        </mat-form-field>
+
+
+         <mat-form-field appearance="outline">
+          <mat-label>Họ và tên</mat-label>
+          <input matInput placeholder="Họ và tên"
+            formControlName="fullName" #fullName maxlength="100" required>
+          <mat-hint align="end">{{fullName.value.length}} / 100</mat-hint>
+          <mat-error *ngIf="f('fullName').hasError('required')">
+            Họ và tên không được bỏ trống
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Địa chỉ</mat-label>
+          <input matInput placeholder="Địa chỉ"
+            formControlName="address" #address maxlength="250" required>
+          <mat-hint align="end">{{address.value.length}} / 250</mat-hint>
+          <mat-error *ngIf="f('address').hasError('required')">
+            Địa chỉ không được bỏ trống
+          </mat-error>
+        </mat-form-field>
+
+        <div fxLayout.gt-md="row" fxLayout.gt-sm="column" fxLayoutGap.gt-sm="0px" fxLayoutGap.gt-md="8px">
+          <div fxFlex>
+            <mat-form-field appearance="outline">
+              <mat-label>Email</mat-label>
+              <input type="email" matInput placeholder="Email"
+                formControlName="email" #email maxlength="50">
+              <mat-icon matPrefix>email</mat-icon>
+              <mat-hint align="end">{{email.value.length}} / 50</mat-hint>
+              <mat-error *ngIf="f('email').hasError('email')">
+                Email không đúng định dạng
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxFlex>
+            <mat-form-field appearance="outline" align="end">
+              <mat-label>Số điện thoại</mat-label>
+              <mat-icon matPrefix> phone</mat-icon>
+              <input type="tel" matInput placeholder="Số điện thoại"
+                maxlength="15" #phoneNumber formControlName="phoneNumber">
+              <mat-hint align="end">{{phoneNumber.value.length}} / 15</mat-hint>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div align="center">
+          <fieldset>
+            <legend>Ảnh</legend>
+            <button type="button" mat-stroked-button
+              onclick="document.getElementById('getFile').click()">Tải ảnh lên</button>
+            <input type="file" (change)="imagePreview($event)" id="getFile"  #fileInput style="display:none">
+            <div *ngIf="f('image').value ==='' || f('image').value === null">
+              <img src="../../../assets/images/user-none.png" class="image-preview">
+            </div>
+            <div class="image-div" *ngIf="f('image').value !=='' && f('image').value !==null">
+              <div class="image-preview">
+                <img src="{{'data:image/jpg;base64,' + f('image').value}}"
+                class="image-preview">
+                <a href="javascript:void(0)" class="remove-image" (click)="fileInput.value='';clearImage()">
+                  <mat-icon>close</mat-icon>
+                </a>
+              </div>
+
+            </div>
+
+          </fieldset>
+        </div>
+
+
+
+      </mat-dialog-content>
+      <mat-dialog-actions align="center">
+        <button mat-stroked-button color="primary" type="submit">Lưu</button>
+        <button mat-stroked-button color="warn" mat-dialog-close (click)="onReset()">Đóng</button>
+
+      </mat-dialog-actions>
+
+    </form>
+</div>
+
+<!-- <footer><a href="javascript:void(0)" target="_blank"><img src="../../assets/img/parking.png"></a>
+  <p>You Gotta Love <a href="javascript:void(0)" target="_blank">Google</a></p>
+</footer> -->

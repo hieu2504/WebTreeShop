@@ -8,6 +8,7 @@ namespace TreeShop.Api.Repository
     public interface IProductRepository : IRepository<Product>
     {
         Task<IQueryable<ProductMappingModel>> GetAllMapping(string keyword);
+        Task<ProductMappingModel> GetByIdMapping(int id);
     }
     public class ProductRepository : RepositoryBase<Product>, IProductRepository
     {
@@ -68,6 +69,34 @@ namespace TreeShop.Api.Repository
                              }).ToListAsync();
                 return (await query).AsQueryable();
             }
+        }
+
+        public async Task<ProductMappingModel> GetByIdMapping(int id)
+        {
+            var query = await (from p in _context.Products
+                         where p.ProductId == id
+                         select new ProductMappingModel
+                         {
+                             ProductId = p.ProductId,
+                             Code = p.Code,
+                             Name = p.Name,
+                             Description = p.Description,
+                             CatId = p.CatId,
+                             Price = p.Price,
+                             Discount = p.Discount,
+                             CreatedDate = p.CreatedDate,
+                             UpdatedDate = p.UpdatedDate,
+                             BestSellers = p.BestSellers,
+                             IsActive = p.IsActive,
+                             Tags = p.Tags,
+                             Title = p.Title,
+                             Quantity = p.Quantity,
+                             ProductImages = (from prImg in _context.ProductImages
+                                              where prImg.ProductId == id
+                                              select prImg).ToList(),
+
+                         }).FirstOrDefaultAsync();
+            return query;
         }
     }
 }

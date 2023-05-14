@@ -244,13 +244,25 @@
           <div fxLayout="row" fxLayoutAlign="space-around center">
             <div>
               <!-- <mat-label>Ảnh hiện tại</mat-label> -->
-              <div>
-                <img *ngIf="model.icon != null" src="{{urlImage + model.icon}}" width="25px" height="25px" alt=""
-                  srcset="">
-                <button>X</button>
-              </div>
+              <!-- <div style="">
+                <span style="position: relative;left: -15px;border: 3px solid #73AD21;">X</span>
+                <img *ngIf="item.imageLink != null" src="{{urlImage + item.imageLink}}" width="300px" height="300px" alt=""
+                  srcset=""></div> -->
+                  <div  *ngFor="let item of this.model.productImages;">
+                      <md-card-content  style="margin: 8px;">
+                        <div *ngIf="item.imageLink != null" class="containerImg" >
+                          <img  [ngClass]="{'unImage' : item.isActive}" src="{{urlImage + item.imageLink}}" alt=""srcset="" style="width:250px">
+                          <button class="btn" [disabled]="item.isActive" (click)="cancelImage(item.id)">Hủy</button>
+                        </div>
+                      </md-card-content>
+
+                    </div>
 
             </div>
+            <!-- <div class="container">
+              <img src="https://www.w3schools.com/howto/img_snow.jpg" alt="Snow" style="width:100%">
+              <button class="btn">Button</button>
+            </div> -->
 
 
 

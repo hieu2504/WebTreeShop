@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using TreeShop.Api.Data;
 using TreeShop.Api.Infrastructure.Core;
 using TreeShop.Api.MappingModel;
@@ -30,7 +31,7 @@ namespace TreeShop.Api.Controllers
         #endregion
         #region Properties
         /// <summary>
-        /// Them moi loai san pham
+        /// Them moi san pham
         /// </summary>
         /// <param name="categoryViewModel"></param>
         /// <returns></returns>
@@ -112,6 +113,135 @@ namespace TreeShop.Api.Controllers
                 return BadRequest(dex);
             }
         }
+
+
+        /// <summary>
+        /// Chỉnh sửa san pham
+        /// </summary>
+        /// <param name="categoryViewModel"></param>
+        /// <returns></returns>
+        [HttpPost("Update"), DisableRequestSizeLimit]
+        [AllowAnonymous]
+        public async Task<IActionResult> Update([FromForm] ProductViewModel productViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+
+                var model = _mapper.Map<ProductViewModel, Product>(productViewModel);
+                if (!string.IsNullOrEmpty(productViewModel.lstProImage))
+                {
+                    var listItem = JsonConvert.DeserializeObject<List<int>>(productViewModel.lstProImage);
+                        foreach (var item in listItem)
+                        {
+                            var resDel = await _productImageService.Delete(item);
+                            string path = _environment.WebRootPath + resDel.ImageLink;
+                            FileInfo file = new FileInfo(path);
+                            if (file.Exists)//check file exsit or not  
+                            {
+                                file.Delete();
+                            }
+                        }
+                }
+                try
+                {
+                    model.UpdatedDate = model.CreatedDate;
+
+                    var product = await _productService.Update(model);
+
+                    if (productViewModel.lstFiles != null)
+                    {
+                        foreach (var item in productViewModel.lstFiles)
+                        {
+                            var imgName = "\\Images\\" + DateTime.Now.ToString("yyyyMMddHHmmss") + item.FileName;
+                            if (item.Length > 0)
+                            {
+                                if (!Directory.Exists(_environment.WebRootPath + "\\Images"))
+                                {
+                                    Directory.CreateDirectory(_environment.WebRootPath + "\\Images\\");
+                                }
+                                using (FileStream filestream = System.IO.File.Create(_environment.WebRootPath + imgName))
+                                {
+                                    item.CopyTo(filestream);
+                                    filestream.Flush();
+                                    //  return "\\Upload\\" + objFile.files.FileName;
+                                }
+                            }
+                            ProductImage productImage = new ProductImage();
+                            productImage.ProductId = product.ProductId;
+                            productImage.ImageLink = imgName;
+                            await _productImageService.Add(productImage);
+                        }
+                    }
+
+
+                    return CreatedAtAction(nameof(Create), new { id = model.CatId }, model);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex);
+                }
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
+        }
+
+        [HttpGet("getbyid/{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            try
+            {
+                var result = await _productService.GetByIdMapping(id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpDelete("DeleteMulti")]
+        public async Task<IActionResult> DeleteMulti(string checkedList)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            else
+            {
+                try
+                {
+                    int countSuccess = 0;
+                    int countError = 0;
+                    List<int> result = new List<int>();
+                    var listItem = JsonConvert.DeserializeObject<List<int>>(checkedList);
+                    foreach (var item in listItem)
+                    {
+                        try
+                        {
+                            var model = await _productService.GetById(item);
+                            model.IsActive = false;
+                            await _productService.Update(model);
+                            countSuccess++;
+                        }
+                        catch (Exception)
+                        {
+                            countError++;
+                        }
+                    }
+                    result.Add(countSuccess);
+                    result.Add(countError);
+
+                    return Ok(result);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+        }
+
         #endregion
     }
 }

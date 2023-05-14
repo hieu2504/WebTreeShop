@@ -1,6 +1,11 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -13,13 +18,29 @@ import { PaginatorCustomService } from 'src/app/core/services/paginator-custom.s
 @Component({
   selector: 'app-product',
   templateUrl: './product.component.html',
-  styleUrls: ['./product.component.css']
+  styleUrls: ['./product.component.css'],
 })
 export class ProductComponent implements OnInit {
-
   action: string = '';
   title: string = '';
-  displayedColumns: string[] = ['select', 'position', 'name', 'categoryName','code','title','tags','description','price','quantity', 'discount', 'bestSellers', 'isActive', 'createdDate', 'updatedDate','action'];
+  displayedColumns: string[] = [
+    'select',
+    'position',
+    'name',
+    'categoryName',
+    'code',
+    'title',
+    'tags',
+    'description',
+    'price',
+    'quantity',
+    'discount',
+    'bestSellers',
+    'isActive',
+    'createdDate',
+    'updatedDate',
+    'action',
+  ];
   dataSource = new MatTableDataSource<any>();
   page = 0;
   keyword: string = '';
@@ -35,20 +56,28 @@ export class ProductComponent implements OnInit {
   urlImage: any;
   filesToUpload: File[] = [];
   formData = new FormData();
+  lstUnImage: any = [];
 
-  constructor(private spinner: NgxSpinnerService,private dialog: MatDialog, private pagin: PaginatorCustomService, private formBuilder: FormBuilder, private dataService: DataService, private notificationService: NotificationService) {
+  constructor(
+    private spinner: NgxSpinnerService,
+    private dialog: MatDialog,
+    private pagin: PaginatorCustomService,
+    private formBuilder: FormBuilder,
+    private dataService: DataService,
+    private notificationService: NotificationService
+  ) {
     this.form = this.formBuilder.group({
-      catId:['', Validators.compose([Validators.required])],
+      catId: ['', Validators.compose([Validators.required])],
       code: ['', Validators.compose([Validators.required])],
       name: ['', Validators.compose([Validators.required])],
       title: ['', Validators.compose([Validators.required])],
-      description:'',
-      quantity:['', Validators.compose([Validators.required])],
-      price:['', Validators.compose([Validators.required])],
+      description: '',
+      quantity: ['', Validators.compose([Validators.required])],
+      price: ['', Validators.compose([Validators.required])],
       tags: [''],
       discount: [0],
       isActive: true,
-      bestSellers: false
+      bestSellers: false,
     });
     this.urlImage = SystemConstants.URL_IMAGE;
   }
@@ -56,19 +85,24 @@ export class ProductComponent implements OnInit {
     this.loadData();
     this.loadCategory();
   }
-  prCas:any[]=[]
-  loadCategory(){
-    this.dataService.get('Category/GetAll').subscribe((data: any) => {
-      this.prCas = data
-    }, err => {
-      this.notificationService.printErrorMessage('Không tải được danh sách!');
-    });
+  prCas: any[] = [];
+  loadCategory() {
+    this.dataService.get('Category/GetAll').subscribe(
+      (data: any) => {
+        this.prCas = data;
+      },
+      (err) => {
+        this.notificationService.printErrorMessage('Không tải được danh sách!');
+      }
+    );
   }
 
   openDialog(action: string, item?: any, config?: MatDialogConfig) {
     this.model = {};
+    this.lstUnImage = [];
     this.action = action;
-    config = { width: '750px' }
+    this.filesToUpload = [];
+    config = { width: '750px' };
     if (action == 'create') {
       this.title = 'Thêm mới sản phẩm';
       this.form.controls['catId'].setValue('');
@@ -83,76 +117,128 @@ export class ProductComponent implements OnInit {
       this.form.controls['isActive'].setValue(true);
       this.form.controls['bestSellers'].setValue(false);
       const dialogRef = this.dialog.open(this.dialogTemplate, config);
-      dialogRef.afterClosed().subscribe(result => {
+      dialogRef.afterClosed().subscribe((result) => {
         this.onReset();
       });
-    }
-    else {
+    } else {
       this.title = 'Chỉnh sửa sản phẩm';
-      this.model.id = item.id;
+      this.model.productId = item.productId;
       this.spinner.show();
-      this.dataService.get('product/getbyid/' + this.model.id).subscribe((data: any) => {
-        this.spinner.hide();
-        this.model = data;
-        this.form.controls['name'].setValue(this.model.name);
-        this.form.controls['title'].setValue(this.model.title);
-        this.form.controls['description'].setValue(this.model.description);
-        this.form.controls['quantity'].setValue(this.model.quantity);
-        this.form.controls['price'].setValue(this.model.price);
-        this.form.controls['isActive'].setValue(this.model.status);
-        this.form.controls['catId'].setValue(this.model.catId);
-        const dialogRef = this.dialog.open(this.dialogTemplate, config);
-        dialogRef.afterClosed().subscribe(result => {
-          this.onReset();
-        });
-      }, err => {
-        this.notificationService.printErrorMessage('Không tải được danh sách!');
-        this.spinner.show();
-      });
+      this.dataService.get('Product/getbyid/' + this.model.productId).subscribe(
+        (data: any) => {
+          this.spinner.hide();
+          this.model = data;
+          this.form.controls['catId'].setValue(this.model.catId);
+          this.form.controls['code'].setValue(this.model.code);
+          this.form.controls['name'].setValue(this.model.name);
+          this.form.controls['title'].setValue(this.model.title);
+          this.form.controls['description'].setValue(this.model.description);
+          this.form.controls['quantity'].setValue(this.model.quantity);
+          this.form.controls['price'].setValue(this.model.price);
+          this.form.controls['tags'].setValue(this.model.tags);
+          this.form.controls['discount'].setValue(this.model.discount);
+          this.form.controls['isActive'].setValue(this.model.isActive);
+          this.form.controls['bestSellers'].setValue(this.model.bestSellers);
+
+          if (this.model.productImages.length > 0) {
+            for (let i = 0; i < this.model.productImages.length; i++) {
+              this.model.productImages[i].isActive = false;
+            }
+          }
+          const dialogRef = this.dialog.open(this.dialogTemplate, config);
+          dialogRef.afterClosed().subscribe((result) => {
+            this.onReset();
+          });
+        },
+        (err) => {
+          this.notificationService.printErrorMessage(
+            'Không tải được danh sách!'
+          );
+          this.spinner.show();
+        }
+      );
     }
   }
 
   loadData() {
     this.spinner.show();
-    this.dataService.get('Product/getlistpaging?page=' + this.page + '&pageSize=' + this.pageSize + '&keyword=' + this.keyword).subscribe((data: any) => {
-      this.dataSource = new MatTableDataSource(data.items);
-      this.totalRow = data.totalCount;
-      this.spinner.hide();
-    }, err => {
-      this.notificationService.printErrorMessage('Không tải được danh sách!');
-      this.spinner.hide();
-    });
+    this.dataService
+      .get(
+        'Product/getlistpaging?page=' +
+        this.page +
+        '&pageSize=' +
+        this.pageSize +
+        '&keyword=' +
+        this.keyword
+      )
+      .subscribe(
+        (data: any) => {
+          this.dataSource = new MatTableDataSource(data.items);
+          this.totalRow = data.totalCount;
+          this.spinner.hide();
+        },
+        (err) => {
+          this.notificationService.printErrorMessage(
+            'Không tải được danh sách!'
+          );
+          this.spinner.hide();
+        }
+      );
   }
 
   search() {
-    this.dataService.get('Product/getlistpaging?page=' + this.page + '&pageSize=' + this.pageSize + '&keyword=' + this.keyword).subscribe((data: any) => {
-      this.dataSource = new MatTableDataSource(data.items);
-      this.totalRow = data.totalCount;
-    }, err => {
-      this.notificationService.printErrorMessage('Không tải được danh sách!');
-    });
+    this.dataService
+      .get(
+        'Product/getlistpaging?page=' +
+        this.page +
+        '&pageSize=' +
+        this.pageSize +
+        '&keyword=' +
+        this.keyword
+      )
+      .subscribe(
+        (data: any) => {
+          this.dataSource = new MatTableDataSource(data.items);
+          this.totalRow = data.totalCount;
+        },
+        (err) => {
+          this.notificationService.printErrorMessage(
+            'Không tải được danh sách!'
+          );
+        }
+      );
   }
 
-  addData(){
+  addData() {
     if (this.form.invalid) {
       return;
     }
-    if(this.filesToUpload.length == 0 && this.action == 'create'){
+    if (this.filesToUpload.length == 0 && this.action == 'create') {
       this.notificationService.printErrorMessage('Ảnh không được bỏ trống!');
       return;
     }
+    if (this.filesToUpload.length == 0 && this.action == 'edit' && this.lstUnImage.length == this.model.productImages.length) {
+      this.notificationService.printErrorMessage('Ảnh không được bỏ trống!');
+      return;
+    }
+
     this.formData = new FormData();
-    this.formData.append("Code", this.form.controls['code'].value);
-    this.formData.append("Name", this.form.controls['name'].value);
-    this.formData.append("Description", this.form.controls['description'].value);
-    this.formData.append("CatId", this.form.controls['catId'].value);
-    this.formData.append("Price", this.form.controls['price'].value);
-    this.formData.append("Discount", this.form.controls['discount'].value);
-    this.formData.append("Tags", this.form.controls['tags'].value);
-    this.formData.append("Title", this.form.controls['title'].value);
-    this.formData.append("Quantity", this.form.controls['quantity'].value);
-    this.formData.append("IsActive", this.form.controls['isActive'].value);
-    this.formData.append("BestSellers", this.form.controls['bestSellers'].value);
+    this.formData.append('ProductId', this.model.productId);
+    this.formData.append('Code', this.form.controls['code'].value);
+    this.formData.append('Name', this.form.controls['name'].value);
+    this.formData.append('Description', this.form.controls['description'].value);
+    this.formData.append('CatId', this.form.controls['catId'].value);
+    this.formData.append('Price', this.form.controls['price'].value);
+    this.formData.append('Discount', this.form.controls['discount'].value);
+    this.formData.append('Tags', this.form.controls['tags'].value);
+    this.formData.append('Title', this.form.controls['title'].value);
+    this.formData.append('Quantity', this.form.controls['quantity'].value);
+    this.formData.append('IsActive', this.form.controls['isActive'].value);
+    this.formData.append('BestSellers', this.form.controls['bestSellers'].value);
+    this.formData.append('CreatedDate', this.model.createdDate);
+    this.formData.append('lstProImage', JSON.stringify(this.lstUnImage));
+
+
     Array.from(this.filesToUpload).map((file, index) => {
       return this.formData.append('lstFiles', file);
     });
@@ -166,52 +252,59 @@ export class ProductComponent implements OnInit {
     // this.model.image=this.form.controls['image'].value;
     this.spinner.show();
     if (this.action == 'create') {
-      this.dataService.postFile('Product/Create', this.formData).subscribe(data => {
-        this.notificationService.printSuccessMessage('Thêm mới thành công');
-        this.loadData();
-        this.onReset();
-
-      }, (err:any) => {
-        this.notificationService.printErrorMessage(err.error.message);
-        this.spinner.hide();
-      });
-    }
-    else if (this.action == 'edit') {
-      this.formData.append("CatId", this.model.catId);
-      this.formData.append("CreatedDate", this.model.createdDate);
-      this.formData.append("Icon", this.model.icon);
-      this.dataService.postFile('Category/Update', this.formData).subscribe(data => {
-        this.notificationService.printSuccessMessage('Chỉnh sửa thành công');
-        this.loadData();
-        this.onReset();
-      }, (err:any) => {
-        this.notificationService.printErrorMessage(err.error.message);
-        this.spinner.hide();
-      });
+      this.dataService.postFile('Product/Create', this.formData).subscribe(
+        (data) => {
+          this.notificationService.printSuccessMessage('Thêm mới thành công');
+          this.loadData();
+          this.onReset();
+        },
+        (err: any) => {
+          this.notificationService.printErrorMessage(err.error.message);
+          this.spinner.hide();
+        }
+      );
+    } else if (this.action == 'edit') {
+      this.dataService.postFile('Product/Update', this.formData).subscribe(
+        (data) => {
+          this.notificationService.printSuccessMessage('Chỉnh sửa thành công');
+          this.loadData();
+          this.onReset();
+        },
+        (err: any) => {
+          this.notificationService.printErrorMessage(err.error.message);
+          this.spinner.hide();
+        }
+      );
     }
   }
 
   removeData() {
+    debugger
     let roleChecked: any[] = [];
     this.selection.selected.forEach((value: any) => {
-      let id = value.id;
+      let id = value.productId;
       roleChecked.push(id);
     });
-    this.notificationService.printConfirmationDialog('Bạn chắc chắn muốn xóa?', () => this.deleteItemConfirm(JSON.stringify(roleChecked)));
+    this.notificationService.printConfirmationDialog(
+      'Bạn chắc chắn muốn xóa?',
+      () => this.deleteItemConfirm(JSON.stringify(roleChecked))
+    );
   }
 
   deleteItemConfirm(id: string) {
     this.spinner.show();
-    this.dataService.delete('product/deletemulti', 'checkedList', id).subscribe(response => {
-      this.notificationService.printSuccessMessage('Xóa thành công');
-      this.selection.clear();
-      this.spinner.hide();
-      this.loadData();
-    }, err => {
-      this.spinner.hide();
-      this.notificationService.printErrorMessage('Xóa thất bại');
-
-    });
+    this.dataService.delete('Product/deletemulti', 'checkedList', id).subscribe(
+      (response) => {
+        this.notificationService.printSuccessMessage('Xóa thành công');
+        this.selection.clear();
+        this.spinner.hide();
+        this.loadData();
+      },
+      (err) => {
+        this.spinner.hide();
+        this.notificationService.printErrorMessage('Xóa thất bại');
+      }
+    );
   }
   applyFilter(event: Event) {
     this.keyword = (event.target as HTMLInputElement).value;
@@ -237,7 +330,6 @@ export class ProductComponent implements OnInit {
     }
 
     this.selection.select(...this.dataSource.data);
-
   }
 
   /** The label for the checkbox on the passed row */
@@ -245,7 +337,8 @@ export class ProductComponent implements OnInit {
     if (!row) {
       return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
     }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1
+      }`;
   }
 
   ngAfterViewInit() {
@@ -275,10 +368,13 @@ export class ProductComponent implements OnInit {
     this.dialog.closeAll();
   }
 
-  uploadFile = (files:any) => {
-
+  uploadFile = (files: any) => {
     this.filesToUpload = files;
+  };
 
-
+  cancelImage(id: any) {
+    this.lstUnImage.push(id);
+    var index = this.model.productImages.findIndex((x: any) => x.id == id);
+    this.model.productImages[index].isActive = true;
   }
 }

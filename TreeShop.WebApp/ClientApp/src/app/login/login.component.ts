@@ -74,4 +74,8 @@ export class LoginComponent implements OnInit {
     localStorage.removeItem(SystemConstants.CURRENT_USER_ROLE);
   }
 
+  register(){
+    this.router.navigate([UrlConstants.REGISTER]);
+  }
+
 }

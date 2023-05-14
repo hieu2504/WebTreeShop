@@ -1,4 +1,6 @@
-﻿namespace TreeShop.Api.MappingModel
+﻿using TreeShop.Api.Data;
+
+namespace TreeShop.Api.MappingModel
 {
     public class ProductMappingModel
     {
@@ -18,5 +20,6 @@
         public string? Tags { get; set; }
         public string? Title { get; set; }
         public int? Quantity { get; set; }
+        public List<ProductImage>? ProductImages { get; set; }
     }
 }

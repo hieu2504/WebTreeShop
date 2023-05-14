@@ -65,11 +65,11 @@ export class MainComponent implements OnInit, AfterViewInit {
       let system: FoodNode = new FoodNode(1, 'Hệ thống', 'security', null, [user, role], null,'all');
       let prCa: FoodNode = new FoodNode(21, 'Loại sản phẩm', 'keyboard_arrow_right', '/main/category', null, 2,'');
       let pr: FoodNode = new FoodNode(22, 'Sản phẩm', 'keyboard_arrow_right', '/main/product', null, 2,'');
-      let de: FoodNode = new FoodNode(23, 'Người giao hàng', 'keyboard_arrow_right', '/main/deliverer', null, 2,'');
+      // let de: FoodNode = new FoodNode(23, 'Người giao hàng', 'keyboard_arrow_right', '/main/deliverer', null, 2,'');
       let stt: FoodNode = new FoodNode(24, 'Trạng thái', 'keyboard_arrow_right', '/main/status', null, 2,'');
       let cus: FoodNode = new FoodNode(25, 'Khách', 'keyboard_arrow_right', '/main/customer', null, 2,'');
       let od: FoodNode = new FoodNode(26, 'Đơn hàng', 'keyboard_arrow_right', '/main/order', null, 2,'');
-      let manage: FoodNode = new FoodNode(2, 'Quản lý', 'folder_open', null, [prCa,pr,de,stt,cus,od], null,'');
+      let manage: FoodNode = new FoodNode(2, 'Quản lý', 'folder_open', null, [prCa,pr,stt,cus,od], null,'');
       let odStt: FoodNode = new FoodNode(31, 'Thống kê đơn hàng', 'keyboard_arrow_right', '/main/order-statistic', null, 3,'');
       let statistics: FoodNode = new FoodNode(3, 'Thống kê', 'stacked_line_chart', null, [odStt], null,'');
       this.menu = [system, manage,statistics];

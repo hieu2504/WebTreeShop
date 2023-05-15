@@ -4,7 +4,23 @@ import { ShoppingComponent } from './shopping.component';
 import { RouterModule, Routes } from '@angular/router';
 import { MaterialModule } from '../main/material/material.module';
 
-const routes: Routes = [  { path: '', component: ShoppingComponent }];
+const routes: Routes = [  { path: '', component: ShoppingComponent ,children: [
+  {
+    path: '', redirectTo: 'home', pathMatch: 'full',
+    data: {
+      title: 'Trang chủ',
+      breadcrumb: [
+        {
+          label: 'Trang chủ',
+          url: ''
+        }
+      ]
+    },
+  },
+  {
+    path: 'home', loadChildren: () => import("./home/home.module").then(m => m.HomeModule),
+
+  },] }];
 
 @NgModule({
   declarations: [

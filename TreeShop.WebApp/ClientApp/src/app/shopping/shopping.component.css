@@ -14,7 +14,7 @@
 .headerShop{
   max-width: 1240px;
   margin: 0 auto;
-  background-color: #fff;
+  background: none !important;
 }
 @media(max-width: 959px){
   .headerShop{
@@ -23,6 +23,18 @@
 }
 .header{
   border-radius: 3px;
-  background-color: #fff;
+  background-color: none;
   border-bottom: 1px solid rgb(105, 105, 105);
+}
+
+main{
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+@media(max-width: 700px){
+  .headerShop{
+      border-radius: 0px;
+  }
+
 }

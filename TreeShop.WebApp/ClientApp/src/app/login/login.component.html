@@ -4,7 +4,7 @@
 </div>
 
 
-  <form name="form" (ngSubmit)="login()" #f="ngForm" novalidate>
+  <form class="formLogin" name="form" (ngSubmit)="login()" #f="ngForm" novalidate>
     <mat-form-field appearance="outline">
       <mat-label>Tên tài khoản</mat-label>
       <input matInput placeholder="Tên tài khoản" [(ngModel)]="model.username" #username="ngModel" required  [ngModelOptions]="{standalone: true}">

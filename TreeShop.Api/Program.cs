@@ -117,6 +117,15 @@ builder.Services.AddAuthentication(x =>
                         ValidateAudience = false
                     };
                 });
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "_myAllowSpecificOrigins",
+                      policy =>
+                      {
+                          policy.WithOrigins("http://example.com",
+                                              "http://www.contoso.com");
+                      });
+});
 
 var app = builder.Build();
 

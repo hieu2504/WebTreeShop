@@ -1,6 +1,5 @@
 
-  <mat-sidenav-container style="height: 100vh;
-  width: 100vw;">
+  <mat-sidenav-container style="display: inline;">
     <mat-sidenav  #sidenav role="navigation">
       <mat-nav-list>
         <a mat-list-item routerLink="/login" (click)="sidenav.close()">
@@ -20,7 +19,7 @@
         <mat-toolbar class="headerShop" >
           <div style="display: inline-flex; align-items: center; line-height: 1;">
             <span style="padding-right: 8px;">
-              <img width="50" height="50" src="https://websitedemos.net/plant-store-02/wp-content/uploads/sites/410/2020/06/plants-store-logo-green.svg"
+              <img width="50" height="50" src="../../assets/images/logo.svg"
               class="custom-logo" alt="Simply Natural" decoding="async">
             </span>
 
@@ -54,54 +53,58 @@
 
       </main>
       <footer>
+
         <div style="max-width: 1240px;
         margin: 0 auto;" class="row primary">
           <div class="column about">
-            <h3>Foolish Developer</h3>
+            <span>
+              <img width="150" height="150" src="../../assets/images/logo.svg"
+              class="custom-logo" alt="Simply Natural" decoding="async">
+            </span>
+            <h3>Xanh Online </h3>
             <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae,
-              voluptatem corporis error non,
+              Chúng tôi luôn cung cấp những sản phẩm tốt nhất cho khách hàng của mình
             </p>
-                      <div class="social">
-                        <i class="fa-brands fa-facebook-square"></i>
-                        <i class="fa-brands fa-instagram-square"></i>
-                        <i class="fa-brands fa-twitter-square"></i>
-            <i class="fa-brands fa-youtube-square"></i>
-              <i class="fa-brands fa-whatsapp-square"></i>
-                      </div>
+
+                      <!-- <div class="social">
+                        <a href="" style="padding: 8px; background-color: green;"><mat-icon style="color: brown;">facebook</mat-icon></a>
+                      </div> -->
           </div>
           <div class="column links">
-            <h3>Some Links</h3>
+            <h3>Menu</h3>
             <ul>
               <li>
-                <a href="#faq">F.A.Q</a>
+                <a href="#faq">Trang chủ</a>
               </li>
               <li>
-                <a href="#cookies-policy">Cookies Policy</a>
+                <a href="#cookies-policy">Giới thiệu</a>
               </li>
               <li>
-                <a href="#terms-of-services">Terms Of Service</a>
+                <a href="#terms-of-services">Cửa hàng</a>
               </li>
               <li>
-                <a href="#support">Support</a>
+                <a href="#support">Tin tức</a>
               </li>
-
+              <li>
+                <a href="#support">Liên hệ</a>
+              </li>
             </ul>
           </div>
             <div class="column links">
-              <h3>Some Links</h3>
+
+              <h3>TỔNG ĐÀI HỖ TRỢ</h3>
               <ul>
                 <li>
-                  <a href="#faq">F.A.Q</a>
+                  <a href="#faq">Gọi mua hàng 0126 922 0162</a>
                 </li>
                 <li>
-                  <a href="#cookies-policy">Cookies Policy</a>
+                  <a href="#cookies-policy">Gọi khiếu nại 0126 922 0162</a>
                 </li>
                 <li>
-                  <a href="#terms-of-services">Terms Of Service</a>
+                  <a href="#terms-of-services">Gọi bảo hành 0126 922 0162</a>
                 </li>
                 <li>
-                  <a href="#support">Support</a>
+                  <a href="#support">Hỗ trợ kỹ thuật 0126 922 0162</a>
                 </li>
 
               </ul>
@@ -109,17 +112,7 @@
         </div>
 
         <div class="row copyright">
-           <div class="footer-menu">
-
-                         <a href="">Home</a>
-                         <a href="">About</a>
-                         <a href="">Contact</a>
-                         <a href="">Blog</a>
-       <a href="">Social</a>
-
-
-                      </div>
-          <p>Copyright &copy; 2021 Foolish Developer</p>
+          <p style="text-align: center;">Copyright &copy; 2023 Xanh Online</p>
         </div>
       </footer>
     </mat-sidenav-content>

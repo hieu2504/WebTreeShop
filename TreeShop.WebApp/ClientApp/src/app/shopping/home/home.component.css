@@ -5,21 +5,29 @@
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
-  padding-top: 15vh;
-  padding-left: 10vh;
-
+  padding-top: 12vh;
+  padding-left: 4vh;
+  /* max-width: 1240px;
+  margin: 0 auto; */
 }
-
-.banner h2{
+.banner-content{
+  max-width: 1240px;
+  margin: 0 auto;
+}
+.banner-content h2{
   font-weight: 200;
   padding-bottom: 3vh;
 }
-.banner h1{
+.banner-content h1{
   font-size: 50px;
   font-weight: 500;
   max-width: 500px;
 }
 
+.content{
+  max-width: 1240px;
+  margin: 0 auto;
+}
 .featured-plants{
   text-align: center;
   padding: 100px;

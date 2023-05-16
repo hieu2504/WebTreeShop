@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { ShoppingComponent } from './shopping.component';
 import { RouterModule, Routes } from '@angular/router';
 import { MaterialModule } from '../main/material/material.module';
-
 const routes: Routes = [  { path: '', component: ShoppingComponent ,children: [
   {
     path: '', redirectTo: 'home', pathMatch: 'full',
@@ -20,7 +19,12 @@ const routes: Routes = [  { path: '', component: ShoppingComponent ,children: [
   {
     path: 'home', loadChildren: () => import("./home/home.module").then(m => m.HomeModule),
 
-  },] }];
+  },
+  {
+    path: 'product', loadChildren: () => import("./product/product.module").then(m => m.ProductModule),
+
+  },
+] }];
 
 @NgModule({
   declarations: [

@@ -20,6 +20,7 @@ export class HomeComponent implements OnInit {
   totalPage: number = 0;
   pageSize = 6;
   productBestSaler:any;
+  lstShopCart:any = [];
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -64,4 +65,17 @@ export class HomeComponent implements OnInit {
         );
   }
 
+  addShopCart(productId:any){
+    let shopCart = localStorage.getItem(SystemConstants.SHOP_CART);
+    if(shopCart!=null){
+      let lst = JSON.parse(shopCart);
+      if(!lst.includes(productId)){
+        lst.push(productId);
+        localStorage.setItem(SystemConstants.SHOP_CART, JSON.stringify(lst));
+      }
+    }else{
+      this.lstShopCart.push(productId);
+      localStorage.setItem(SystemConstants.SHOP_CART, JSON.stringify(this.lstShopCart));
+    }
+  }
 }

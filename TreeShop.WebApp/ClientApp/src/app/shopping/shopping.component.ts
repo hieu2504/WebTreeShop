@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
+import { SystemConstants } from '../core/common/system.constants';
 
 @Component({
   selector: 'app-shopping',
@@ -11,6 +12,8 @@ export class ShoppingComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    // let shopCart = localStorage.getItem(SystemConstants.SHOP_CART);
+    // console.log(shopCart);
   }
   public onToggleSidenav = () => {
     // sidenav.toggle().emit();

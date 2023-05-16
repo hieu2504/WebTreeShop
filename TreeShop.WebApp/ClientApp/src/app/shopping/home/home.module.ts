@@ -8,7 +8,7 @@ import { NotificationService } from 'src/app/core/services/notification.service'
 import { DataService } from 'src/app/core/services/data.service';
 import { AuthenService } from 'src/app/core/services/authen.service';
 
-const routes: Routes = [{path:'**',component:HomeComponent}]
+const routes: Routes = [{path:'',component:HomeComponent}]
 
 @NgModule({
   declarations: [

@@ -8,6 +8,7 @@ namespace TreeShop.Api.Repository
     public interface IProductRepository : IRepository<Product>
     {
         Task<IQueryable<ProductMappingModel>> GetAllMapping(string keyword);
+        Task<IQueryable<ProductMappingModel>> GetProductShop(string keyword);
         Task<ProductMappingModel> GetByIdMapping(int id);
     }
     public class ProductRepository : RepositoryBase<Product>, IProductRepository
@@ -97,6 +98,66 @@ namespace TreeShop.Api.Repository
 
                          }).FirstOrDefaultAsync();
             return query;
+        }
+
+        public async Task<IQueryable<ProductMappingModel>> GetProductShop(string keyword)
+        {
+            if (string.IsNullOrEmpty(keyword))
+            {
+                var query = (from p in _context.Products
+                             join pc in _context.Categories on p.CatId equals pc.CatId
+                             where p.IsActive == true
+                             select new ProductMappingModel
+                             {
+                                 ProductId = p.ProductId,
+                                 Code = p.Code,
+                                 Name = p.Name,
+                                 CategoryName = pc.Name,
+                                 Description = p.Description,
+                                 CatId = p.CatId,
+                                 Price = p.Price,
+                                 Discount = p.Discount,
+                                 CreatedDate = p.CreatedDate,
+                                 UpdatedDate = p.UpdatedDate,
+                                 BestSellers = p.BestSellers,
+                                 IsActive = p.IsActive,
+                                 Tags = p.Tags,
+                                 Title = p.Title,
+                                 Quantity = p.Quantity,
+                                 ProductImages = (from prImg in _context.ProductImages
+                                                  where prImg.ProductId == p.ProductId
+                                                  select prImg).ToList(),
+                             }).ToListAsync();
+                return (await query).AsQueryable();
+            }
+            else
+            {
+                var query = (from p in _context.Products
+                             join pc in _context.Categories on p.CatId equals pc.CatId
+                             where p.IsActive == true && (p.Name.ToLower().Contains(keyword.ToLower()) || pc.Name.ToLower().Contains(keyword.ToLower()))
+                             select new ProductMappingModel
+                             {
+                                 ProductId = p.ProductId,
+                                 Code = p.Code,
+                                 Name = p.Name,
+                                 CategoryName = pc.Name,
+                                 Description = p.Description,
+                                 CatId = p.CatId,
+                                 Price = p.Price,
+                                 Discount = p.Discount,
+                                 CreatedDate = p.CreatedDate,
+                                 UpdatedDate = p.UpdatedDate,
+                                 BestSellers = p.BestSellers,
+                                 IsActive = p.IsActive,
+                                 Tags = p.Tags,
+                                 Title = p.Title,
+                                 Quantity = p.Quantity,
+                                 ProductImages = (from prImg in _context.ProductImages
+                                                  where prImg.ProductId == p.ProductId
+                                                  select prImg).ToList(),
+                             }).ToListAsync();
+                return (await query).AsQueryable();
+            }
         }
     }
 }

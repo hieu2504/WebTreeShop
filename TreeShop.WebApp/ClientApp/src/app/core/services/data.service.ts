@@ -62,6 +62,13 @@ export class DataService {
       .pipe(map(extractData => extractData));
   }
 
+  getShop(url: string) {
+    let headers = new HttpHeaders()
+      .set('content-type', 'application/json')
+      .set('Access-Control-Allow-Origin', '*');
+    return this._http.get(this._urlApi.getUrlApiDatabse() + url, { 'headers': headers }).pipe(map(extractData => extractData));
+  }
+
   public handleError(error: any) {
     if (error.status == 401) {
       localStorage.removeItem(SystemConstants.CURRENT_USER);

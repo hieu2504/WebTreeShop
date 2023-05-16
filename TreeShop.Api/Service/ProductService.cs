@@ -15,6 +15,8 @@ namespace TreeShop.Api.Service
         Task<IQueryable<Product>> GetAll(string keyword);
         Task<IQueryable<ProductMappingModel>> GetAllMapping(string keyword);
         Task<ProductMappingModel> GetByIdMapping(int id);
+        Task<IQueryable<ProductMappingModel>> GetProductShop(string keyword);
+
     }
     public class ProductService : IProductService
     {
@@ -85,6 +87,11 @@ namespace TreeShop.Api.Service
         public async Task<ProductMappingModel> GetByIdMapping(int id)
         {
             return await _productRepository.GetByIdMapping(id);
+        }
+
+        public async Task<IQueryable<ProductMappingModel>> GetProductShop(string keyword)
+        {
+            return await _productRepository.GetProductShop(keyword);
         }
     }
 }

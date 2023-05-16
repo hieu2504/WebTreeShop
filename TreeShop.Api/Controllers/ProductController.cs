@@ -242,6 +242,35 @@ namespace TreeShop.Api.Controllers
             }
         }
 
+        [HttpGet("getlistpaging_shop")]
+        public async Task<IActionResult> GetListPagingShop(int page = 0, int pageSize = 10, string? keyword = null, bool? bestSellers = false)
+        {
+            try
+            {
+                var model = await _productService.GetProductShop(keyword);
+                if ((bool)bestSellers)
+                {
+                    model = model.Where(x => x.BestSellers == bestSellers);
+                }
+                int totalRow = 0;
+                    
+                totalRow = model.Count();
+                model = model.Skip(page * pageSize).Take(pageSize);
+                var responseData = new PaginationSet<ProductMappingModel>()
+                {
+                    Items = model,
+                    Page = page,
+                    TotalCount = totalRow,
+                    TotalPages = (int)Math.Ceiling((decimal)totalRow / pageSize)
+                };
+                return Ok(responseData);
+            }
+            catch (Exception dex)
+            {
+                return BadRequest(dex);
+            }
+        }
+
         #endregion
     }
 }

@@ -1,36 +1,15 @@
-.banner{
-  height: 70vh;
-  border-radius: 0 0 56px 56px;
-  background-image: url(https://websitedemos.net/plant-store-02/wp-content/uploads/sites/410/2020/07/hero-bg.jpg);
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  padding-top: 12vh;
-  padding-left: 4vh;
-  /* max-width: 1240px;
-  margin: 0 auto; */
-}
-.banner-content{
-  max-width: 1240px;
-  margin: 0 auto;
-}
-.banner-content h2{
-  font-weight: 200;
-  padding-bottom: 3vh;
-}
-.banner-content h1{
-  font-size: 50px;
-  font-weight: 500;
-  max-width: 500px;
-}
+
 
 .content{
   max-width: 1240px;
   margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.2fr 3fr;
+  grid-gap: 50px;
+  padding-top: 60px;
 }
-.featured-plants{
+.content-right{
   text-align: center;
-  padding: 100px;
 }
 .title-featured-plants h2{
   margin-bottom: 16px;
@@ -42,25 +21,6 @@
 }
 
 @media(max-width: 700px){
-  .banner h1{
-
-    font-size: 40px;
-    font-weight: 500;
-    max-width: 300px;
-  }
-
-  .banner{
-    height: 50vh;
-    border-radius: 0 0 25px 25px;
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    padding-top: 4vh;
-    padding-left: 4vh;
-  }
-  .featured-plants{
-    padding: 20px;
-  }
 
   .title-featured-plants h2{
     margin-bottom: 16px;
@@ -94,7 +54,6 @@
 }
 .product-price{
   font-size: 18px;
-  height: 38px;
   line-height: 120%;
   font-weight: bold;
 }
@@ -102,4 +61,11 @@
   background-color: #86c200;
   color: white;
   margin-bottom: 16px !important;
+}
+.content-right, .content-left{
+  background-color: #F7FCF4;
+}
+.img-product{
+  width: 200px;
+  height: 200px;
 }

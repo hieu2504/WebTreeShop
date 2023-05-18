@@ -83,6 +83,7 @@ namespace TreeShop.Api.Controllers
                     }
                     model.Icon = imgName;
                     model.CreatedDate = DateTime.Now;
+                    model.UpdatedDate = model.CreatedDate;
                     await _categoryService.Add(model);
                     return CreatedAtAction(nameof(Create), new { id = model.CatId }, model);
                 }

@@ -1,29 +1,34 @@
 
-<div style="background-color: #F9F9F9;">
+<div style="background-color: #FFFFFF;">
   <div class="content">
     <div class="content-left">
-      <div class="filter-by-price">
-        <h3>Lọc theo giá</h3>
+      <div class="filter-product">
+        <div class="filter-category">
+          <h3 style="margin-top: 15px;">Loại sản phẩm</h3>
+          <ul>
+            <li  *ngFor="let category of categories"><a (click)="filterProduct(category.catId)">{{category.name}}</a> </li>
+          </ul>
+        </div>
+
       </div>
     </div>
     <div class="content-right">
       <div class="title-featured-plants">
-        <h2>Sản phẩm nổi bật</h2>
-        <p>Đây là những sản phẩm bán chạy nhất của chúng tôi</p>
+        <p style="text-align: left;margin-left: 16px;">TRANG CHỦ/ SẢN PHẨM</p>
       </div>
       <div class="product-featured-plants">
         <div
           fxLayout="row wrap"
           fxLayout.lt-sm="column"
           fxLayoutAlign="flex-start">
-        <ng-container *ngFor="let product of productBestSaler">
-          <div
-          fxFlex="50%"
+        <ng-container *ngFor="let product of productShow">
+          <div fxFlex="0 1 calc(33.3%)"
+          fxFlex.lt-md="0 1 calc(50%)"
           fxFlex.lt-sm="100%" style="padding: 16px;">
           <mat-card class="product">
             <a>
-              <img class="img-product" *ngIf="product.productImages.length==0" src="../../../assets/images/produc-image-none.png" alt="">
-              <img class="img-product" *ngIf="product.productImages.length>0" src="{{urlImage + product.productImages[0].imageLink}}" alt="" srcset="">
+              <img class="img-product" *ngIf="product.productImages.length==0" width="300px" height="300px" src="../../../assets/images/produc-image-none.png" alt="">
+              <img class="img-product" *ngIf="product.productImages.length>0" width="300px" height="300px" src="{{urlImage + product.productImages[0].imageLink}}" alt="" srcset="">
             </a>
             <p class="category-name">{{product.categoryName}}</p>
             <a href=""><p class="title-product-name">{{product.title}}</p></a>

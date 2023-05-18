@@ -223,7 +223,7 @@ export class ProductComponent implements OnInit {
     }
 
     this.formData = new FormData();
-    this.formData.append('ProductId', this.model.productId);
+
     this.formData.append('Code', this.form.controls['code'].value);
     this.formData.append('Name', this.form.controls['name'].value);
     this.formData.append('Description', this.form.controls['description'].value);
@@ -235,10 +235,9 @@ export class ProductComponent implements OnInit {
     this.formData.append('Quantity', this.form.controls['quantity'].value);
     this.formData.append('IsActive', this.form.controls['isActive'].value);
     this.formData.append('BestSellers', this.form.controls['bestSellers'].value);
-    this.formData.append('CreatedDate', this.model.createdDate);
     this.formData.append('lstProImage', JSON.stringify(this.lstUnImage));
 
-
+    debugger
     Array.from(this.filesToUpload).map((file, index) => {
       return this.formData.append('lstFiles', file);
     });
@@ -264,6 +263,9 @@ export class ProductComponent implements OnInit {
         }
       );
     } else if (this.action == 'edit') {
+      debugger
+      this.formData.append('ProductId', this.model.productId);
+      this.formData.append('CreatedDate', this.model.createdDate);
       this.dataService.postFile('Product/Update', this.formData).subscribe(
         (data) => {
           this.notificationService.printSuccessMessage('Chỉnh sửa thành công');

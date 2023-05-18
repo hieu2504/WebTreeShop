@@ -71,8 +71,11 @@
     font-size: 14px;
   }
 }
+.product{
+  border: 1px solid rgb(0 0 0 / 0.2);
+}
 .product:hover{
-  box-shadow: 0 4px 11px rgb(0 0 0 / 0.2);
+  box-shadow: 0 4px 15px rgb(0 0 0 / 0.2);
 }
 .category-name{
   font-size: 14px;

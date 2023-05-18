@@ -18,9 +18,10 @@ export class ProductComponent implements OnInit {
   totalRow: number = 0;
   totalPage: number = 0;
   pageSize = 6;
-  productBestSaler:any;
+  products:any;
+  productShow:any;
   lstShopCart:any = [];
-
+  categories:any =[];
   constructor(
     private spinner: NgxSpinnerService,
     private pagin: PaginatorCustomService,
@@ -32,7 +33,7 @@ export class ProductComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    this.loadCategory();
     this.loadProductBestSale();
   }
 
@@ -51,7 +52,8 @@ export class ProductComponent implements OnInit {
         .subscribe(
           (data: any) => {
 
-            this.productBestSaler = data.items;
+            this.products = data.items;
+            this.productShow = data.items;
             this.totalRow = data.totalCount;
             this.spinner.hide();
           },
@@ -76,6 +78,21 @@ export class ProductComponent implements OnInit {
       this.lstShopCart.push(productId);
       localStorage.setItem(SystemConstants.SHOP_CART, JSON.stringify(this.lstShopCart));
     }
+  }
+
+  loadCategory() {
+    this.dataService.getShop('Category/GetAll').subscribe(
+      (data: any) => {
+        this.categories = data;
+      },
+      (err) => {
+        this.notificationService.printErrorMessage('Không tải được danh sách!');
+      }
+    );
+  }
+
+  filterProduct(catId: any){
+    this.productShow = this.products.filter((pro:any) => pro.catId ==catId);
   }
 
 }

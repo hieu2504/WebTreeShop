@@ -69,13 +69,23 @@ export class ProductComponent implements OnInit {
   addShopCart(productId:any){
     let shopCart = localStorage.getItem(SystemConstants.SHOP_CART);
     if(shopCart!=null){
-      let lst = JSON.parse(shopCart);
-      if(!lst.includes(productId)){
-        lst.push(productId);
-        localStorage.setItem(SystemConstants.SHOP_CART, JSON.stringify(lst));
+      this.lstShopCart = JSON.parse(shopCart);
+      var found = false;
+      for(var i = 0; i < this.lstShopCart.length; i++) {
+        if (this.lstShopCart[i].Id == productId) {
+          this.lstShopCart[i].Quantity = this.lstShopCart[i].Quantity+1;
+            found = true;
+            break;
+        }
       }
+      if(!found){
+        var item = {Id : productId, Quantity: 1}
+        this.lstShopCart.push(item);
+      }
+      localStorage.setItem(SystemConstants.SHOP_CART, JSON.stringify(this.lstShopCart));
     }else{
-      this.lstShopCart.push(productId);
+      var item = {Id : productId, Quantity: 1}
+        this.lstShopCart.push(item);
       localStorage.setItem(SystemConstants.SHOP_CART, JSON.stringify(this.lstShopCart));
     }
   }

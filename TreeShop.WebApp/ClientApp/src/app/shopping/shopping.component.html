@@ -40,7 +40,7 @@
                     <a routerLink="shop-introduce" >Giới thiệu</a>
                   </li>
                   <li>
-                    <a routerLink="shop-cart" ><mat-icon>shopping_cart</mat-icon></a>
+                    <a routerLink="shop-cart" ><mat-icon>shopping_cart</mat-icon>{{countItem}}</a>
                   </li>
               </ul>
           </div>
@@ -53,7 +53,7 @@
       </div>
       <!--in here all the content must reside. We will add a navigation header as well-->
 
-      <main>
+      <main style="height: auto; min-height: 80vh;">
         <router-outlet></router-outlet>
 
 

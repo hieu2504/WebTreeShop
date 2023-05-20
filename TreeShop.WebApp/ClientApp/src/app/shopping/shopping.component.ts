@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { SystemConstants } from '../core/common/system.constants';
 
@@ -8,8 +8,9 @@ import { SystemConstants } from '../core/common/system.constants';
   styleUrls: ['./shopping.component.css']
 })
 export class ShoppingComponent implements OnInit {
-
+  countItem: any;
   constructor() { }
+
 
   ngOnInit(): void {
     // let shopCart = localStorage.getItem(SystemConstants.SHOP_CART);
@@ -21,4 +22,6 @@ export class ShoppingComponent implements OnInit {
   public onSidenavClose = (sidenav:any) => {
      sidenav.close();
   }
+
+
 }

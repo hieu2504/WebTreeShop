@@ -1,32 +1,66 @@
-
-  <div class="shop-cart" style="display: flex; max-width: 1240px; margin: 0 auto;">
+<div class="shop-cart">
+  <div class="shop-cart-item">
     <table>
       <thead>
         <tr>
           <th>Sản phẩm</th>
           <th>Giá</th>
-          <th>Số lượng</th>
+          <th class="th-quantity">Số lượng</th>
+          <th>Giảm giá</th>
           <th>Tổng tiền</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td><img class="img-tb-shop-cart" src="../../../assets/images/produc-image-none.png" alt="" srcset=""><span>SPA</span></td>
+        <tr style="border-bottom: 1px solid #929292;">
+          <td style="display: flex;">
+            <div>
+              <img class="img-tb-shop-cart" src="../../../assets/images/produc-image-none.png" alt="" srcset="">
+            </div>
+            <div style="display: flex;flex-direction: column;justify-content: center; padding: 8px;">
+              <p>SPA</p>
+            </div>
+          </td>
           <td>100000</td>
-          <td><button>-</button><input type="number"><button>+</button></td>
+          <td><button>-</button><input style="width: 30px; margin: 8px;" type="number"><button>+</button></td>
+          <td>5%</td>
           <td>1000</td>
         </tr>
+
       </tbody>
-      <tfoot>
+      <!-- <tfoot>
+          <tr>
+            <td colspan="3">Tổng tiền</td>
+            <td>18000</td>
+          </tr>
+        </tfoot> -->
+    </table>
+  </div>
+  <div class="shop-cart-order">
+
+    <table style="min-width: auto !important;">
         <tr>
-          <td colspan="3">Tổng tiền</td>
-          <td>18000</td>
+          <th colspan="2">TỔNG SỐ LƯỢNG</th>
         </tr>
-      </tfoot>
+        <tr style="border-bottom: 1px solid #929292;">
+          <td >
+              <p>Tổng tiền</p>
+          </td>
+          <td>{{formatCash("100000")}}</td>
+          <td></td>
+        </tr>
+        <tr style="border-bottom: 1px solid #929292;">
+          <td colspan="2">
+            <mat-form-field appearance="outline">
+              <mat-label>Loại thanh toán</mat-label>
+              <mat-select [(ngModel)]="paymentId">
+                <mat-option *ngFor="let payment of payments"  [value]="payment.id">
+                  {{payment.description}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </td>
+        </tr>
     </table>
   </div>
 
-
-
-
-
+</div>

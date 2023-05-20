@@ -4,12 +4,25 @@
   height: auto;
 }
 .shop-cart{
-  margin: 0;
-  padding: 0;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-gap: 30px;
+  max-width: 1240px;
+  margin: 0 auto;
+  min-height: 100%;
+  max-height: auto;
+  padding-top: 30px;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 .shop-cart table, .shop-cart th, .shop-cart td{
   border-collapse: collapse;
 }
-.shop-cart th, .shop-cart td{
-  border: 1px solid #929292;
+.shop-cart th{
+  text-align: left;
+  border-bottom: 1px solid #929292;
+}
+
+.th-quantity{
+  width: 20%;
 }

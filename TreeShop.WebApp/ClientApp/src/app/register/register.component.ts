@@ -121,7 +121,7 @@ addData() {
 
       this.spinner.hide();
       this.notification.printSuccessMessage('Thêm mới thành công');
-      this.router.navigate([UrlConstants.SHOPPING])
+      this.router.navigate([UrlConstants.LOGIN])
       this.onReset();
 
     }, err => {

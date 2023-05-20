@@ -24,6 +24,12 @@ const routes: Routes = [  { path: '', component: ShoppingComponent ,children: [
     path: 'product', loadChildren: () => import("./product/product.module").then(m => m.ProductModule),
 
   },
+  {
+    path: 'shop-cart', loadChildren: () => import("./shop-cart/shop-cart.module").then(m => m.ShopCartModule),
+  },
+  {
+    path: 'shop-introduce', loadChildren: () => import("./shop-introduce/shop-introduce.module").then(m => m.ShopIntroduceModule),
+  },
 ] }];
 
 @NgModule({

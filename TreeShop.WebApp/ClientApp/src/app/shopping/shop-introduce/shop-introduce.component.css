@@ -1,0 +1,34 @@
+.content-introduce {
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+.content-2-introduce {
+  display: grid;
+  grid-template-columns: 1fr 2.5fr 1fr;
+  grid-gap: 20px;
+}
+
+.content-2-introduce-center img {
+  object-fit: contain;
+  width: 100%;
+}
+.icon-box-text{
+  text-align: center;
+}
+.icon-box-img{
+  margin: 0 auto;
+}
+.featured-box{
+  padding: 10px;
+}
+@media only screen and (max-width: 810px) {
+  .content-2-introduce {
+      display: block;
+  grid-gap: 20px;
+}
+.icon-box-text{
+  width: 300px;
+  margin: 0 auto;
+}
+}

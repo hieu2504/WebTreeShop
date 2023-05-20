@@ -22,7 +22,6 @@ namespace TreeShop.Api.Data
         public DateTime? ShipDate { get; set; }
         [ForeignKey("TransactStatus")]
         public int? TransactStatusId { get; set; }
-        public bool? Deleted { get; set; }
         public bool? Paid { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime? PaymentDate { get; set; }

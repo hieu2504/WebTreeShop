@@ -6,7 +6,9 @@
         <div class="filter-category">
           <h3 style="margin-top: 15px;">Loại sản phẩm</h3>
           <ul>
-            <li  *ngFor="let category of categories"><a (click)="filterProduct(category.catId)">{{category.name}}</a> </li>
+            <li  *ngFor="let category of categories">
+              <a (click)="filterProduct(category.catId, category.name)"><img style="margin-bottom: -5px; padding-right: 8px;" src="{{urlImage + category.icon}}" alt="" width="25px" height="25px"><span>{{category.name}}</span></a>
+            </li>
           </ul>
         </div>
 
@@ -14,7 +16,7 @@
     </div>
     <div class="content-right">
       <div class="title-featured-plants">
-        <p style="text-align: left;margin-left: 16px;">TRANG CHỦ/ SẢN PHẨM</p>
+        <p style="text-align: left;margin-left: 16px;">TRANG CHỦ / SẢN PHẨM{{categoryFilter}}</p>
       </div>
       <div class="product-featured-plants">
         <div

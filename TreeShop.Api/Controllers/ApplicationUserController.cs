@@ -180,6 +180,43 @@ namespace TreeShop.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Thêm mới tài khoản
+        /// </summary>
+        /// <param name="AppUserViewModel"></param>
+        /// <returns></returns>
+        [HttpPost("create-custommer")]
+        [AllowAnonymous]
+        public async Task<IActionResult> CreateCustommer(AppUserViewModel AppUserViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    AppUser appUser = new AppUser();
+                    appUser.UpdateUser(AppUserViewModel, "add");
+
+                    var result = await _userManager.CreateAsync(appUser, AppUserViewModel.PasswordHash);
+                    if (result.Succeeded)
+                    {
+                        return CreatedAtAction(nameof(Create), appUser);
+                    }
+                    else
+                    {
+                        return BadRequest(result.Errors);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex);
+                }
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
+        }
+
 
         /// <summary>
         /// Chỉnh sửa tài khoản

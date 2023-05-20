@@ -1,0 +1,15 @@
+.img-tb-shop-cart{
+  width: 150px;
+  max-width: 100%;
+  height: auto;
+}
+.shop-cart{
+  margin: 0;
+  padding: 0;
+}
+.shop-cart table, .shop-cart th, .shop-cart td{
+  border-collapse: collapse;
+}
+.shop-cart th, .shop-cart td{
+  border: 1px solid #929292;
+}

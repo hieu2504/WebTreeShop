@@ -4,6 +4,8 @@ import { DataService } from '../core/services/data.service';
 import { MatDialog } from '@angular/material/dialog';
 import { NotificationService } from '../core/services/notification.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { Router } from '@angular/router';
+import { UrlConstants } from '../core/common/url.constants';
 
 @Component({
   selector: 'app-register',
@@ -23,7 +25,8 @@ constructor(
   public dialog: MatDialog,
   private notification: NotificationService,
   private formBuilder: FormBuilder,
-  private spinner: NgxSpinnerService
+  private spinner: NgxSpinnerService,
+  private router: Router
 ) {
   this.form = this.formBuilder.group({
     id: '',
@@ -99,11 +102,10 @@ f = (controlName: string) => {
 };
 
 addData() {
+  debugger
   if (this.form.invalid) {
     return;
   }
-
-  if (this.action == 'create') {
     this.spinner.show();
 
     let user = {
@@ -113,41 +115,21 @@ addData() {
       phoneNumber: this.form.controls['phoneNumber'].value,
       email: this.form.controls['email'].value,
       image: this.form.controls['image'].value != '' ? this.form.controls['image'].value : null,
-      type: 1
+      type: 0,
     }
-    this.dataService.post('ApplicationUser/create', user).subscribe(data => {
+    this.dataService.postShop('ApplicationUser/create-custommer', user).subscribe(data => {
 
       this.spinner.hide();
       this.notification.printSuccessMessage('Thêm mới thành công');
+      this.router.navigate([UrlConstants.SHOPPING])
       this.onReset();
 
     }, err => {
       this.spinner.hide();
       this.notification.printErrorMessage(err.error.message);
     });
-  } else if (this.action == 'edit') {
-    this.spinner.show();
 
-    let user = {
-      id: this.form.controls['id'].value,
-      userName: this.form.controls['userName'].value,
-      fullName: this.form.controls['fullName'].value,
-      passwordHash: this.form.controls['password'].value,
-      phoneNumber: this.form.controls['phoneNumber'].value,
-      email: this.form.controls['email'].value,
-      image: this.form.controls['image'].value != '' ? this.form.controls['image'].value : null,
-      type: 1
-    }
-    this.dataService.post('ApplicationUser/update', user).subscribe(data => {
-      this.spinner.hide();
-      this.notification.printSuccessMessage('Chỉnh sửa thành công');
-      this.onReset();
 
-    }, err => {
-      this.spinner.hide();
-      this.notification.printErrorMessage(err.error.message);
-    });
-  }
 }
 
 onReset() {

@@ -22,6 +22,7 @@ export class ProductComponent implements OnInit {
   productShow:any;
   lstShopCart:any = [];
   categories:any =[];
+  categoryFilter:any="";
   constructor(
     private spinner: NgxSpinnerService,
     private pagin: PaginatorCustomService,
@@ -46,8 +47,7 @@ export class ProductComponent implements OnInit {
           '&pageSize=' +
           this.pageSize +
           '&keyword=' +
-          this.keyword +
-          '&bestSellers=true'
+          this.keyword
         )
         .subscribe(
           (data: any) => {
@@ -91,8 +91,9 @@ export class ProductComponent implements OnInit {
     );
   }
 
-  filterProduct(catId: any){
+  filterProduct(catId: any, name:any){
     this.productShow = this.products.filter((pro:any) => pro.catId ==catId);
+    this.categoryFilter = " / "+name.toUpperCase();
   }
 
 }

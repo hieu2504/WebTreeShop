@@ -31,7 +31,6 @@ export class ProductComponent implements OnInit {
     'code',
     'title',
     'tags',
-    'description',
     'price',
     'quantity',
     'discount',

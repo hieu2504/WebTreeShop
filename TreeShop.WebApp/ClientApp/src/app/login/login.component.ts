@@ -40,6 +40,7 @@ export class LoginComponent implements OnInit {
         this.router.navigate([UrlConstants.HOME]); this.preventAbuse = false;
       }else{
         // trang bán hàng
+        this.router.navigate([UrlConstants.SHOPPING])
       }
 
 

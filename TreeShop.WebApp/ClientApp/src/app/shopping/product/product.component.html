@@ -24,9 +24,9 @@
           fxLayout.lt-sm="column"
           fxLayoutAlign="flex-start">
         <ng-container *ngFor="let product of productShow">
-          <div fxFlex="0 1 calc(33.3%)"
-          fxFlex.lt-md="0 1 calc(50%)"
-          fxFlex.lt-sm="100%" style="padding: 16px;">
+          <div fxFlex="33.3%"
+          fxFlex.lt-md="50%"
+          fxFlex.lt-sm="100%" style="padding: 8px;">
           <mat-card class="product">
             <a>
               <img class="img-product" *ngIf="product.productImages.length==0" width="300px" height="300px" src="../../../assets/images/produc-image-none.png" alt="">

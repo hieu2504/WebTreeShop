@@ -14,6 +14,7 @@ namespace TreeShop.Api.Infrastructure.Extention
             CreateMap<Product, ProductViewModel>().ReverseMap();
             CreateMap<Order, OrderViewModel>().ReverseMap();
             CreateMap<Payment, PaymentViewModel>().ReverseMap();
+            CreateMap<OrderDetail, OrderDetailViewModel>().ReverseMap();
         }
     }
 }

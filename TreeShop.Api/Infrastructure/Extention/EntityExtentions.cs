@@ -24,6 +24,7 @@ namespace TreeShop.Api.Infrastructure.Extention
             appUser.FullName = appUserViewModel.FullName;
             appUser.Type = appUserViewModel.Type;
             appUser.Image = appUserViewModel.Image;
+            appUser.Address = appUserViewModel.Address;
             
         }
 

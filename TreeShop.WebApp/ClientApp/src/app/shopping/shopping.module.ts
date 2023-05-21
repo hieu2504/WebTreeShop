@@ -30,6 +30,9 @@ const routes: Routes = [  { path: '', component: ShoppingComponent ,children: [
   {
     path: 'shop-introduce', loadChildren: () => import("./shop-introduce/shop-introduce.module").then(m => m.ShopIntroduceModule),
   },
+  {
+    path: 'order-shop', loadChildren: () => import("./order-shop/order-shop.module").then(m => m.OrderShopModule),
+  },
 ] }];
 
 @NgModule({

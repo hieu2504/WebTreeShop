@@ -2,6 +2,7 @@
 using TreeShop.Api.Infrastructure.Extention;
 using TreeShop.Api.MappingModel;
 using TreeShop.Api.Repository;
+using TreeShop.Api.ViewModel;
 
 namespace TreeShop.Api.Service
 {
@@ -16,6 +17,7 @@ namespace TreeShop.Api.Service
         Task<IQueryable<ProductMappingModel>> GetAllMapping(string keyword);
         Task<ProductMappingModel> GetByIdMapping(int id);
         Task<IQueryable<ProductMappingModel>> GetProductShop(string keyword);
+        Task<List<OrderShopViewModel>> GetListOrderShop(List<OrderRequestModel> lst);
 
     }
     public class ProductService : IProductService
@@ -92,6 +94,12 @@ namespace TreeShop.Api.Service
         public async Task<IQueryable<ProductMappingModel>> GetProductShop(string keyword)
         {
             return await _productRepository.GetProductShop(keyword);
+        }
+
+        // Get Danh sach san pham vao gio hang
+        public async Task<List<OrderShopViewModel>> GetListOrderShop(List<OrderRequestModel> lst)
+        {
+            return await _productRepository.GetListOrderShop(lst);
         }
     }
 }

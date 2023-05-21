@@ -7,8 +7,8 @@ namespace TreeShop.Api.ViewModel
 {
     public class OrderViewModel
     {
-        public int OrderId { get; set; }
-        public int? CustomerId { get; set; }
+        public int? OrderId { get; set; }
+        public string? CustomerId { get; set; }
         public DateTime? OrderDate { get; set; }
         public DateTime? ShipDate { get; set; }
         public int? TransactStatusId { get; set; }
@@ -17,6 +17,6 @@ namespace TreeShop.Api.ViewModel
         public int? PaymentId { get; set; }
         public string? ShippingAddress { get; set; }
         public string? Note { get; set; }
-        public List<OrderDetail> lstOrderDetails { get; set; }
+        public List<OrderDetailViewModel> lstOrderDetails { get; set; }
     }
 }

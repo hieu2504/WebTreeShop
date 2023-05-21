@@ -1,29 +1,35 @@
 <div class="shop-cart">
   <div class="shop-cart-item">
-    <table>
+    <table style="min-width: auto !important;">
       <thead>
         <tr>
-          <th>Sản phẩm</th>
-          <th>Giá</th>
-          <th class="th-quantity">Số lượng</th>
-          <th>Giảm giá</th>
-          <th>Tổng tiền</th>
+          <th>SẢN PHẨM</th>
+          <th class="shop-cart-col-hide">GIÁ</th>
+          <th class="th-quantity">SỐ LƯỢNG</th>
+          <th class="shop-cart-col-hide">GIẢM GIÁ</th>
+          <th class="shop-cart-col-total-hide" style="text-align: right;">TỔNG CỘNG</th>
         </tr>
       </thead>
       <tbody>
-        <tr style="border-bottom: 1px solid #929292;">
+        <tr style="border-bottom: 1px solid #929292;" *ngFor="let product of orderShop;let indexOfelement=index;">
           <td style="display: flex;">
+            <div style="display: flex;flex-direction: column;justify-content: center; padding-right: 8px;">
+              <button style="border-radius: 50%; width: 25px; height: 25px;" (click)="deleteProduct(indexOfelement, product.productId)">X</button>
+            </div>
             <div>
-              <img class="img-tb-shop-cart" src="../../../assets/images/produc-image-none.png" alt="" srcset="">
+              <img class="img-tb-shop-cart" width="100px" height="100px" src="{{urlImage + product.productImages[0].imageLink}}" alt="" srcset="">
             </div>
             <div style="display: flex;flex-direction: column;justify-content: center; padding: 8px;">
-              <p>SPA</p>
+              <p style="margin: 0 0 8px 0;">{{product.title}}</p>
+              <p class="shop-cart-tb-p-show" style="margin: 0 0 8px 0; font-weight:bold ;">{{formatCash(product.price.toString())}} <span style="text-decoration: underline;">đ</span></p>
+              <p class="shop-cart-tb-p-show" style="margin: 0 0 8px 0; color: red;">- {{product.discount}}%</p>
             </div>
           </td>
-          <td>100000</td>
-          <td><button>-</button><input style="width: 30px; margin: 8px;" type="number"><button>+</button></td>
-          <td>5%</td>
-          <td>1000</td>
+
+          <td class="shop-cart-col-hide" style="font-weight: bold;">{{formatCash(product.price.toString())}} <span style="text-decoration: underline;">đ</span></td>
+          <td><button (click)="changeQuantity('-',indexOfelement)">-</button><input [value]="product.orderQuantity" style="width: 25px; margin:0 4px 0 4px; border: 1px solid black; border-radius: 2px;" type="text" readonly><button (click)="changeQuantity('+',indexOfelement)">+</button></td>
+          <td class="shop-cart-col-hide">{{product.discount}}%</td>
+          <td class="shop-cart-col-total-hide" style="font-weight: bold;text-align: right;">{{formatCash(total(product.price, product.orderQuantity, product.discount, indexOfelement).toString())}} <span style="text-decoration: underline;">đ</span></td>
         </tr>
 
       </tbody>
@@ -45,8 +51,7 @@
           <td >
               <p>Tổng tiền</p>
           </td>
-          <td>{{formatCash("100000")}}</td>
-          <td></td>
+          <td style="font-weight: bold; text-align: right;">{{formatCash(totalAll.toString())}} <span style="text-decoration: underline;">đ</span></td>
         </tr>
         <tr style="border-bottom: 1px solid #929292;">
           <td colspan="2">
@@ -60,7 +65,66 @@
             </mat-form-field>
           </td>
         </tr>
+        <tr>
+          <td colspan="2" style="text-align: center;">
+            <button class="custom-button" mat-raised-button color="warn" (click)="pay()">
+              TIẾP THEO
+            </button>
+          </td>
+        </tr>
     </table>
   </div>
 
+</div>
+
+<div class="order-info" *ngIf="isOrder">
+  <div class="text-center">
+    <!-- <h2 class="text-upper-case">Thông tin giao hàng</h2> -->
+      <form action="" (submit)="addData()" [formGroup]="form">
+        <!-- <h2 mat-dialog-title>{{title}}</h2> -->
+           <mat-form-field appearance="outline">
+            <mat-label>Họ và tên</mat-label>
+            <input matInput placeholder="Họ và tên"
+              formControlName="fullName" #fullName maxlength="100" required>
+            <mat-hint align="end">{{fullName.value.length}} / 100</mat-hint>
+            <mat-error *ngIf="f('fullName').hasError('required')">
+              Họ và tên không được bỏ trống
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Địa chỉ</mat-label>
+            <input matInput placeholder="Địa chỉ"
+              formControlName="address" #address maxlength="250" required>
+            <mat-hint align="end">{{address.value.length}} / 250</mat-hint>
+            <mat-error *ngIf="f('address').hasError('required')">
+              Địa chỉ không được bỏ trống
+            </mat-error>
+          </mat-form-field>
+
+              <mat-form-field appearance="outline" align="end">
+                <mat-label>Số điện thoại</mat-label>
+                <mat-icon matPrefix> phone</mat-icon>
+                <input type="tel" matInput placeholder="Số điện thoại"
+                  maxlength="15" #phoneNumber formControlName="phoneNumber" required>
+                <mat-hint align="end">{{phoneNumber.value.length}} / 15</mat-hint>
+                <mat-error *ngIf="f('phoneNumber').hasError('required')">
+                  Số điện thoại không được bỏ trống
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Ghi chú</mat-label>
+                <textarea [rows]="3" matInput placeholder="Địa chỉ"
+                  formControlName="note" #note maxlength="250"></textarea>
+                <mat-hint align="end">{{note.value.length}} / 250</mat-hint>
+              </mat-form-field>
+
+        <div align="center" style="margin-bottom: 40px;">
+          <button mat-stroked-button color="primary" type="submit">ĐẶT HÀNG</button>
+
+        </div>
+
+      </form>
+  </div>
 </div>

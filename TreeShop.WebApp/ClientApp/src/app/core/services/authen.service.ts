@@ -27,12 +27,20 @@ export class AuthenService {
         map(res => {
           this.user = res;
           if (this.user) {
-            localStorage.removeItem(SystemConstants.CURRENT_USER);
-            localStorage.removeItem(SystemConstants.CURRENT_USER_ROLE);
-            localStorage.setItem(SystemConstants.CURRENT_USER, JSON.stringify(this.user));
-            //this.loadAllMenuUser(this.user);
-            this.userRoleValue();
-            return this.user;
+            debugger
+            if(this.user.type==1){
+              localStorage.removeItem(SystemConstants.CURRENT_USER);
+              localStorage.removeItem(SystemConstants.CURRENT_USER_ROLE);
+              localStorage.setItem(SystemConstants.CURRENT_USER, JSON.stringify(this.user));
+              //this.loadAllMenuUser(this.user);
+              this.userRoleValue();
+              return this.user;
+            }else{
+              localStorage.removeItem(SystemConstants.CURRENT_USER_SHOP);
+              localStorage.setItem(SystemConstants.CURRENT_USER_SHOP, JSON.stringify(this.user));
+              return this.user;
+            }
+
           }
         }));
   }

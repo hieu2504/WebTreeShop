@@ -15,14 +15,12 @@ import { UrlConstants } from '../core/common/url.constants';
 export class RegisterComponent implements OnInit {
 form!: FormGroup;
 title!: string;
-action!: string;
 pageSizeOptions: number[] = [10, 25, 50, 100];
 pageSize = this.pageSizeOptions[0];
 users: any;
 
 constructor(
   private dataService: DataService,
-  public dialog: MatDialog,
   private notification: NotificationService,
   private formBuilder: FormBuilder,
   private spinner: NgxSpinnerService,
@@ -33,13 +31,9 @@ constructor(
     userName: ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
     password: ['', Validators.compose([Validators.required,Validators.maxLength(50), Validators.minLength(6)])],
     fullName: ['', Validators.compose([Validators.required, Validators.maxLength(100)])],
-    phoneNumber: '',
+    phoneNumber: ['', Validators.required],
     email: ['', Validators.compose([Validators.email, Validators.maxLength(50)])],
     image: '',
-    createdDate: '',
-    createdBy: '',
-    updatedBy: '',
-    updatedDate: '',
     address:['', Validators.compose([Validators.required, Validators.maxLength(250)])],
     confirmPassword:['', Validators.compose([Validators.required,Validators.maxLength(50), Validators.minLength(6)])],
     //emId:['', Validators.compose([Validators.required])]
@@ -50,9 +44,6 @@ constructor(
 }
 
 ngOnInit() {
-  // set initial selection
-  // this.bankMultiCtrl.setValue([this.appUsers[1]]);
-
 }
 
 ngAfterViewInit() {
@@ -63,46 +54,11 @@ ngOnDestroy() {
 
 }
 
-
-
-// openDialog(action: string, item?: any, config?: MatDialogConfig) {
-//   this.action = action;
-//   if (action == 'create') {
-//     this.title = 'Thêm mới';
-//   } else {
-
-//     this.title = 'Chỉnh sửa';
-//     console.log(item)
-//     this.form.controls["password"].setValidators([Validators.minLength(6), Validators.maxLength(50)]);
-//     this.form.controls['id'].setValue(item.id);
-//     this.form.controls['userName'].setValue(item.userName);
-//     this.form.controls['fullName'].setValue(item.fullName);
-//     this.form.controls['image'].setValue(item.image);
-//     this.form.controls['email'].setValue(item.email);
-//     this.form.controls['phoneNumber'].setValue(item.phoneNumber);
-//     this.form.controls['createdDate'].setValue(item.createdDate);
-//     this.form.controls['updatedDate'].setValue(item.updatedDate);
-
-//     this.getRoleByUserID(item.id);
-
-
-//   }
-//   const dialogRef = this.dialog.open(this.dialogTemplate, {
-//     width: '750px',
-//   });
-//   dialogRef.afterClosed().subscribe((result) => {
-//     this.onReset();
-//   });
-// }
-
-
-
 f = (controlName: string) => {
   return this.form.controls[controlName];
 };
 
 addData() {
-  debugger
   if (this.form.invalid) {
     return;
   }
@@ -116,6 +72,7 @@ addData() {
       email: this.form.controls['email'].value,
       image: this.form.controls['image'].value != '' ? this.form.controls['image'].value : null,
       type: 0,
+      address: this.form.controls['address'].value
     }
     this.dataService.postShop('ApplicationUser/create-custommer', user).subscribe(data => {
 
@@ -126,15 +83,18 @@ addData() {
 
     }, err => {
       this.spinner.hide();
-      this.notification.printErrorMessage(err.error.message);
+      if(err.error[0].code=="DuplicateUserName"){
+        this.notification.printErrorMessage("Tài khoản đã tồn tại");
+      }else{
+        this.notification.printErrorMessage(err.error[0].code);
+      }
+
     });
 
 
 }
 
 onReset() {
-  this.action == '';
-  this.dialog.closeAll();
   this.form.reset();
 }
 

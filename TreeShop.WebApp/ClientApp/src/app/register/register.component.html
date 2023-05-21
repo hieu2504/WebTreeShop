@@ -1,5 +1,5 @@
 <div id="divLogin" class="text-center">
-  <h2 class="text-upper-case">Đăng nhập</h2>
+  <h2 class="text-upper-case">Đăng ký</h2>
     <form action="" (submit)="addData()" [formGroup]="form">
       <h2 mat-dialog-title>{{title}}</h2>
       <mat-dialog-content class="mat-typography">
@@ -80,13 +80,16 @@
               <mat-label>Số điện thoại</mat-label>
               <mat-icon matPrefix> phone</mat-icon>
               <input type="tel" matInput placeholder="Số điện thoại"
-                maxlength="15" #phoneNumber formControlName="phoneNumber">
+                maxlength="15" #phoneNumber formControlName="phoneNumber" required>
               <mat-hint align="end">{{phoneNumber.value.length}} / 15</mat-hint>
+              <mat-error *ngIf="f('phoneNumber').hasError('required')">
+                Số điện thoại không được bỏ trống
+              </mat-error>
             </mat-form-field>
           </div>
         </div>
 
-        <div align="center">
+        <div align="center" style="margin-bottom: 16px;">
           <fieldset>
             <legend>Ảnh</legend>
             <button type="button" mat-stroked-button
@@ -114,7 +117,6 @@
       </mat-dialog-content>
       <mat-dialog-actions align="center">
         <button mat-stroked-button color="primary" type="submit">Lưu</button>
-        <button mat-stroked-button color="warn" mat-dialog-close (click)="onReset()">Đóng</button>
 
       </mat-dialog-actions>
 

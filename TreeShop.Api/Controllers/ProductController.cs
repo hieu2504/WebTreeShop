@@ -271,6 +271,21 @@ namespace TreeShop.Api.Controllers
             }
         }
 
+        [HttpGet("getlist_order_shop")]
+        public async Task<IActionResult> GetListOrderShop(string strLstOrder)
+        {
+            try
+            {
+                List<OrderRequestModel> lstOrder = JsonConvert.DeserializeObject<List<OrderRequestModel>>(strLstOrder);
+                var model = await _productService.GetListOrderShop(lstOrder);
+                return Ok(model);
+            }
+            catch (Exception dex)
+            {
+                return BadRequest(dex);
+            }
+        }
+
         #endregion
     }
 }

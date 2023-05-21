@@ -35,7 +35,6 @@ export class LoginComponent implements OnInit {
     this.preventAbuse = true;
     this.authenService.login(this.model).subscribe(data => {
       this.spinner.hide();
-      console.log(data);
       if(data.type == 1){
         this.router.navigate([UrlConstants.HOME]); this.preventAbuse = false;
       }else{

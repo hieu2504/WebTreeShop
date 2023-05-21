@@ -72,18 +72,18 @@ export class HomeComponent implements OnInit {
       var found = false;
       for(var i = 0; i < this.lstShopCart.length; i++) {
         if (this.lstShopCart[i].Id == productId) {
-          this.lstShopCart[i].Quantity = this.lstShopCart[i].Quantity+1;
+          this.lstShopCart[i].OrderQuantity = this.lstShopCart[i].OrderQuantity+1;
             found = true;
             break;
         }
       }
       if(!found){
-        var item = {Id : productId, Quantity: 1}
+        var item = {Id : productId, OrderQuantity: 1}
         this.lstShopCart.push(item);
       }
       localStorage.setItem(SystemConstants.SHOP_CART, JSON.stringify(this.lstShopCart));
     }else{
-      var item = {Id : productId, Quantity: 1}
+      var item = {Id : productId, OrderQuantity: 1}
         this.lstShopCart.push(item);
       localStorage.setItem(SystemConstants.SHOP_CART, JSON.stringify(this.lstShopCart));
     }

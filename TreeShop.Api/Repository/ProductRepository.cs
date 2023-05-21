@@ -2,6 +2,7 @@
 using TreeShop.Api.Data;
 using TreeShop.Api.Infrastructure;
 using TreeShop.Api.MappingModel;
+using TreeShop.Api.ViewModel;
 
 namespace TreeShop.Api.Repository
 {
@@ -10,6 +11,7 @@ namespace TreeShop.Api.Repository
         Task<IQueryable<ProductMappingModel>> GetAllMapping(string keyword);
         Task<IQueryable<ProductMappingModel>> GetProductShop(string keyword);
         Task<ProductMappingModel> GetByIdMapping(int id);
+        Task<List<OrderShopViewModel>> GetListOrderShop(List<OrderRequestModel> lst);
     }
     public class ProductRepository : RepositoryBase<Product>, IProductRepository
     {
@@ -158,6 +160,34 @@ namespace TreeShop.Api.Repository
                              }).ToListAsync();
                 return (await query).AsQueryable();
             }
+        }
+
+        public async Task<List<OrderShopViewModel>> GetListOrderShop(List<OrderRequestModel> lst)
+        {
+            List<OrderShopViewModel> result = new List<OrderShopViewModel>();
+            foreach(var item in lst)
+            {
+                var query = await (from p in _context.Products
+                             join pc in _context.Categories on p.CatId equals pc.CatId
+                             where p.IsActive == true && p.ProductId == item.Id
+                             select new OrderShopViewModel
+                             {
+                                 ProductId = p.ProductId,
+                                 Code = p.Code,
+                                 Name = p.Name,
+                                 Price = p.Price,
+                                 Discount = p.Discount,
+                                 Title = p.Title,
+                                 Quantity = p.Quantity,
+                                 OrderQuantity = item.OrderQuantity,
+                                 ProductImages = (from prImg in _context.ProductImages
+                                                  where prImg.ProductId == p.ProductId
+                                                  select prImg).ToList(),
+                             }).ToListAsync();
+                result.AddRange(query);
+            }
+            
+            return result;
         }
     }
 }

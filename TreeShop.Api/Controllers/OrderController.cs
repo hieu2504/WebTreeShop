@@ -79,7 +79,8 @@ namespace TreeShop.Api.Controllers
                         {
                             foreach(var item in orderViewModel.lstOrderDetails)
                             {
-                                await _orderDetailService.Add(item);
+                                var orderDetail = _mapper.Map<OrderDetailViewModel, OrderDetail>(item);
+                                await _orderDetailService.Add(orderDetail);
                             }
                         }
                         
@@ -122,7 +123,8 @@ namespace TreeShop.Api.Controllers
                         {
                             foreach (var item in orderViewModel.lstOrderDetails)
                             {
-                                await _orderDetailService.Add(item);
+                                var orderDetail = _mapper.Map<OrderDetailViewModel, OrderDetail>(item);
+                                await _orderDetailService.Add(orderDetail);
                             }
                         }
 

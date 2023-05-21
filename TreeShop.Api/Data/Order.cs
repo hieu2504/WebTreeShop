@@ -15,7 +15,7 @@ namespace TreeShop.Api.Data
         [Key]
         public int OrderId { get; set; }
         [ForeignKey("AppUsers")]
-        public int? CustomerId { get; set; }
+        public string? CustomerId { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime? OrderDate { get; set; }
         [Column(TypeName = "datetime")]

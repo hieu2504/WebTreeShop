@@ -24,25 +24,23 @@
           fxLayout.lt-sm="column"
           fxLayoutAlign="flex-start">
         <ng-container *ngFor="let product of productShow">
-          <div     fxFlex="0 1 calc(33.3% - 32px)"
+          <div  fxFlex="0 1 calc(33.3% - 32px)"
           fxFlex.lt-md="0 1 calc(50% - 32px)"
-          fxFlex.lt-sm="100%" style="padding: 16px;">
-          <mat-card class="product">
+          fxFlex.lt-sm="100%"  class="product">
             <div class="cart-top">
               <a>
                 <img class="img-product" *ngIf="product.productImages.length==0" width="300px" height="300px" src="../../../assets/images/produc-image-none.png" alt="">
                 <img class="img-product" *ngIf="product.productImages.length>0" width="300px" height="300px" src="{{urlImage + product.productImages[0].imageLink}}" alt="" srcset="">
               </a>
             </div>
-
             <div class="cart-botom">
               <p class="category-name">{{product.categoryName}}</p>
               <a href=""><p class="title-product-name">{{product.title}}</p></a>
               <p class="product-price">{{product.price}} đ</p>
-              <button class="product-btn-add"  mat-raised-button (click)="addShopCart(product.productId)" >THÊM VÀO GIỎ</button>
+              <button class="product-btn-add"  mat-raised-button (click)="addShopCart(product.productId)">THÊM VÀO GIỎ</button>
             </div>
 
-          </mat-card>
+
           </div>
 
         </ng-container>

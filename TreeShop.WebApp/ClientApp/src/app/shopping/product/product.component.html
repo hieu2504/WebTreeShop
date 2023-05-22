@@ -24,9 +24,9 @@
           fxLayout.lt-sm="column"
           fxLayoutAlign="flex-start">
         <ng-container *ngFor="let product of productShow">
-          <div fxFlex="33.3%"
-          fxFlex.lt-md="50%"
-          fxFlex.lt-sm="100%" style="padding: 8px;">
+          <div     fxFlex="0 1 calc(33.3% - 32px)"
+          fxFlex.lt-md="0 1 calc(50% - 32px)"
+          fxFlex.lt-sm="100%" style="padding: 16px;">
           <mat-card class="product">
             <div class="cart-top">
               <a>

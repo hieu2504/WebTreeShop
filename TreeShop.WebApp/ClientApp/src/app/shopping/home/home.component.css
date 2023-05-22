@@ -104,3 +104,13 @@
   color: white;
   margin-bottom: 16px !important;
 }
+
+.img-product{
+  max-width: 100%;
+  width: 100%;
+  transform: translateZ(0);
+  margin: 0 auto;
+  height: auto;
+  display: inline-block;
+  vertical-align: middle;
+}

@@ -28,14 +28,20 @@
           fxFlex.lt-md="50%"
           fxFlex.lt-sm="100%" style="padding: 8px;">
           <mat-card class="product">
-            <a>
-              <img class="img-product" *ngIf="product.productImages.length==0" width="300px" height="300px" src="../../../assets/images/produc-image-none.png" alt="">
-              <img class="img-product" *ngIf="product.productImages.length>0" width="300px" height="300px" src="{{urlImage + product.productImages[0].imageLink}}" alt="" srcset="">
-            </a>
-            <p class="category-name">{{product.categoryName}}</p>
-            <a href=""><p class="title-product-name">{{product.title}}</p></a>
-            <p class="product-price">{{product.price}} đ</p>
-            <button class="product-btn-add"  mat-raised-button (click)="addShopCart(product.productId)" >THÊM VÀO GIỎ</button>
+            <div class="cart-top">
+              <a>
+                <img class="img-product" *ngIf="product.productImages.length==0" width="300px" height="300px" src="../../../assets/images/produc-image-none.png" alt="">
+                <img class="img-product" *ngIf="product.productImages.length>0" width="300px" height="300px" src="{{urlImage + product.productImages[0].imageLink}}" alt="" srcset="">
+              </a>
+            </div>
+
+            <div class="cart-botom">
+              <p class="category-name">{{product.categoryName}}</p>
+              <a href=""><p class="title-product-name">{{product.title}}</p></a>
+              <p class="product-price">{{product.price}} đ</p>
+              <button class="product-btn-add"  mat-raised-button (click)="addShopCart(product.productId)" >THÊM VÀO GIỎ</button>
+            </div>
+
           </mat-card>
           </div>
 

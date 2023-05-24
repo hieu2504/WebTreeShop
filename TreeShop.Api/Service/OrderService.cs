@@ -1,5 +1,6 @@
 ﻿using TreeShop.Api.Data;
 using TreeShop.Api.Infrastructure.Extention;
+using TreeShop.Api.MappingModel;
 using TreeShop.Api.Repository;
 
 namespace TreeShop.Api.Service
@@ -11,6 +12,7 @@ namespace TreeShop.Api.Service
         Task<Order> Add(Order order);
         Task<Order> Update(Order order);
         Task<Order> Delete(int id);
+        Task<IEnumerable<OrderMapping>> GetAllOrder(string fromDate, string toDate, int payId, int transId);
     }
     public class OrderService : IOrderService
     {
@@ -43,6 +45,22 @@ namespace TreeShop.Api.Service
         public async Task<Order> Update(Order order)
         {
             return await _orderRepository.UpdateASync(order);
+        }
+
+        public async Task<IEnumerable<OrderMapping>> GetAllOrder(string fromDate, string toDate, int payId, int transId)
+        {
+            string sql = "";
+            if(payId != 0)
+            {
+                sql += " and pay.Id=" + payId;
+            }
+            if(transId != 0)
+            {
+                sql += " and trans.TransactStatusId=" + transId;
+            }
+            sql += " ";
+            return await _orderRepository.GetAllOrder(fromDate, toDate, sql);
+
         }
     }
 }

@@ -40,7 +40,20 @@ export class ShopCartComponent implements OnInit,AfterViewInit {
   orderShop: any = [];
   totalAll:any = 0;
   isOrder = false;
+  isNotFoundProduct = true;
   ngOnInit(): void {
+    let shopCart = localStorage.getItem(SystemConstants.SHOP_CART);
+
+    if (shopCart != null) {
+      if(shopCart.length == 2){
+        this.isNotFoundProduct = false;
+      }else{
+        this.isNotFoundProduct = true;
+      }
+
+    }else{
+      this.isNotFoundProduct = false;
+    }
     this.loadPayment();
     this.loadProductOrder();
   }
@@ -212,8 +225,10 @@ export class ShopCartComponent implements OnInit,AfterViewInit {
       debugger
       this.dataService.postShop('Order/Create', order).subscribe(data => {
         this.spinner.hide();
+
         this.notification.printSuccessMessage('Đặt hàng thành công');
         // this.router.navigate([UrlConstants.LOGIN])
+        localStorage.removeItem(SystemConstants.SHOP_CART)
         this.onReset();
       }, err => {
         this.spinner.hide();

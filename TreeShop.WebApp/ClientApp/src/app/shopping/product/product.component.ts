@@ -107,4 +107,14 @@ export class ProductComponent implements OnInit {
     this.categoryFilter = " / "+name.toUpperCase();
   }
 
+  formatCash(str: any): string {
+
+    return str
+      .split('')
+      .reverse()
+      .reduce((prev: any, next: any, index: any) => {
+        return (index % 3 ? next : next + ',') + prev;
+      });
+  }
+
 }

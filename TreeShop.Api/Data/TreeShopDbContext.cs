@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using TreeShop.Api.ViewModel;
+using TreeShop.Api.MappingModel;
 
 namespace TreeShop.Api.Data
 {
@@ -29,6 +31,7 @@ namespace TreeShop.Api.Data
         public virtual DbSet<Product> Products { get; set; } = null!;
         public virtual DbSet<ProductImage> ProductImages { get; set; } = null!;
         public virtual DbSet<TransactStatus> TransactStatuses { get; set; } = null!;
+        public virtual DbSet<OrderMapping> OrderMappings { get; set; }
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{

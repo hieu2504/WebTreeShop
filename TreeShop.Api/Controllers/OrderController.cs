@@ -8,6 +8,7 @@ using System.Data;
 using System.Net.Http.Headers;
 using TreeShop.Api.Data;
 using TreeShop.Api.Infrastructure.Core;
+using TreeShop.Api.MappingModel;
 using TreeShop.Api.Service;
 using TreeShop.Api.ViewModel;
 
@@ -80,6 +81,7 @@ namespace TreeShop.Api.Controllers
                             foreach(var item in orderViewModel.lstOrderDetails)
                             {
                                 var orderDetail = _mapper.Map<OrderDetailViewModel, OrderDetail>(item);
+                                orderDetail.OrderId = rsOrder.OrderId;
                                 await _orderDetailService.Add(orderDetail);
                             }
                         }
@@ -139,6 +141,31 @@ namespace TreeShop.Api.Controllers
             else
             {
                 return BadRequest(ModelState);
+            }
+        }
+
+        [HttpGet("getallorder")]
+        public async Task<IActionResult> GetAllOrder(DateTime fromDate, DateTime toDate, int payId = 0, int transId = 0, int page = 0, int pageSize = 10)
+        {
+            try
+            {
+
+                var model = await _orderService.GetAllOrder(fromDate.ToString("yyyy-MM-dd HH:mm:ss"), toDate.ToString("yyyy-MM-dd HH:mm:ss"), payId, transId);
+                int totalRow = 0;
+                totalRow = model.Count();
+                model = model.Skip(page * pageSize).Take(pageSize);
+                var responseData = new PaginationSet<OrderMapping>()
+                {
+                    Items = model,
+                    Page = page,
+                    TotalCount = totalRow,
+                    TotalPages = (int)Math.Ceiling((decimal)totalRow / pageSize)
+                };
+                return Ok(responseData);
+            }
+            catch (Exception dex)
+            {
+                return BadRequest(dex);
             }
         }
 

@@ -1,3 +1,8 @@
+<div *ngIf="!isNotFoundProduct" style=" margin-top: 40px;">
+<h2 style="text-align:  center;">Không có sản phẩm nào trong giỏ hàng</h2>
+</div>
+
+<div *ngIf="isNotFoundProduct">
 <div class="shop-cart">
   <div class="shop-cart-item">
     <table style="min-width: auto !important;">
@@ -127,4 +132,5 @@
 
       </form>
   </div>
+</div>
 </div>

@@ -31,6 +31,7 @@ const routes: Routes = [{
     },
     {path:'app-user',loadChildren:()=>import('./app-user/app-user.module').then(x=>x.AppUserModule)},
     {path:'product',loadChildren:()=>import('./product/product.module').then(x=>x.ProductModule)},
+    {path:'order',loadChildren:()=>import('./order/order.module').then(x=>x.OrderModule)},
     // {path:'app-menu',loadChildren:()=>import('./app-menu/app-menu.module').then(x=>x.AppMenuModule)}
   ]
 }];

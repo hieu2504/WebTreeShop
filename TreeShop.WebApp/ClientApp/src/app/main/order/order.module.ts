@@ -1,5 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { OrderComponent } from './order.component';
 import { RouterModule, Routes } from '@angular/router';
 import { MaterialModule } from '../material/material.module';
@@ -20,7 +20,7 @@ const routes: Routes = [{path:'',component:OrderComponent}]
     MaterialModule,
     NgxSpinnerModule
   ],
-  providers:[AuthenService, NotificationService, DataService],
+  providers:[AuthenService, NotificationService, DataService,DatePipe],
   schemas:[CUSTOM_ELEMENTS_SCHEMA],
 })
 export class OrderModule { }

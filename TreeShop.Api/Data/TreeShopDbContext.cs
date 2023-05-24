@@ -32,6 +32,7 @@ namespace TreeShop.Api.Data
         public virtual DbSet<ProductImage> ProductImages { get; set; } = null!;
         public virtual DbSet<TransactStatus> TransactStatuses { get; set; } = null!;
         public virtual DbSet<OrderMapping> OrderMappings { get; set; }
+        public virtual DbSet<Payment> Payments { get; set; } = null!;
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{

@@ -145,12 +145,12 @@ namespace TreeShop.Api.Controllers
         }
 
         [HttpGet("getallorder")]
-        public async Task<IActionResult> GetAllOrder(DateTime fromDate, DateTime toDate, int payId = 0, int transId = 0, int page = 0, int pageSize = 10)
+        public async Task<IActionResult> GetAllOrder(DateTime fromDate, DateTime toDate, int payId = 0, int transId = 0, int page = 0, int pageSize = 10, string? fullName = "", string? phoneNumber ="" )
         {
             try
             {
 
-                var model = await _orderService.GetAllOrder(fromDate.ToString("yyyy-MM-dd HH:mm:ss"), toDate.ToString("yyyy-MM-dd HH:mm:ss"), payId, transId);
+                var model = await _orderService.GetAllOrder(fromDate.ToString("yyyy-MM-dd HH:mm:ss"), toDate.ToString("yyyy-MM-dd HH:mm:ss"), payId, transId, fullName, phoneNumber);
                 int totalRow = 0;
                 totalRow = model.Count();
                 model = model.Skip(page * pageSize).Take(pageSize);
@@ -166,6 +166,20 @@ namespace TreeShop.Api.Controllers
             catch (Exception dex)
             {
                 return BadRequest(dex);
+            }
+        }
+
+        [HttpGet("getbyid/{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            try
+            {
+                var result = await _orderService.GetByIdMapping(id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
             }
         }
 

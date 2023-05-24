@@ -1,4 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
+import { DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild, TemplateRef, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -19,12 +20,13 @@ import { PaginatorCustomService } from 'src/app/core/services/paginator-custom.s
 export class OrderComponent implements OnInit,AfterViewInit {
   urlImage: any;
   page: any = 0;
-  fromDate:any;
-  toDate:any;
+
+  fromDate :any;
+  toDate :any;
   payId:any;
   transId:any;
   constructor(private formBuilder: FormBuilder, private dialog: MatDialog,
-    private http: HttpClient, private dataService: DataService,
+    private http: HttpClient, private dataService: DataService, private datePipe: DatePipe,
     private notificationService: NotificationService,private pagin: PaginatorCustomService, private spinner: NgxSpinnerService) {
     this.urlImage = SystemConstants.URL_IMAGE;
 
@@ -38,7 +40,7 @@ export class OrderComponent implements OnInit,AfterViewInit {
   formData = new FormData();
   filesToUpload: File[] = [];
 
-  displayedColumns: string[] = ['position', 'name', 'code', 'description', 'ordering', 'createdDate','updatedDate', 'icon', 'isActive','action'];
+  displayedColumns: string[] = ['position', 'fullName', 'orderId', 'phoneNumber', 'payDescription', 'tranDescription','totalOrder','action'];
   dataSource = new MatTableDataSource<any>();
   totalRow: number = 0;
   totalPage: number = 0;
@@ -48,14 +50,52 @@ export class OrderComponent implements OnInit,AfterViewInit {
   model:any;
   Payments: any;
   TransactStatus: any;
+  fullName: any;
+  phoneNumber:any;
 
   ngOnInit(): void {
+    this.loadPayment();
+    this.loadTransactStatus();
+    this.reset();
+  }
+
+  reset(){
+    this.fromDate = this.datePipe.transform(new Date(), "yyyy-MM-ddT00:00:00");
+    this.toDate = this.datePipe.transform(new Date(), "yyyy-MM-ddT23:59:59");
+    this.payId = 0;
+    this.transId = 0;
+    this.fullName = "";
+    this.phoneNumber = "";
+  }
+
+  loadPayment() {
+    this.dataService.get('Payment/GetAll').subscribe(
+      (data: any) => {
+        this.Payments = data;
+      },
+      (err) => {
+        //this.notificationService.printErrorMessage('Không tải được danh sách!');
+      }
+    );
+  }
+
+  loadTransactStatus() {
+    this.dataService.get('TransactStatus/GetAll').subscribe(
+      (data: any) => {
+        this.TransactStatus = data;
+      },
+      (err) => {
+        //this.notificationService.printErrorMessage('Không tải được danh sách!');
+      }
+    );
   }
 
   loadData() {
     this.spinner.show();
+    debugger
     this.dataService.get('Order/getallorder?page=' + this.page + '&pageSize=' + this.pageSize + '&fromDate=' + this.fromDate + '&toDate='+this.toDate
-    +'&payId='+this.payId+'&transId'+this.transId).subscribe((data: any) => {
+    +'&payId='+this.payId+'&transId='+this.transId + '&fullName='+this.fullName+'&phoneNumber='+this.phoneNumber).subscribe((data: any) => {
+      debugger
       this.dataSource = new MatTableDataSource(data.items);
       this.totalRow = data.totalCount;
       this.spinner.hide();
@@ -112,6 +152,16 @@ export class OrderComponent implements OnInit,AfterViewInit {
     this.page = pe.pageIndex;
     this.pageSize = pe.pageSize;
     this.loadData();
+  }
+
+  formatCash(str: any): string {
+
+    return str
+      .split('')
+      .reverse()
+      .reduce((prev: any, next: any, index: any) => {
+        return (index % 3 ? next : next + ',') + prev;
+      });
   }
 
 }

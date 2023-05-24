@@ -12,7 +12,7 @@ namespace TreeShop.Api.Service
         Task<Order> Add(Order order);
         Task<Order> Update(Order order);
         Task<Order> Delete(int id);
-        Task<IEnumerable<OrderMapping>> GetAllOrder(string fromDate, string toDate, int payId, int transId);
+        Task<IEnumerable<OrderMapping>> GetAllOrder(string fromDate, string toDate, int payId, int transId, string fullName, string phoneNumber);
     }
     public class OrderService : IOrderService
     {
@@ -47,7 +47,7 @@ namespace TreeShop.Api.Service
             return await _orderRepository.UpdateASync(order);
         }
 
-        public async Task<IEnumerable<OrderMapping>> GetAllOrder(string fromDate, string toDate, int payId, int transId)
+        public async Task<IEnumerable<OrderMapping>> GetAllOrder(string fromDate, string toDate, int payId, int transId, string fullName, string phoneNumber)
         {
             string sql = "";
             if(payId != 0)
@@ -58,8 +58,19 @@ namespace TreeShop.Api.Service
             {
                 sql += " and trans.TransactStatusId=" + transId;
             }
+            if (!string.IsNullOrEmpty(phoneNumber))
+            {
+                sql += " and apu.PhoneNumber like ''%" + phoneNumber + "%''";
+            }
             sql += " ";
-            return await _orderRepository.GetAllOrder(fromDate, toDate, sql);
+            if (!string.IsNullOrEmpty(fullName))
+            {
+                return (await _orderRepository.GetAllOrder(fromDate, toDate, sql)).Where(x => x.FullName.Contains(fullName));
+            }
+            else
+            {
+                return await _orderRepository.GetAllOrder(fromDate, toDate, sql);
+            }
 
         }
     }

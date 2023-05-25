@@ -1,7 +1,10 @@
-﻿namespace TreeShop.Api.MappingModel
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace TreeShop.Api.MappingModel
 {
     public class OrderProductMapping
     {
+        [Key]
         public int ProductId { get; set; }
         public string ProductName { get; set; }
         public string Code { get; set; }

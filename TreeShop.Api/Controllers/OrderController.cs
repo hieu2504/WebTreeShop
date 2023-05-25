@@ -174,8 +174,8 @@ namespace TreeShop.Api.Controllers
         {
             try
             {
-                var result = await _orderService.GetByIdMapping(id);
-                return Ok(result);
+                //var result = await _orderService.GetByIdMapping(id);
+                return Ok();
             }
             catch (Exception ex)
             {

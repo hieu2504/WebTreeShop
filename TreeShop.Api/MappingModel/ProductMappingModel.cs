@@ -1,10 +1,12 @@
-﻿using TreeShop.Api.Data;
+﻿using System.ComponentModel.DataAnnotations;
+using TreeShop.Api.Data;
 
 namespace TreeShop.Api.MappingModel
 {
     public class ProductMappingModel
     {
-        public int? ProductId { get; set; }
+        [Key]
+        public int ProductId { get; set; }
         public string? Code { get; set; }
         public string? Name { get; set; }
         public string? CategoryName { get; set; }

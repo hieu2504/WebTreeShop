@@ -35,7 +35,6 @@ namespace TreeShop.Api.Repository
 
         public async Task<List<OrderProductMapping>> GetOrderById(int orderId)
         {
-            return null;
             //var query = from p in _context.Products
             //                  join pc in _context.Categories on p.CatId equals pc.CatId
             //                  where p.IsActive == true && p.ProductId == item.Id
@@ -69,7 +68,7 @@ namespace TreeShop.Api.Repository
                                    Discount = odt.Discount,
                                    Quantity = odt.Quantity,
                                    Total = odt.Total
-                               }).FirstOrDefaultAsync();
+                               }).ToListAsync();
             return query;
 
         }

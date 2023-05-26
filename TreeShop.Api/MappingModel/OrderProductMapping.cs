@@ -4,9 +4,8 @@ namespace TreeShop.Api.MappingModel
 {
     public class OrderProductMapping
     {
-        [Key]
         public int ProductId { get; set; }
-        public string ProductName { get; set; }
+        public string Title { get; set; }
         public string Code { get; set; }
         public int? Price { get; set; }
         public double? Discount { get; set; }

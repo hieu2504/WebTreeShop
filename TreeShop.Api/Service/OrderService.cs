@@ -13,6 +13,9 @@ namespace TreeShop.Api.Service
         Task<Order> Update(Order order);
         Task<Order> Delete(int id);
         Task<IEnumerable<OrderMapping>> GetAllOrder(string fromDate, string toDate, int payId, int transId, string fullName, string phoneNumber);
+
+        Task<List<OrderProductMapping>> GetProductOrderById(int orderId);
+        Task<Order> GetOrderByIdNoTracking(int orderId);
     }
     public class OrderService : IOrderService
     {
@@ -72,6 +75,16 @@ namespace TreeShop.Api.Service
                 return await _orderRepository.GetAllOrder(fromDate, toDate, sql);
             }
 
+        }
+
+        public async Task<List<OrderProductMapping>> GetProductOrderById(int orderId)
+        {
+            return await _orderRepository.GetProductOrderById(orderId);
+        }
+
+        public async Task<Order> GetOrderByIdNoTracking(int orderId)
+        {
+            return await _orderRepository.GetOrderByIdNoTracking(orderId);
         }
     }
 }

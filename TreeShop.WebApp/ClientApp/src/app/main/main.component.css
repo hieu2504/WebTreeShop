@@ -138,4 +138,7 @@ mat-divider {
 .tree-main{
     width: 94%;
 }
+.un-role-access{
+  display: none !important;
+}
 

@@ -41,9 +41,11 @@ export class ShopCartComponent implements OnInit,AfterViewInit {
   totalAll:any = 0;
   isOrder = false;
   isNotFoundProduct = true;
+  isThanks = false;
+
   ngOnInit(): void {
     let shopCart = localStorage.getItem(SystemConstants.SHOP_CART);
-
+    debugger
     if (shopCart != null) {
       if(shopCart.length == 2){
         this.isNotFoundProduct = false;
@@ -228,6 +230,7 @@ export class ShopCartComponent implements OnInit,AfterViewInit {
 
         this.notification.printSuccessMessage('Đặt hàng thành công');
         // this.router.navigate([UrlConstants.LOGIN])
+        this.isThanks = true;
         localStorage.removeItem(SystemConstants.SHOP_CART)
         this.onReset();
       }, err => {
@@ -246,5 +249,9 @@ export class ShopCartComponent implements OnInit,AfterViewInit {
   f = (controlName: string) => {
     return this.form.controls[controlName];
   };
+
+  trangChu(){
+    location.href = "/shopping";
+  }
 
 }

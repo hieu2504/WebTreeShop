@@ -16,7 +16,9 @@ namespace TreeShop.Api.MappingModel
         public string TranDescription { get; set; }
         public int? TransactStatusId { get; set; }
         public int? PayId { get; set; }
-        public List<OrderProductMapping> ProductMappings { get; set; }
-        
+        public string Note { get; set; }
+        public string ShippingAddress { get; set; }
+        //public List<OrderProductMapping> ProductMappings { get; set; }
+
     }
 }

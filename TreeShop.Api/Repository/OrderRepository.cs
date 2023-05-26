@@ -12,7 +12,8 @@ namespace TreeShop.Api.Repository
     public interface IOrderRepository : IRepository<Order>
     {
         Task<IEnumerable<OrderMapping>> GetAllOrder(string fromDate, string toDate, string sql);
-        Task<List<OrderProductMapping>> GetOrderById(int orderId);
+        Task<List<OrderProductMapping>> GetProductOrderById(int orderId);
+        Task<Order> GetOrderByIdNoTracking(int orderId);
     }
     public class OrderRepository : RepositoryBase<Order>, IOrderRepository
     {
@@ -33,27 +34,8 @@ namespace TreeShop.Api.Repository
             return await _context.OrderMappings.FromSqlRaw("[dbo].[OrderManager] @strSql,@strTuNgay,@strDenNgay", parameters).ToListAsync();
         }
 
-        public async Task<List<OrderProductMapping>> GetOrderById(int orderId)
+        public async Task<List<OrderProductMapping>> GetProductOrderById(int orderId)
         {
-            //var query = from p in _context.Products
-            //                  join pc in _context.Categories on p.CatId equals pc.CatId
-            //                  where p.IsActive == true && p.ProductId == item.Id
-            //                  select new OrderShopViewModel
-            //                  {
-            //                      ProductId = p.ProductId,
-            //                      Code = p.Code,
-            //                      Name = p.Name,
-            //                      Price = p.Price,
-            //                      Discount = p.Discount,
-            //                      Title = p.Title,
-            //                      Quantity = p.Quantity,
-            //                      OrderQuantity = item.OrderQuantity,
-            //                      ProductImages = (from prImg in _context.ProductImages
-            //                                       where prImg.ProductId == p.ProductId
-            //                                       select prImg).ToList(),
-            //                  }).ToListAsync();
-            //result.AddRange(query);
-
             var query = await (from od in _context.Orders
                                join odt in _context.OrderDetails on od.OrderId equals odt.OrderId
                                join p in _context.Products on odt.ProductId equals p.ProductId
@@ -62,7 +44,7 @@ namespace TreeShop.Api.Repository
                                select new OrderProductMapping
                                {
                                    ProductId = p.ProductId,
-                                   ProductName = p.Name,
+                                   Title = p.Title,
                                    Code = p.Code,
                                    Price = p.Price,
                                    Discount = odt.Discount,
@@ -71,6 +53,12 @@ namespace TreeShop.Api.Repository
                                }).ToListAsync();
             return query;
 
+        }
+
+        public async Task<Order> GetOrderByIdNoTracking(int orderId)
+        {
+            var query = await(from od in _context.Orders where od.OrderId == orderId select od).FirstOrDefaultAsync();
+            return query;
         }
     }
 }

@@ -16,23 +16,24 @@
       <div class="product-featured-plants">
         <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutAlign="flex-start">
           <ng-container *ngFor="let product of productBestSaler" >
-            <div fxFlex="0 1 calc(33.3% - 32px)" fxFlex.lt-md="0 1 calc(50% - 32px)" fxFlex.lt-sm="100%" style="margin: 16px;">
-              <mat-card class="product">
-                <a>
-                  <img *ngIf="product.productImages.length==0" src="../../../assets/images/produc-image-none.png"
-                    width="200px" height="200px" alt="">
-                  <img *ngIf="product.productImages.length>0" src="{{urlImage + product.productImages[0].imageLink}}"
-                    width="200px" height="200px" alt="" srcset="">
-                </a>
-                <p class="category-name">{{product.categoryName}}</p>
-                <a href="">
-                  <p class="title-product-name">{{product.title}}</p>
-                </a>
-                <p class="product-price">{{product.price}} đ</p>
-                <button class="product-btn-add" mat-raised-button (click)="addShopCart(product.productId)">THÊM VÀO
-                  GIỎ</button>
-              </mat-card>
+            <div  fxFlex="0 1 calc(33.3% - 32px)"
+          fxFlex.lt-md="0 1 calc(50% - 32px)"
+          fxFlex.lt-sm="100%"  class="product">
+            <div class="cart-top">
+              <a>
+                <img class="img-product" *ngIf="product.productImages.length==0" width="300px" height="300px" src="../../../assets/images/produc-image-none.png" alt="">
+                <img class="img-product" *ngIf="product.productImages.length>0" width="300px" height="300px" src="{{urlImage + product.productImages[0].imageLink}}" alt="" srcset="">
+              </a>
             </div>
+            <div class="cart-botom">
+              <p class="category-name">{{product.categoryName}}</p>
+              <a href=""><p class="title-product-name">{{product.title}}</p></a>
+              <p class="product-price">{{formatCash(product.price.toString())}} đ</p>
+              <button class="product-btn-add"  mat-raised-button (click)="addShopCart(product.productId)">THÊM VÀO GIỎ</button>
+            </div>
+
+
+          </div>
 
           </ng-container>
         </div>

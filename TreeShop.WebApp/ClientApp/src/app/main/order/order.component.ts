@@ -2,11 +2,12 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild, TemplateRef, AfterViewInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { MessageConstants } from 'src/app/core/common/message.constants';
 import { SystemConstants } from 'src/app/core/common/system.constants';
 import { DataService } from 'src/app/core/services/data.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
@@ -25,13 +26,6 @@ export class OrderComponent implements OnInit,AfterViewInit {
   toDate :any;
   payId:any;
   transId:any;
-  constructor(private formBuilder: FormBuilder, private dialog: MatDialog,
-    private http: HttpClient, private dataService: DataService, private datePipe: DatePipe,
-    private notificationService: NotificationService,private pagin: PaginatorCustomService, private spinner: NgxSpinnerService) {
-    this.urlImage = SystemConstants.URL_IMAGE;
-
-  }
-
   form!: FormGroup;
   progress!: number ;
   message!: string ;
@@ -41,7 +35,9 @@ export class OrderComponent implements OnInit,AfterViewInit {
   filesToUpload: File[] = [];
 
   displayedColumns: string[] = ['position', 'fullName', 'orderId', 'phoneNumber', 'payDescription', 'tranDescription','totalOrder','action'];
+  displayedColumns1: string[] = ['position', 'title','code', 'price', 'discount', 'total'];
   dataSource = new MatTableDataSource<any>();
+  dataSource1 = new MatTableDataSource<any>();
   totalRow: number = 0;
   totalPage: number = 0;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -52,6 +48,23 @@ export class OrderComponent implements OnInit,AfterViewInit {
   TransactStatus: any;
   fullName: any;
   phoneNumber:any;
+  totalAll: any = 0;
+
+
+  constructor(private formBuilder: FormBuilder, private dialog: MatDialog,
+    private http: HttpClient, private dataService: DataService, private datePipe: DatePipe,
+    private notificationService: NotificationService,private pagin: PaginatorCustomService, private spinner: NgxSpinnerService) {
+    this.urlImage = SystemConstants.URL_IMAGE;
+    this.form = this.formBuilder.group({
+      _orderId: [''],
+      _fullName: ['', Validators.compose([Validators.required])],
+      _paymentId:[0,Validators.required],
+      _transactStatusId:[0,Validators.required],
+      _phoneNumber: ['',Validators.required],
+      _shippingAddress:['',Validators.required],
+      _note:['']
+    });
+  }
 
   ngOnInit(): void {
     this.loadPayment();
@@ -92,10 +105,10 @@ export class OrderComponent implements OnInit,AfterViewInit {
 
   loadData() {
     this.spinner.show();
-    debugger
+
     this.dataService.get('Order/getallorder?page=' + this.page + '&pageSize=' + this.pageSize + '&fromDate=' + this.fromDate + '&toDate='+this.toDate
     +'&payId='+this.payId+'&transId='+this.transId + '&fullName='+this.fullName+'&phoneNumber='+this.phoneNumber).subscribe((data: any) => {
-      debugger
+
       this.dataSource = new MatTableDataSource(data.items);
       this.totalRow = data.totalCount;
       this.spinner.hide();
@@ -107,6 +120,7 @@ export class OrderComponent implements OnInit,AfterViewInit {
   }
 
   openDialog(item?: any, config?: MatDialogConfig) {
+
     this.model = {};
     config = { width: '750px', autoFocus: false }
 
@@ -118,16 +132,23 @@ export class OrderComponent implements OnInit,AfterViewInit {
 
       this.filesToUpload = [];
       this.title = 'Chỉnh sửa';
-      this.model.catId = item.catId;
-      this.spinner.show();
-      this.dataService.get('Order/getbyid/' + this.model.catId).subscribe((data: any) => {
+      this.model = item;
 
-        this.model = data;
-        this.form.controls['name'].setValue(this.model.name);
-        this.form.controls['code'].setValue(this.model.code);
-        this.form.controls['description'].setValue(this.model.description);
-        this.form.controls['ordering'].setValue(this.model.ordering);
-        this.form.controls['isActive'].setValue(this.model.isActive);
+      this.spinner.show();
+      this.dataService.get('Order/getbyid/' + this.model.orderId).subscribe((data: any) => {
+        this.totalAll = 0;
+        this.dataSource1 = data;
+        console.log(this.dataSource1);
+        this.form.controls['_orderId'].setValue(this.model.orderId);
+        this.form.controls['_fullName'].setValue(this.model.fullName);
+        this.form.controls['_paymentId'].setValue(this.model.payId);
+        this.form.controls['_transactStatusId'].setValue(this.model.transactStatusId);
+        this.form.controls['_phoneNumber'].setValue(this.model.phoneNumber);
+        this.form.controls['_shippingAddress'].setValue(this.model.shippingAddress);
+        this.form.controls['_note'].setValue(this.model.note);
+        data.forEach((element:any) => {
+            this.totalAll += Math.round(element.total);
+        });
         this.spinner.hide();
       }, err => {
         this.notificationService.printErrorMessage('Không tải loại sản phẩm!');
@@ -135,6 +156,10 @@ export class OrderComponent implements OnInit,AfterViewInit {
       });
 
   }
+
+  f = (controlName: string) => {
+    return this.form.controls[controlName];
+  };
 
   onReset(): void {
     this.form.reset();
@@ -162,6 +187,31 @@ export class OrderComponent implements OnInit,AfterViewInit {
       .reduce((prev: any, next: any, index: any) => {
         return (index % 3 ? next : next + ',') + prev;
       });
+  }
+
+  addData(){
+    this.spinner.show();
+    let orderUpdate = {
+      orderId: this.form.controls['_orderId'].value,
+      transactStatusId: this.form.controls['_transactStatusId'].value,
+      payId: this.form.controls['_paymentId'].value,
+      note: this.form.controls['_note'].value,
+      shippingAddress: this.form.controls['_shippingAddress'].value
+    };
+    this.dataService.post('Order/UpdateOrder', orderUpdate).subscribe(
+      (data) => {
+        this.notificationService.printSuccessMessage(
+          MessageConstants.UPDATED_OK_MSG
+        );
+        this.loadData();
+        this.dialog.closeAll();
+        this.onReset();
+      },
+      (err) => {
+        this.spinner.hide();
+        this.notificationService.printErrorMessage(err.error);
+      }
+    );
   }
 
 }

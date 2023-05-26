@@ -1,9 +1,4 @@
-<div *ngIf="!isNotFoundProduct" style=" margin-top: 40px;">
-<h2 style="text-align:  center;">Không có sản phẩm nào trong giỏ hàng</h2>
-</div>
-
-<div *ngIf="isNotFoundProduct">
-<div class="shop-cart">
+<div *ngIf="isNotFoundProduct && !isThanks" class="shop-cart">
   <div class="shop-cart-item">
     <table style="min-width: auto !important;">
       <thead>
@@ -63,7 +58,7 @@
             <mat-form-field appearance="outline">
               <mat-label>Loại thanh toán</mat-label>
               <mat-select [(ngModel)]="paymentId">
-                <mat-option *ngFor="let payment of payments"  [value]="payment.id">
+                <mat-option *ngFor="let payment of payments" [value]="payment.id">
                   {{payment.description}}
                 </mat-option>
               </mat-select>
@@ -82,7 +77,7 @@
 
 </div>
 
-<div class="order-info" *ngIf="isOrder">
+<div class="order-info" *ngIf="isOrder && !isThanks">
   <div class="text-center">
     <!-- <h2 class="text-upper-case">Thông tin giao hàng</h2> -->
       <form action="" (submit)="addData()" [formGroup]="form">
@@ -133,4 +128,13 @@
       </form>
   </div>
 </div>
+
+<div *ngIf="!isNotFoundProduct && !isThanks" style="text-align: center;">
+  <h2>KHÔNG CÓ SẢN PHẨM NÀO TRONG GIỎ HÀNG</h2>
+</div>
+
+<div *ngIf="isThanks" class="content-thank-you" style="text-align: center;">
+  <h2>ĐẶT HÀNG THÀNH CÔNG</h2>
+  <h3>CẢM ƠN QUÝ KHÁCH ĐÃ MUA HÀNG</h3>
+  <button (click)="trangChu()" class="product-btn-add" color="primary" mat-raised-button> TIẾP TỤC MUA HÀNG	<mat-icon>arrow_right_alt</mat-icon></button>
 </div>

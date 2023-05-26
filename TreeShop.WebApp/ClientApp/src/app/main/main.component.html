@@ -36,7 +36,7 @@
       <!-- <img class="avatar mat-elevation-z8" *ngIf="userInfo.image===null" src="../../assets/images/user-none.png" /> -->
       <!-- <img class="avatar mat-elevation-z8" *ngIf="userInfo.image!=null" src="{{'data:image/jpg;base64,' + userInfo.image}}" /> -->
       <h4 class="name">Le trung Hieu</h4>
-      <p [appCheckRoleMenu]="'ViewAppRole'" class="designation">hieu 123456</p>
+      <p appCheckRoleMenu [roleName]="'ViewAppRole1'" class="designation">hieu 123456</p>
 
 
       <mat-divider></mat-divider>
@@ -46,7 +46,7 @@
       </button>
       <div id="sidebar">
         <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="example-tree">
-          <mat-tree-node  *matTreeNodeDef="let node" matTreeNodeToggle [appCheckRoleMenu]="node.role"  [style.display]="node.link==='home' ? 'none' : 'flex'">
+          <mat-tree-node  *matTreeNodeDef="let node" matTreeNodeToggle  [roleName]="node.role"  [style.display]="node.link==='home' ? 'none' : 'flex'">
             <button  mat-icon-button disabled></button>
             <mat-icon >{{node.icon}}</mat-icon>
             <a class="tree-main" mat-menu-item routerLink="{{node.link}}" > {{node.menuName}}</a>

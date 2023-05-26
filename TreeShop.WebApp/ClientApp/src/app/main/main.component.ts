@@ -60,7 +60,7 @@ export class MainComponent implements OnInit, AfterViewInit {
     private elementRef: ElementRef, private observer: BreakpointObserver, private ref: ChangeDetectorRef, private dataService:DataService) {
 
       this.account = JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER) as string)
-      let user: FoodNode = new FoodNode(11, 'Tài khoản quản trị', 'keyboard_arrow_right', '/main/app-user', null, 1,'');
+      let user: FoodNode = new FoodNode(11, 'Tài khoản quản trị', 'keyboard_arrow_right', '/main/app-user', null, 1,'4');
       let role: FoodNode = new FoodNode(12, 'Quyền người dùng', 'keyboard_arrow_right', '/main/app-role', null, 1,'');
       let system: FoodNode = new FoodNode(1, 'Hệ thống', 'security', null, [user, role], null,'all');
       let prCa: FoodNode = new FoodNode(21, 'Loại sản phẩm', 'keyboard_arrow_right', '/main/category', null, 2,'');
@@ -81,33 +81,19 @@ export class MainComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     // this.getUser();
     // this.getlistUser();
-    // this.loadMenuUsers();
-  }
-
-  loadMenuUsers(){
-    this.dataService.get('AppMenus/gettreeviewbyuser?userId='+user.id).subscribe((data:any)=>{
-      this.dataSource.data=data;
-    });
   }
 
   logOut() {
     localStorage.removeItem(SystemConstants.CURRENT_USER);
     localStorage.removeItem(SystemConstants.CURRENT_USER_ROLE);
-    localStorage.removeItem(SystemConstants.USERS_PIPE);
-    localStorage.removeItem(SystemConstants.USER_MENUS);
+    // localStorage.removeItem(SystemConstants.USERS_PIPE);
+   // localStorage.removeItem(SystemConstants.USER_MENUS);
     this.utilityService.navigate(UrlConstants.LOGIN);
   }
 
   getUser(){
     let current= localStorage.getItem(SystemConstants.CURRENT_USER);
     this.userInfo=JSON.parse(current!) ;
-  }
-
-  getlistUser(){
-    this.dataService.get('appusers/getall').subscribe((data:any)=>{
-      localStorage.removeItem(SystemConstants.USERS_PIPE);
-      localStorage.setItem(SystemConstants.USERS_PIPE, JSON.stringify(data));
-    });
   }
 
   ngAfterViewInit() {
@@ -122,5 +108,6 @@ export class MainComponent implements OnInit, AfterViewInit {
       }
     });
     this.ref.detectChanges();
+
   }
 }

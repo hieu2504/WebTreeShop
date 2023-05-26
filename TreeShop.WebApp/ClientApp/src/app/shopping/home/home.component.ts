@@ -88,4 +88,13 @@ export class HomeComponent implements OnInit {
       localStorage.setItem(SystemConstants.SHOP_CART, JSON.stringify(this.lstShopCart));
     }
   }
+
+  formatCash(str: any): string {
+    return str
+      .split('')
+      .reverse()
+      .reduce((prev: any, next: any, index: any) => {
+        return (index % 3 ? next : next + ',') + prev;
+      });
+  }
 }

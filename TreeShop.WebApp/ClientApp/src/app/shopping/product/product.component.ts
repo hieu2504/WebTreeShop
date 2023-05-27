@@ -69,6 +69,7 @@ export class ProductComponent implements OnInit {
   addShopCart(productId:any){
     debugger
     let shopCart = localStorage.getItem(SystemConstants.SHOP_CART);
+    this.lstShopCart = [];
     if(shopCart!=null){
       this.lstShopCart = JSON.parse(shopCart);
       var found = false;
@@ -108,7 +109,6 @@ export class ProductComponent implements OnInit {
   }
 
   formatCash(str: any): string {
-
     return str
       .split('')
       .reverse()

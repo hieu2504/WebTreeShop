@@ -134,6 +134,7 @@ export class ShopCartComponent implements OnInit,AfterViewInit {
   }
 
   addShopCart(productId:any,phep:any){
+    this.lstShopCart = [];
     let shopCart = localStorage.getItem(SystemConstants.SHOP_CART);
     if(shopCart!=null){
       this.lstShopCart = JSON.parse(shopCart);

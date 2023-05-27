@@ -97,4 +97,7 @@ export class HomeComponent implements OnInit {
         return (index % 3 ? next : next + ',') + prev;
       });
   }
+  productDetail(proId: any){
+    window.location.href = 'shopping/product/product-detail/'+proId;
+  }
 }

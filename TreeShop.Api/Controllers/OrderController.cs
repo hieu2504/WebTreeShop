@@ -164,6 +164,31 @@ namespace TreeShop.Api.Controllers
             }
         }
 
+        [HttpGet("getallrevenue")]
+        public async Task<IActionResult> GetAllRevenue(DateTime fromDate, DateTime toDate, int page = 0, int pageSize = 10)
+        {
+            try
+            {
+
+                var model = await _orderService.GetAllOrder(fromDate.ToString("yyyy-MM-dd HH:mm:ss"), toDate.ToString("yyyy-MM-dd HH:mm:ss"));
+                int totalRow = 0;
+                totalRow = model.Count();
+                model = model.Skip(page * pageSize).Take(pageSize);
+                var responseData = new PaginationSet<OrderMapping>()
+                {
+                    Items = model,
+                    Page = page,
+                    TotalCount = totalRow,
+                    TotalPages = (int)Math.Ceiling((decimal)totalRow / pageSize)
+                };
+                return Ok(responseData);
+            }
+            catch (Exception dex)
+            {
+                return BadRequest(dex);
+            }
+        }
+
         [HttpGet("getbyid/{id}")]
         public async Task<IActionResult> GetById(int id)
         {

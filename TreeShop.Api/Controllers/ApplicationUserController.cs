@@ -309,6 +309,42 @@ namespace TreeShop.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Get danh sách customer phân trang
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="page">Trang thứ</param>
+        /// <param name="pageSize">Số bản ghi hiển thị trong 1 trang</param>
+        /// <param name="filter">Từ khóa tìm kiếm</param>
+        /// <returns></returns>
+        [HttpGet("getlistcustomer")]
+        //[Authorize(Roles = "ViewRole")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetListCustomer(int page = 0, int pageSize = 100, string? keyword = null)
+        {
+            try
+            {
+                int totalRow = 0;
+                var model = (await _applicationUserService.GetAll(keyword)).Where(x => x.Type == 0);
+                totalRow = model.Count();
+                var paging = model.OrderByDescending(x => x.UpdatedDate).Skip(page * pageSize).Take(pageSize);
+                IEnumerable<AppUserViewModel> modelVm = _mapper.Map<IEnumerable<AppUser>, IEnumerable<AppUserViewModel>>(paging);
+
+                PaginationSet<AppUserViewModel> pagedSet = new PaginationSet<AppUserViewModel>()
+                {
+                    Page = page,
+                    TotalCount = totalRow,
+                    TotalPages = (int)Math.Ceiling((decimal)totalRow / pageSize),
+                    Items = modelVm
+                };
+
+                return Ok(pagedSet);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
 
         /// <summary>
         /// Xóa nhiều tài khoản

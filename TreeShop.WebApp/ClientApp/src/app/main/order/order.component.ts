@@ -180,7 +180,6 @@ export class OrderComponent implements OnInit,AfterViewInit {
   }
 
   formatCash(str: any): string {
-
     return str
       .split('')
       .reverse()

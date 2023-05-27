@@ -32,6 +32,8 @@ const routes: Routes = [{
     {path:'app-user',loadChildren:()=>import('./app-user/app-user.module').then(x=>x.AppUserModule)},
     {path:'product',loadChildren:()=>import('./product/product.module').then(x=>x.ProductModule)},
     {path:'order',loadChildren:()=>import('./order/order.module').then(x=>x.OrderModule)},
+    {path:'revenue-statistic',loadChildren:()=>import('./revenue-statistic/revenue-statistic.module').then(x=>x.RevenueStatisticModule)},
+    {path:'customer',loadChildren:()=>import('./customer/customer.module').then(x=>x.CustomerModule)},
     // {path:'app-menu',loadChildren:()=>import('./app-menu/app-menu.module').then(x=>x.AppMenuModule)}
   ]
 }];

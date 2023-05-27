@@ -14,6 +14,7 @@ namespace TreeShop.Api.Repository
         Task<IEnumerable<OrderMapping>> GetAllOrder(string fromDate, string toDate, string sql);
         Task<List<OrderProductMapping>> GetProductOrderById(int orderId);
         Task<Order> GetOrderByIdNoTracking(int orderId);
+        Task<IEnumerable<RevenueStatisticMapping>> GetRevenue(string fromDate, string toDate);
     }
     public class OrderRepository : RepositoryBase<Order>, IOrderRepository
     {
@@ -59,6 +60,16 @@ namespace TreeShop.Api.Repository
         {
             var query = await(from od in _context.Orders where od.OrderId == orderId select od).FirstOrDefaultAsync();
             return query;
+        }
+
+        public async Task<IEnumerable<RevenueStatisticMapping>> GetRevenue(string fromDate, string toDate)
+        {
+            var parameters = new SqlParameter[]
+              {
+                    new SqlParameter("@strTuNgay",SqlDbType.NVarChar){Value = fromDate},
+                    new SqlParameter("@strDenNgay",SqlDbType.NVarChar){Value = toDate},
+              };
+            return await _context.RevenueStatisticMappings.FromSqlRaw("[dbo].[Revenue] @strTuNgay,@strDenNgay", parameters).ToListAsync();
         }
     }
 }

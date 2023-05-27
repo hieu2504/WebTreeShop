@@ -16,6 +16,7 @@ namespace TreeShop.Api.Service
 
         Task<List<OrderProductMapping>> GetProductOrderById(int orderId);
         Task<Order> GetOrderByIdNoTracking(int orderId);
+        Task<IEnumerable<RevenueStatisticMapping>> GetRevenue(string fromDate, string toDate);
     }
     public class OrderService : IOrderService
     {
@@ -85,6 +86,11 @@ namespace TreeShop.Api.Service
         public async Task<Order> GetOrderByIdNoTracking(int orderId)
         {
             return await _orderRepository.GetOrderByIdNoTracking(orderId);
+        }
+
+        public async Task<IEnumerable<RevenueStatisticMapping>> GetRevenue(string fromDate, string toDate)
+        {
+            return await _orderRepository.GetRevenue(fromDate, toDate);
         }
     }
 }

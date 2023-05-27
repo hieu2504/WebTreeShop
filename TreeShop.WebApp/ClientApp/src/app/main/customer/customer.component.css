@@ -1,0 +1,4 @@
+.example-table th, .example-table td{
+  padding: 8px;
+  white-space: nowrap;
+}

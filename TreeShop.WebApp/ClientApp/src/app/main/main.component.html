@@ -12,7 +12,7 @@
           <!-- <img src="{{'data:image/jpg;base64,' + userInfo.image}}"  *ngIf="userInfo.image!=null" class="avatar-logout" alt=""
           [matMenuTriggerFor]="dropMenu"> -->
       </a>
-      <a href="javascript:void(0)" id="profile-name" [matMenuTriggerFor]="dropMenu"><span>LÊ TRUNG HIẾU</span></a>
+      <a href="javascript:void(0)" id="profile-name" [matMenuTriggerFor]="dropMenu"><span style="text-transform: uppercase;">{{this.userInfo.fullname}}</span></a>
       <button mat-icon-button [matMenuTriggerFor]="dropMenu">
 
         <mat-icon>more_vert</mat-icon>
@@ -32,11 +32,11 @@
 <mat-sidenav-container>
   <mat-sidenav class="mat-elevation-z8" mode="side">
     <div class="left-sidebar">
-      <img class="avatar mat-elevation-z8"  src="../../assets/images/user-none.png" />
-      <!-- <img class="avatar mat-elevation-z8" *ngIf="userInfo.image===null" src="../../assets/images/user-none.png" /> -->
-      <!-- <img class="avatar mat-elevation-z8" *ngIf="userInfo.image!=null" src="{{'data:image/jpg;base64,' + userInfo.image}}" /> -->
-      <h4 class="name">Le trung Hieu</h4>
-      <p appCheckRoleMenu [roleName]="'ViewAppRole1'" class="designation">hieu 123456</p>
+      <!-- <img class="avatar mat-elevation-z8"  src="../../assets/images/user-none.png" /> -->
+      <img class="avatar mat-elevation-z8" *ngIf="userInfo.image===null" src="../../assets/images/user-none.png" />
+      <img class="avatar mat-elevation-z8" *ngIf="userInfo.image!=null" src="{{'data:image/jpg;base64,' + userInfo.image}}" />
+      <h4 class="name">{{this.userInfo.fullname}}</h4>
+      <p class="designation">{{this.userInfo.email}}</p>
 
 
       <mat-divider></mat-divider>

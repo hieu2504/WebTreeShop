@@ -170,16 +170,25 @@ namespace TreeShop.Api.Controllers
             try
             {
 
-                var model = await _orderService.GetAllOrder(fromDate.ToString("yyyy-MM-dd HH:mm:ss"), toDate.ToString("yyyy-MM-dd HH:mm:ss"));
+                var model = await _orderService.GetRevenue(fromDate.ToString("yyyy-MM-dd HH:mm:ss"), toDate.ToString("yyyy-MM-dd HH:mm:ss"));
                 int totalRow = 0;
                 totalRow = model.Count();
                 model = model.Skip(page * pageSize).Take(pageSize);
-                var responseData = new PaginationSet<OrderMapping>()
+                var totalRevenue = 0;
+                foreach(var item in model)
+                {
+                    if (item.TotalOrder != null)
+                    {
+                        totalRevenue += (int)item.TotalOrder;
+                    }
+                }
+                var responseData = new PaginationSet<RevenueStatisticMapping>()
                 {
                     Items = model,
                     Page = page,
                     TotalCount = totalRow,
-                    TotalPages = (int)Math.Ceiling((decimal)totalRow / pageSize)
+                    TotalPages = (int)Math.Ceiling((decimal)totalRow / pageSize),
+                    Total = totalRevenue
                 };
                 return Ok(responseData);
             }
@@ -224,6 +233,7 @@ namespace TreeShop.Api.Controllers
                         }
                         if(orderUpdateRequestModel.TransactStatusId == 4)
                         {
+                            model.ShipDate = DateTime.Now;
                             model.Paid = true;
                             model.PaymentDate = DateTime.Now;
                         }

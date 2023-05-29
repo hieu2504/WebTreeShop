@@ -12,6 +12,7 @@ namespace TreeShop.Api.ViewModel
         public int Type { get; set; }
         public DateTime? CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
+        public string? OldPassWord { get; set; }
         public List<string>? LstRoleId { get; set; }
     }
 }

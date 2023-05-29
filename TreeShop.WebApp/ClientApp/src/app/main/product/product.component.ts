@@ -236,7 +236,6 @@ export class ProductComponent implements OnInit {
     this.formData.append('BestSellers', this.form.controls['bestSellers'].value);
     this.formData.append('lstProImage', JSON.stringify(this.lstUnImage));
 
-    debugger
     Array.from(this.filesToUpload).map((file, index) => {
       return this.formData.append('lstFiles', file);
     });

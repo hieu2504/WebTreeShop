@@ -2,6 +2,12 @@
   <mat-sidenav-container style="display: inline;">
     <mat-sidenav  #sidenav role="navigation">
       <mat-nav-list>
+        <a *ngIf="userInfo!=null" href="information/">
+            <div style="display: flex; justify-content: center;">
+              <img routerLink="information" class="avatar-shop" *ngIf="userInfo.image===null" src="../../assets/images/user-none.png" />
+            <img routerLink="information" class="avatar-shop" *ngIf="userInfo.image!=null" src="{{'data:image/jpg;base64,' + userInfo.image}}" />
+            </div>
+        </a>
         <a mat-list-item routerLink="home" (click)="sidenav.close()">
             <span class="nav-caption">Trang chủ</span>
         </a>
@@ -17,6 +23,13 @@
         <a mat-list-item routerLink="shop-cart" >
             <span class="nav-caption">Giỏ hàng</span>
         </a>
+        <a *ngIf="userInfo==null" (click)="logIn()" mat-list-item routerLink="shop-cart" >
+          <span class="nav-caption">Đăng nhập</span>
+      </a>
+      <a *ngIf="userInfo!=null" (click)="logOut()" mat-list-item routerLink="shop-cart" >
+        <span class="nav-caption">Đăng xuất</span>
+    </a>
+
       </mat-nav-list>
       <!--this is a place for us to add side-nav code-->
     </mat-sidenav>
@@ -49,8 +62,29 @@
                     <a routerLink="new-post" >Tin tức</a>
                   </li>
                   <li>
-                    <a routerLink="shop-cart" ><mat-icon>shopping_cart</mat-icon>{{countItem}}</a>
+                    <a routerLink="shop-cart" ><mat-icon style="vertical-align: middle;">shopping_cart</mat-icon>{{countItem}}</a>
                   </li>
+                  <li>
+                    <button mat-icon-button [matMenuTriggerFor]="dropMenu">
+
+                      <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu #dropMenu="matMenu">
+                      <div *ngIf="userInfo!=null" style="display: flex; justify-content: center;">
+                        <img routerLink="information" class="avatar-shop" *ngIf="userInfo.image===null" src="../../assets/images/user-none.png" />
+                      <img routerLink="information" class="avatar-shop" *ngIf="userInfo.image!=null" src="{{'data:image/jpg;base64,' + userInfo.image}}" />
+                      </div>
+                      <button *ngIf="userInfo!=null" style="color: black;" mat-menu-item (click)="logOut()">
+                        <mat-icon class="mr">logout</mat-icon>
+                        Đăng xuất
+                      </button>
+                      <button *ngIf="userInfo==null" style="color: black;" (click)="logIn()" mat-menu-item>
+                        <mat-icon class="mr">login</mat-icon>
+                        Đăng nhập
+                      </button>
+                    </mat-menu>
+                  </li>
+
               </ul>
           </div>
           <div fxFlex fxLayout fxLayoutAlign="end" fxHide.gt-xs>
@@ -89,19 +123,16 @@
             <h3>Menu</h3>
             <ul>
               <li>
-                <a href="#faq">Trang chủ</a>
+                <a routerLink="home">Trang chủ</a>
               </li>
               <li>
-                <a href="#cookies-policy">Giới thiệu</a>
+                <a routerLink="shop-introduce">Giới thiệu</a>
               </li>
               <li>
-                <a href="#terms-of-services">Cửa hàng</a>
+                <a routerLink="product">Cửa hàng</a>
               </li>
               <li>
-                <a href="#support">Tin tức</a>
-              </li>
-              <li>
-                <a href="#support">Liên hệ</a>
+                <a routerLink="new-post">Tin tức</a>
               </li>
             </ul>
           </div>
@@ -110,16 +141,16 @@
               <h3>TỔNG ĐÀI HỖ TRỢ</h3>
               <ul>
                 <li>
-                  <a href="#faq">Gọi mua hàng 0126 922 0162</a>
+                  <a >Gọi mua hàng 0126 922 0162</a>
                 </li>
                 <li>
-                  <a href="#cookies-policy">Gọi khiếu nại 0126 922 0162</a>
+                  <a>Gọi khiếu nại 0126 922 0162</a>
                 </li>
                 <li>
-                  <a href="#terms-of-services">Gọi bảo hành 0126 922 0162</a>
+                  <a>Gọi bảo hành 0126 922 0162</a>
                 </li>
                 <li>
-                  <a href="#support">Hỗ trợ kỹ thuật 0126 922 0162</a>
+                  <a>Hỗ trợ kỹ thuật 0126 922 0162</a>
                 </li>
 
               </ul>

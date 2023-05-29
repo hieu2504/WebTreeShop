@@ -98,7 +98,6 @@ this.loadData();
 
       this.title = "Thêm mới";
     }else{
-      debugger
       this.filesToUpload = [];
       this.title = 'Chỉnh sửa';
       this.model.catId = item.catId;
@@ -150,7 +149,6 @@ this.loadData();
       this.notificationService.printErrorMessage('Ảnh không được bỏ trống!');
       return;
     }
-    debugger
     this.formData = new FormData();
     this.formData.append("Code", this.form.controls['code'].value);
     this.formData.append("Name", this.form.controls['name'].value);

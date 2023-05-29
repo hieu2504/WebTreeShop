@@ -27,34 +27,6 @@
           </fieldset>
         </div>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Mật khẩu</mat-label>
-          <input type="password" matInput placeholder="Mật khẩu"
-            formControlName="password" #password maxlength="50">
-          <mat-hint align="end">{{password.value.length}} / 50</mat-hint>
-          <mat-error *ngIf="f('password').hasError('required')">
-            Mật khẩu không được bỏ trống
-          </mat-error>
-          <mat-error *ngIf="f('password').hasError('minlength')">
-            Mật khẩu phải có ít nhất 6 kí tự
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Mật khẩu</mat-label>
-          <input type="password" matInput placeholder="Mật khẩu"
-            formControlName="confirmPassword" #confirmPassword maxlength="50">
-          <mat-hint align="end">{{confirmPassword.value.length}} / 50</mat-hint>
-          <mat-error *ngIf="f('confirmPassword').hasError('required')">
-            Xác nhận mật khẩu không được bỏ trống
-          </mat-error>
-          <mat-error *ngIf="f('confirmPassword').hasError('minlength')">
-            Xác nhận mật khẩu phải có ít nhất 6 kí tự
-          </mat-error>
-          <mat-error *ngIf="f('confirmPassword').hasError('confirmPasswordValidator')">Xác nhận mật khẩu không khớp</mat-error>
-        </mat-form-field>
-
-
          <mat-form-field appearance="outline">
           <mat-label>Họ và tên</mat-label>
           <input matInput placeholder="Họ và tên"
@@ -100,6 +72,50 @@
               </mat-error>
             </mat-form-field>
           </div>
+        </div>
+        <div style="text-align: left; margin-bottom: 16px;">
+          <mat-checkbox style="margin-top: 8px;" (ngModelChange)="ChangePass()" [(ngModel)]="isChangePass"  [ngModelOptions]="{standalone: true}">Đổi mật khẩu </mat-checkbox>
+        </div>
+        <div *ngIf="isChangePass">
+          <mat-form-field appearance="outline">
+            <mat-label>Mật khẩu cũ</mat-label>
+            <input type="password" matInput placeholder="Mật khẩu"
+              formControlName="oldpassword" #oldpassword maxlength="50" required>
+            <mat-hint align="end">{{oldpassword.value.length}} / 50</mat-hint>
+            <mat-error *ngIf="f('oldpassword').hasError('required')">
+              Mật khẩu không được bỏ trống
+            </mat-error>
+            <mat-error *ngIf="f('password').hasError('minlength')">
+              Mật khẩu phải có ít nhất 6 kí tự
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Mật khẩu mới</mat-label>
+            <input type="password" matInput placeholder="Mật khẩu"
+              formControlName="password" #password maxlength="50" required>
+            <mat-hint align="end">{{password.value.length}} / 50</mat-hint>
+            <mat-error *ngIf="f('password').hasError('required')">
+              Mật khẩu không được bỏ trống
+            </mat-error>
+            <mat-error *ngIf="f('password').hasError('minlength')">
+              Mật khẩu phải có ít nhất 6 kí tự
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Xác nhận mật khẩu</mat-label>
+            <input type="password" matInput placeholder="Mật khẩu"
+              formControlName="confirmPassword" #confirmPassword maxlength="50" required>
+            <mat-hint align="end">{{confirmPassword.value.length}} / 50</mat-hint>
+            <mat-error *ngIf="f('confirmPassword').hasError('required')">
+              Xác nhận mật khẩu không được bỏ trống
+            </mat-error>
+            <mat-error *ngIf="f('confirmPassword').hasError('minlength')">
+              Xác nhận mật khẩu phải có ít nhất 6 kí tự
+            </mat-error>
+            <mat-error *ngIf="f('confirmPassword').hasError('confirmPasswordValidator')">Xác nhận mật khẩu không khớp</mat-error>
+          </mat-form-field>
         </div>
 
       </mat-dialog-content>

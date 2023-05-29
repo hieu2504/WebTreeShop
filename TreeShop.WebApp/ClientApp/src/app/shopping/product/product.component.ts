@@ -117,4 +117,14 @@ export class ProductComponent implements OnInit {
       });
   }
 
+  formatCashNewPrice(price: any, discount: any): string {
+    var str = (Math.round(price - price*discount/100)).toString();
+    return str
+      .split('')
+      .reverse()
+      .reduce((prev: any, next: any, index: any) => {
+        return (index % 3 ? next : next + ',') + prev;
+      });
+  }
+
 }

@@ -98,6 +98,16 @@ export class HomeComponent implements OnInit {
         return (index % 3 ? next : next + ',') + prev;
       });
   }
+
+  formatCashNewPrice(price: any, discount: any): string {
+    var str = (Math.round(price - price*discount/100)).toString();
+    return str
+      .split('')
+      .reverse()
+      .reduce((prev: any, next: any, index: any) => {
+        return (index % 3 ? next : next + ',') + prev;
+      });
+  }
   productDetail(proId: any){
     window.location.href = 'shopping/product/product-detail/'+proId;
   }

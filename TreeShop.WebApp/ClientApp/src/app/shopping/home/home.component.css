@@ -105,8 +105,16 @@
 .product-price{
   font-size: 18px;
   line-height: 120%;
-  font-weight: bold;
+  text-decoration: line-through;
+  color: #f64749;
 }
+
+.product-price-new{
+  font-size: 18px;
+  line-height: 120%;
+  color: #256eff;
+}
+
 .product-btn-add{
   background-color: #86c200;
   color: white;

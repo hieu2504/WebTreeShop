@@ -37,6 +37,7 @@
               <p class="category-name">{{product.categoryName}}</p>
               <a routerLink="product-detail/{{product.productId}}"><p class="title-product-name">{{product.title}}</p></a>
               <p class="product-price">{{formatCash(product.price.toString())}} đ</p>
+              <p class="product-price-new">{{formatCashNewPrice(product.price,product.discount)}} đ ({{product.discount}}%)</p>
               <button class="product-btn-add"  mat-raised-button (click)="addShopCart(product.productId)">THÊM VÀO GIỎ</button>
             </div>
 

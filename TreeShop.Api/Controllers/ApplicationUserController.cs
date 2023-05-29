@@ -217,6 +217,73 @@ namespace TreeShop.Api.Controllers
             }
         }
 
+        [HttpPost("update-custommer")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UpdateCustommer(AppUserViewModel appUserViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    AppUser appUser = await _userManager.FindByNameAsync(appUserViewModel.UserName);
+                    appUserViewModel.Id = appUser.Id;
+                    if (!string.IsNullOrEmpty(appUserViewModel.OldPassWord))
+                    {
+                        if (appUser != null && await _userManager.CheckPasswordAsync(appUser, appUserViewModel.OldPassWord))
+                        {
+                            
+                            appUser.UpdateUser(appUserViewModel, "update");
+
+                            if (!string.IsNullOrEmpty(appUserViewModel.PasswordHash))
+                            {
+                                appUser.PasswordHash = _userManager.PasswordHasher.HashPassword(appUser, appUserViewModel.PasswordHash);
+                            }
+                            var result = await _userManager.UpdateAsync(appUser);
+                            if (result.Succeeded)
+                            {
+                                return CreatedAtAction(nameof(UpdateCustommer), appUser);
+                            }
+                            else
+                            {
+                                return BadRequest(result.Errors.ToString());
+                            }
+                        }
+                        else
+                        {
+                            return BadRequest("Mật khẩu cũ không đúng");
+                        }
+                    }
+                    else
+                    {
+                        appUser.UpdateUser(appUserViewModel, "update");
+
+                        if (!string.IsNullOrEmpty(appUserViewModel.PasswordHash))
+                        {
+                            appUser.PasswordHash = _userManager.PasswordHasher.HashPassword(appUser, appUserViewModel.PasswordHash);
+                        }
+                        var result = await _userManager.UpdateAsync(appUser);
+                        if (result.Succeeded)
+                        {
+                            return CreatedAtAction(nameof(UpdateCustommer), appUser);
+                        }
+                        else
+                        {
+                            return BadRequest(result.Errors.ToString());
+                        }
+                    }
+                    
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex);
+                }
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
+        }
+
 
         /// <summary>
         /// Chỉnh sửa tài khoản

@@ -27,7 +27,6 @@ export class AuthenService {
         map(res => {
           this.user = res;
           if (this.user) {
-            debugger
             if(this.user.type==1){
               localStorage.removeItem(SystemConstants.CURRENT_USER);
               localStorage.removeItem(SystemConstants.CURRENT_USER_ROLE);

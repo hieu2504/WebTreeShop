@@ -1,18 +1,31 @@
 <div id="divLogin" class="text-center">
-  <h2 class="text-upper-case">Đăng ký</h2>
+  <h2 class="text-upper-case">Thông tin cá nhân</h2>
     <form action="" (submit)="addData()" [formGroup]="form">
       <h2 mat-dialog-title>{{title}}</h2>
       <mat-dialog-content class="mat-typography">
 
-        <mat-form-field appearance="outline">
-          <mat-label>Tài khoản</mat-label>
-          <input matInput placeholder="Tài khoản"
-            formControlName="userName" required #userName maxlength="20">
-          <mat-hint align="end">{{userName.value.length}} / 20</mat-hint>
-          <mat-error *ngIf="f('userName').hasError('required')">
-            Tài khoản không được bỏ trống
-          </mat-error>
-        </mat-form-field>
+        <div align="center" style="margin-bottom: 16px;">
+          <fieldset>
+            <legend>Ảnh</legend>
+            <button type="button" mat-stroked-button
+              onclick="document.getElementById('getFile').click()">Tải ảnh lên</button>
+            <input type="file" (change)="imagePreview($event)" id="getFile"  #fileInput style="display:none">
+            <div *ngIf="f('image').value ==='' || f('image').value === null">
+              <img src="../../../assets/images/user-none.png" class="image-preview">
+            </div>
+            <div class="image-div" *ngIf="f('image').value !=='' && f('image').value !==null">
+              <div class="image-preview">
+                <img src="{{'data:image/jpg;base64,' + f('image').value}}"
+                class="image-preview">
+                <a href="javascript:void(0)" class="remove-image" (click)="fileInput.value='';clearImage()">
+                  <mat-icon>close</mat-icon>
+                </a>
+              </div>
+
+            </div>
+
+          </fieldset>
+        </div>
 
         <mat-form-field appearance="outline">
           <mat-label>Mật khẩu</mat-label>
@@ -28,7 +41,7 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Xác nhận mật khẩu</mat-label>
+          <mat-label>Mật khẩu</mat-label>
           <input type="password" matInput placeholder="Mật khẩu"
             formControlName="confirmPassword" #confirmPassword maxlength="50">
           <mat-hint align="end">{{confirmPassword.value.length}} / 50</mat-hint>
@@ -88,31 +101,6 @@
             </mat-form-field>
           </div>
         </div>
-
-        <div align="center" style="margin-bottom: 16px;">
-          <fieldset>
-            <legend>Ảnh</legend>
-            <button type="button" mat-stroked-button
-              onclick="document.getElementById('getFile').click()">Tải ảnh lên</button>
-            <input type="file" (change)="imagePreview($event)" id="getFile"  #fileInput style="display:none">
-            <div *ngIf="f('image').value ==='' || f('image').value === null">
-              <img src="../../../assets/images/user-none.png" class="image-preview">
-            </div>
-            <div class="image-div" *ngIf="f('image').value !=='' && f('image').value !==null">
-              <div class="image-preview">
-                <img src="{{'data:image/jpg;base64,' + f('image').value}}"
-                class="image-preview">
-                <a href="javascript:void(0)" class="remove-image" (click)="fileInput.value='';clearImage()">
-                  <mat-icon>close</mat-icon>
-                </a>
-              </div>
-
-            </div>
-
-          </fieldset>
-        </div>
-
-
 
       </mat-dialog-content>
       <mat-dialog-actions align="center">

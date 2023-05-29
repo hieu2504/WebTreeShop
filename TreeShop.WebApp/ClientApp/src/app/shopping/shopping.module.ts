@@ -42,6 +42,9 @@ const routes: Routes = [  { path: '', component: ShoppingComponent ,children: [
   {
     path: 'new-post/new-post-detail/:id', loadChildren: () => import("./new-post-detail/new-post-detail.module").then(m => m.NewPostDetailModule),
   },
+  {
+    path: 'information', loadChildren: () => import("./information/information.module").then(m => m.InformationModule),
+  },
 ] }];
 
 @NgModule({

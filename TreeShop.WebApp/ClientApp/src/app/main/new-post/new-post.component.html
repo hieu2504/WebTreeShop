@@ -1,0 +1,141 @@
+<mat-card>
+  <div>
+    <mat-card-title color="primary">Loại sản phẩm</mat-card-title>
+    <mat-divider></mat-divider>
+    <br>
+    <br>
+    <div fxLayout.xl="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.xs="column">
+      <div fxFlex fxLayoutAlign="satrt center">
+        <button class="custom-button" mat-raised-button color="primary" (click)="openDialog('create')">
+          Thêm mới
+        </button>
+        <button class="custom-button" color="warn" mat-raised-button [disabled]="selection.selected.length==0" (click)="removeData()">
+          Xóa </button>
+      </div>
+      <div fxFlex></div>
+      <div fxFlex>
+        <mat-form-field appearance="standard" ngClass.md="width100">
+          <mat-label>Tìm kiếm</mat-label>
+          <input matInput (keyup)="applyFilter($event)" placeholder="Nhập từ khóa..." #inputSearch>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+
+  <div class="mat-elevation-z8 table-container">
+    <div class="res-table-container">
+      <table mat-table [dataSource]="dataSource" matSort>
+
+        <ng-container matColumnDef="select">
+          <th style="width: 7%; text-align: center !important;" mat-header-cell *matHeaderCellDef class="checkbox-col">
+            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+              [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+            </mat-checkbox>
+          </th>
+          <td style="width: 5%; text-align: center !important;" mat-cell *matCellDef="let row">
+            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+              [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="position">
+          <th mat-header-cell *matHeaderCellDef>STT</th>
+          <td mat-cell *matCellDef="let element;index as i">{{(i+1)+(page*pageSize)}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Tên bài viết</th>
+          <td mat-cell *matCellDef="let element">{{element.name}}</td>
+        </ng-container>
+        <ng-container matColumnDef="createdDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Ngày tạo</th>
+          <td mat-cell *matCellDef="let element">{{element.createdDate|date:'HH:mm:ss dd-MM-yyyy'}}</td>
+        </ng-container>
+        <ng-container matColumnDef="updatedDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Ngày sửa</th>
+          <td mat-cell *matCellDef="let element">{{element.updatedDate|date:'HH:mm:ss dd-MM-yyyy'}}</td>
+        </ng-container>
+        <ng-container matColumnDef="thumb">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Ảnh</th>
+          <td mat-cell *matCellDef="let element"><img src="{{urlImage}}{{element.thumb}}" width="50px" height="50px" alt="" srcset=""></td>
+        </ng-container>
+        <ng-container matColumnDef="published">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Đăng bài</th>
+          <td mat-cell *matCellDef="let element">
+            <mat-checkbox [checked]="element.published" [disableRipple]="true" (click)="$event.preventDefault()">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="action" stickyEnd>
+          <th mat-header-cell *matHeaderCellDef class="action-col">Thao tác</th>
+          <td mat-cell *matCellDef="let element">
+            <a href="javascript:void(0)" color="primary" matTooltip="Chỉnh sửa" (click)="openDialog('edit',element)">
+              <mat-icon>edit</mat-icon>
+            </a>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      </table>
+    </div>
+
+  <mat-paginator [pageSizeOptions]="pageSizeOptions" pageSize="pageSize" (page)="onChangePage($event)"
+      [pageIndex]="page" [length]="totalRow" showFirstLastButtons [disabled]="false"
+      aria-label="Select page of appRoles elements">
+    </mat-paginator>
+  </div>
+</mat-card>
+
+
+
+<ng-template #dialog>
+  <form action="" (submit)="addData()" [formGroup]="form">
+    <h2 mat-dialog-title style="margin-bottom: 8px;">{{title}}</h2>
+    <mat-dialog-content class="mat-typography">
+      <mat-form-field appearance="outline">
+        <mat-label>Tên bài viết</mat-label>
+        <input matInput placeholder="Tên loại sản phẩm" formControlName="name" #name maxlength="250">
+        <mat-hint align="end">{{name.value.length}} / 250</mat-hint>
+        <mat-error *ngIf="f('name','required')">Tên bài viết không được bỏ trống</mat-error>
+      </mat-form-field>
+
+        <mat-label>Nội dung <span *ngIf="action=='create' ? true : false " style="color: red;">*</span></mat-label>
+        <editor style="margin-bottom: 16px;" [init]="{
+          base_url: '/tinymce',
+          suffix: '.min'
+        }" [(ngModel)]="contents" [ngModelOptions]="{standalone: true}"></editor>
+
+      <mat-label>Chọn ảnh <span *ngIf="action=='create' ? true : false " style="color: red;">*</span></mat-label>
+      <div class="chose-file-image">
+        <input style="width: 100%;" required type="file" accept="image/*" #file placeholder="Chọn ảnh"  (change)="uploadFile(file.files)"
+          >
+          <!-- <button mat-raised-button color="primary" (click)="file.click()">Chọn ảnh</button> -->
+        <!-- <button type="button" class="btn btn-success" (click)="file.click()">Upload File</button> -->
+      </div>
+      <div style="margin-top: 14px;" *ngIf="action=='create' ? false : true ">
+        <mat-label>Ảnh hiện tại</mat-label>
+        <div>
+          <img style="max-width:250px;width: 100%; height: auto;" *ngIf="model.thumb != null" src="{{urlImage + model.thumb}}" width="200px" height="100px" alt="" srcset="">
+        </div>
+
+      </div>
+
+
+
+    </mat-dialog-content>
+    <mat-checkbox style="margin-top: 8px;" formControlName="published">Đăng bài </mat-checkbox>
+    <mat-dialog-actions align="center">
+      <button mat-stroked-button color="primary"  type="submit">Lưu</button>
+      <button mat-stroked-button color="warn" mat-dialog-close type="button">Đóng</button>
+
+    </mat-dialog-actions>
+  </form>
+
+</ng-template>
+
+
+
+

@@ -1,0 +1,38 @@
+<div style="background-color: #FFFFFF;">
+
+  <div class="content">
+    <section class="featured-plants">
+      <div class="title-featured-plants">
+        <h2>Tin tức</h2>
+      </div>
+      <div class="product-featured-plants">
+        <div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutAlign="flex-start">
+          <ng-container *ngFor="let news of newsPosts" >
+            <div  fxFlex="0 1 calc(33.3% - 32px)"
+          fxFlex.lt-md="0 1 calc(50% - 32px)"
+          fxFlex.lt-sm="100%"  class="product">
+            <div class="cart-top">
+              <a style="cursor: pointer;" (click)="newsPostDetail(news.postId)">
+                <img class="img-product" *ngIf="news.thumb.length==0" width="300px" height="200px" src="../../../assets/images/produc-image-none.png" alt="">
+                <img class="img-product" *ngIf="news.thumb.length>0" width="300px" height="200px" src="{{urlImage + news.thumb}}" alt="" srcset="">
+              </a>
+            </div>
+            <div class="cart-botom">
+
+              <a style="cursor: pointer;" (click)="newsPostDetail(news.postId)"><p class="title-product-name">{{news.name}}</p></a>
+              <p class="category-name">Ngày đăng: {{news.createdDate|date:'HH:mm dd-MM-yyyy'}}</p>
+            </div>
+
+
+          </div>
+
+          </ng-container>
+        </div>
+      </div>
+    </section>
+  </div>
+
+
+
+
+</div>

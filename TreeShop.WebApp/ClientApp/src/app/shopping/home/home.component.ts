@@ -67,6 +67,7 @@ export class HomeComponent implements OnInit {
 
   addShopCart(productId:any){
     let shopCart = localStorage.getItem(SystemConstants.SHOP_CART);
+    this.lstShopCart = [];
     if(shopCart!=null){
       this.lstShopCart = JSON.parse(shopCart);
       var found = false;

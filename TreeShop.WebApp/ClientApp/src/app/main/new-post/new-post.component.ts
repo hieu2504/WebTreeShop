@@ -1,32 +1,24 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { UrlConstants } from './../../core/common/url.constants';
-import { HttpClient, HttpErrorResponse, HttpEventType } from '@angular/common/http';
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { SystemConstants } from 'src/app/core/common/system.constants';
 import { DataService } from 'src/app/core/services/data.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { PaginatorCustomService } from 'src/app/core/services/paginator-custom.service';
-import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
-  selector: 'app-category',
-  templateUrl: './category.component.html',
-  styleUrls: ['./category.component.css']
+  selector: 'app-new-post',
+  templateUrl: './new-post.component.html',
+  styleUrls: ['./new-post.component.css']
 })
-export class CategoryComponent implements OnInit {
-  // form: FormGroup = new FormGroup({
-  //   fullname: new FormControl(''),
-  //   username: new FormControl(''),
-  //   email: new FormControl(''),
-  //   password: new FormControl(''),
-  //   confirmPassword: new FormControl(''),
-  //   acceptTerms: new FormControl(false),
-  // });
-  // submitted = false;
+export class NewPostComponent implements OnInit {
+  contents:any;
+
   form!: FormGroup;
   progress!: number ;
   message!: string ;
@@ -38,7 +30,7 @@ export class CategoryComponent implements OnInit {
   model: any;
   urlImage: any;
 
-  displayedColumns: string[] = ['select', 'position', 'name', 'code', 'description', 'ordering', 'createdDate','updatedDate', 'icon', 'isActive','action'];
+  displayedColumns: string[] = ['select', 'position', 'name','thumb', 'createdDate','updatedDate', 'published','action'];
   dataSource = new MatTableDataSource<any>();
   page = 0;
   keyword: string = '';
@@ -60,11 +52,7 @@ export class CategoryComponent implements OnInit {
     this.form = this.formBuilder.group(
       {
         name: ['', Validators.required],
-        code: ['', Validators.required,
-        ],
-        description: [''],
-        ordering: [1,Validators.required],
-        isActive: [true, Validators.required],
+        published: [true, Validators.required]
       }
 
     );
@@ -81,11 +69,11 @@ this.loadData();
     this.action == '';
     this.form.reset();
     this.dialog.closeAll();
-    this.form.controls['ordering'].setValue(1);
-    this.form.controls['isActive'].setValue(true);
+    this.form.controls['published'].setValue(true);
   }
 
   openDialog(action: string, item?: any, config?: MatDialogConfig) {
+    this.spinner.show();
     this.model = {};
     config = { width: '750px', autoFocus: false }
 
@@ -93,84 +81,73 @@ this.loadData();
     dialogRef.afterClosed().subscribe(result => {
       this.onReset();
     });
+    this.filesToUpload = [];
+
     this.action = action;
     if(action == 'create'){
-
       this.title = "Thêm mới";
+      this.contents = "";
+      this.spinner.hide();
     }else{
-      debugger
+      this.contents=item.contents;
       this.filesToUpload = [];
       this.title = 'Chỉnh sửa';
-      this.model.catId = item.catId;
-      this.spinner.show();
-      this.dataService.get('Category/getbyid/' + this.model.catId).subscribe((data: any) => {
-
-        this.model = data;
-        this.form.controls['name'].setValue(this.model.name);
-        this.form.controls['code'].setValue(this.model.code);
-        this.form.controls['description'].setValue(this.model.description);
-        this.form.controls['ordering'].setValue(this.model.ordering);
-        this.form.controls['isActive'].setValue(this.model.isActive);
-        this.spinner.hide();
-      }, err => {
-        this.notificationService.printErrorMessage('Không tải loại sản phẩm!');
-        this.spinner.hide();
-      });
+      this.model.postId = item.postId;
+      this.model.thumb = item.thumb;
+      this.model.createdDate = item.createdDate;
+      this.model.updatedDate = item.updatedDate;
+      this.form.controls['name'].setValue(item.name);
+      this.form.controls['published'].setValue(item.published);
+      this.spinner.hide();
     }
   }
 
   loadData() {
     this.spinner.show();
-    this.dataService.get('Category/getlistpaging?page=' + this.page + '&pageSize=' + this.pageSize + '&keyword=' + this.keyword).subscribe((data: any) => {
+    this.dataService.get('NewsPost/getlistpaging?page=' + this.page + '&pageSize=' + this.pageSize + '&keyword=' + this.keyword).subscribe((data: any) => {
       this.dataSource = new MatTableDataSource(data.items);
       this.totalRow = data.totalCount;
       this.spinner.hide();
     }, err => {
-      this.notificationService.printErrorMessage('Không tải được danh sách!');
+      this.notificationService.printErrorMessage('Không tải được danh sách');
       this.spinner.hide();
     });
 
   }
 
   search() {
-    this.dataService.get('Category/getlistpaging?page=' + this.page + '&pageSize=' + this.pageSize + '&keyword=' + this.keyword).subscribe((data: any) => {
+    this.dataService.get('NewsPost/getlistpaging?page=' + this.page + '&pageSize=' + this.pageSize + '&keyword=' + this.keyword).subscribe((data: any) => {
       this.dataSource = new MatTableDataSource(data.items);
       this.totalRow = data.totalCount;
     }, err => {
-      this.notificationService.printErrorMessage('Không tải được danh sách!');
+      this.notificationService.printErrorMessage('Không tải được danh sách');
     });
 
   }
 
   addData(){
+
     if (this.form.invalid) {
       return;
     }
-    if(this.filesToUpload.length == 0 && this.action == 'create'){
-      this.notificationService.printErrorMessage('Ảnh không được bỏ trống!');
+    if(this.contents.length == 0&& this.action == 'create'){
+      this.notificationService.printErrorMessage('Nội dung bài viết không được bỏ trống');
       return;
     }
-    debugger
+    if(this.filesToUpload.length == 0 && this.action == 'create'){
+      this.notificationService.printErrorMessage('Ảnh không được bỏ trống');
+      return;
+    }
     this.formData = new FormData();
-    this.formData.append("Code", this.form.controls['code'].value);
     this.formData.append("Name", this.form.controls['name'].value);
-    this.formData.append("Description", this.form.controls['description'].value);
-    this.formData.append("Ordering", this.form.controls['ordering'].value);
-    this.formData.append("IsActive", this.form.controls['isActive'].value);
+    this.formData.append("Contents", this.contents);
+    this.formData.append("Published", this.form.controls['published'].value);
     Array.from(this.filesToUpload).map((file, index) => {
       return this.formData.append('Files', file);
     });
-
-    // this.model.name=this.form.controls['name'].value;
-    // this.model.description=this.form.controls['description'].value;
-    // this.model.status=this.form.controls['status'].value;
-    // if(this.form.controls['image'].value == ''){
-    //   this.form.controls['image'].setValue(null) ;
-    // }
-    // this.model.image=this.form.controls['image'].value;
     this.spinner.show();
     if (this.action == 'create') {
-      this.dataService.postFile('Category/Create', this.formData).subscribe(data => {
+      this.dataService.postFile('NewsPost/Create', this.formData).subscribe(data => {
         this.notificationService.printSuccessMessage('Thêm mới thành công');
         this.loadData();
         this.onReset();
@@ -181,10 +158,11 @@ this.loadData();
       });
     }
     else if (this.action == 'edit') {
-      this.formData.append("CatId", this.model.catId);
+      this.formData.append("PostId", this.model.postId);
+      this.formData.append("Thumb", this.model.thumb);
       this.formData.append("CreatedDate", this.model.createdDate);
-      this.formData.append("Icon", this.model.icon);
-      this.dataService.postFile('Category/Update', this.formData).subscribe(data => {
+      this.formData.append("UpdatedDate", this.model.updatedDate);
+      this.dataService.postFile('NewsPost/Update', this.formData).subscribe(data => {
         this.notificationService.printSuccessMessage('Chỉnh sửa thành công');
         this.loadData();
         this.onReset();
@@ -198,7 +176,7 @@ this.loadData();
   removeData() {
     let roleChecked: any[] = [];
     this.selection.selected.forEach((value: any) => {
-      let id = value.catId;
+      let id = value.postId;
       roleChecked.push(id);
     });
     this.notificationService.printConfirmationDialog('Bạn chắc chắn muốn xóa?', () => this.deleteItemConfirm(JSON.stringify(roleChecked)));
@@ -206,7 +184,7 @@ this.loadData();
 
   deleteItemConfirm(id: string) {
     this.spinner.show();
-    this.dataService.delete('Category/DeleteMulti', 'checkedList', id).subscribe(response => {
+    this.dataService.delete('NewsPost/DeleteMulti', 'checkedList', id).subscribe(response => {
       this.notificationService.printSuccessMessage('Xóa thành công');
       this.selection.clear();
       this.loadData();

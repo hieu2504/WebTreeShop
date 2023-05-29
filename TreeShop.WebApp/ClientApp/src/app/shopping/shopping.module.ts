@@ -36,6 +36,12 @@ const routes: Routes = [  { path: '', component: ShoppingComponent ,children: [
   {
     path: 'product/product-detail/:id', loadChildren: () => import("./product-detail/product-detail.module").then(m => m.ProductDetailModule),
   },
+  {
+    path: 'new-post', loadChildren: () => import("./new-post/new-post.module").then(m => m.NewPostModule),
+  },
+  {
+    path: 'new-post/new-post-detail/:id', loadChildren: () => import("./new-post-detail/new-post-detail.module").then(m => m.NewPostDetailModule),
+  },
 ] }];
 
 @NgModule({

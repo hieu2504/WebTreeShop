@@ -6,13 +6,13 @@
       <div class = "product-imgs">
         <div class = "img-display">
           <div class = "img-showcase">
-            <img src = "{{urlImage + product.productImages[currentImg].imageLink}}" alt = "shoe image">
+            <img src = "{{urlImage + product.productImages[currentImg].imageLink}}" alt = "Đang tải...">
           </div>
         </div>
         <div class = "img-select">
           <div class = "img-item" *ngFor="let productImage of product.productImages;let idx=index;">
             <a (click)="currentImg=idx">
-              <img width="80px" src = "{{urlImage + productImage.imageLink}}" alt = "shoe image">
+              <img width="80px" src = "{{urlImage + productImage.imageLink}}" alt = "Đang tải...">
             </a>
           </div>
 
@@ -31,15 +31,15 @@
           <h2>Mô tả sản phẩm: </h2>
           <p>{{product.description}}</p>
           <ul style="padding: 0px;">
-            <li>Còn lại: <span>in stock</span></li>
-            <li>Loại sản phẩm: <span>Shoes</span></li>
+            <li>Còn lại: <span>{{product.quantity}}</span></li>
+            <li>Loại sản phẩm: <span>{{product.categoryName}}</span></li>
             <li>Khu vực vận chuyển: <span>Mọi nơi trên đất nước Việt Nam</span></li>
             <li>Phí vận chuyển: <span>Miễn phí</span></li>
           </ul>
         </div>
 
         <div class = "purchase-info">
-          <input [(ngModel)]="quantityPro" type="number" min = "1" value = "1">
+          <input [(ngModel)]="quantityPro" type="number" max="{{product.quantity}}" min = "{{quantityMin}}">
           <button type = "button" class = "btn" (click)="addShopCart(product.productId)">
             Thêm vào giỏ hàng <i class = "fas fa-shopping-cart"></i>
           </button>

@@ -136,7 +136,7 @@ namespace TreeShop.Api.Repository
             {
                 var query = (from p in _context.Products
                              join pc in _context.Categories on p.CatId equals pc.CatId
-                             where p.IsActive == true && (p.Name.ToLower().Contains(keyword.ToLower()) || pc.Name.ToLower().Contains(keyword.ToLower()))
+                             where p.IsActive == true && (p.Title.ToLower().Contains(keyword.ToLower()) || pc.Name.ToLower().Contains(keyword.ToLower()))
                              select new ProductMappingModel
                              {
                                  ProductId = p.ProductId,

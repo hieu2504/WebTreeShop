@@ -67,9 +67,10 @@ namespace TreeShop.Api.Controllers
                 var model = _mapper.Map<CategoryViewModel, Category>(categoryViewModel);
                 try
                 {
-                    var imgName = "\\Images\\" + DateTime.Now.ToString("yyyyMMddHHmmss") + categoryViewModel.Files.FileName;
+                    
                     if (categoryViewModel.Files != null)
                     {
+                        var imgName = "\\Images\\" + DateTime.Now.ToString("yyyyMMddHHmmss") + categoryViewModel.Files.FileName;
                         if (!Directory.Exists(_environment.WebRootPath + "\\Images"))
                         {
                             Directory.CreateDirectory(_environment.WebRootPath + "\\Images\\");
@@ -80,8 +81,9 @@ namespace TreeShop.Api.Controllers
                             filestream.Flush();
                             //  return "\\Upload\\" + objFile.files.FileName;
                         }
+                        model.Icon = imgName;
                     }
-                    model.Icon = imgName;
+                    
                     model.CreatedDate = DateTime.Now;
                     model.UpdatedDate = model.CreatedDate;
                     await _categoryService.Add(model);

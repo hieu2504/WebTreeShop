@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { SystemConstants } from 'src/app/core/common/system.constants';
 import { DataService } from 'src/app/core/services/data.service';
@@ -17,12 +18,15 @@ export class ProductComponent implements OnInit {
   keyword: string = '';
   totalRow: number = 0;
   totalPage: number = 0;
-  pageSize = 6;
   products:any;
   productShow:any;
   lstShopCart:any = [];
   categories:any =[];
   categoryFilter:any="";
+  pageSizeOptions: number[] = [3, 12, 18];
+  pageSize = this.pageSizeOptions[0];
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
   constructor(
     private spinner: NgxSpinnerService,
     private pagin: PaginatorCustomService,
@@ -67,7 +71,6 @@ export class ProductComponent implements OnInit {
   }
 
   addShopCart(productId:any){
-    debugger
     let shopCart = localStorage.getItem(SystemConstants.SHOP_CART);
     this.lstShopCart = [];
     if(shopCart!=null){
@@ -84,10 +87,12 @@ export class ProductComponent implements OnInit {
         var item = {Id : productId, OrderQuantity: 1}
         this.lstShopCart.push(item);
       }
+      this.notificationService.printSuccessMessage('Thêm thành công');
       localStorage.setItem(SystemConstants.SHOP_CART, JSON.stringify(this.lstShopCart));
     }else{
       var item = {Id : productId, OrderQuantity: 1}
         this.lstShopCart.push(item);
+        this.notificationService.printSuccessMessage('Thêm thành công');
       localStorage.setItem(SystemConstants.SHOP_CART, JSON.stringify(this.lstShopCart));
     }
   }
@@ -127,4 +132,19 @@ export class ProductComponent implements OnInit {
       });
   }
 
+  hetHang(){
+    this.notificationService.printErrorMessage('Sản phẩm đã hết hàng');
+  }
+  onChangePage(pe: PageEvent) {
+    this.page = pe.pageIndex;
+    this.pageSize = pe.pageSize;
+    this.loadProduct();
+  }
+  ngAfterViewInit() {
+    this.paginator._intl.itemsPerPageLabel = this.pagin.setLable;
+    this.paginator._intl.firstPageLabel = this.pagin.firstButton;
+    this.paginator._intl.nextPageLabel = this.pagin.nextButton;
+    this.paginator._intl.lastPageLabel = this.pagin.lastButton;
+    this.paginator._intl.previousPageLabel = this.pagin.preButton;
+  }
 }

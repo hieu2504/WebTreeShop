@@ -19,7 +19,7 @@ export class ProductDetailComponent implements OnInit {
   id: any;
   product:any;
   newPrice:any;
-
+  quantityMin: any = 0;
   constructor( private route: ActivatedRoute,
     private spinner: NgxSpinnerService,
     private formBuilder: FormBuilder,
@@ -39,6 +39,8 @@ export class ProductDetailComponent implements OnInit {
     this.dataService.getShop('Product/getbyid/' + this.id).subscribe((data: any) => {
       this.product = data;
       this.newPrice =Math.round(this.product.price - this.product.price*this.product.discount/100);
+      this.quantityMin = this.product.quantity > 0? 1:0;
+      this.quantityPro  = this.product.quantity > 0? 1:0;
       console.log(this.product);
       this.spinner.hide();
     }, err => {

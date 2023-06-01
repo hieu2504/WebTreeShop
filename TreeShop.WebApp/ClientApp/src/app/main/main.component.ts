@@ -61,8 +61,8 @@ export class MainComponent implements OnInit, AfterViewInit {
 
       this.account = JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER) as string)
       let user: FoodNode = new FoodNode(11, 'Tài khoản quản trị', 'keyboard_arrow_right', '/main/app-user', null, 1,'4');
-      let role: FoodNode = new FoodNode(12, 'Quyền người dùng', 'keyboard_arrow_right', '/main/app-role', null, 1,'');
-      let system: FoodNode = new FoodNode(1, 'Hệ thống', 'security', null, [user, role], null,'all');
+      //let role: FoodNode = new FoodNode(12, 'Quyền người dùng', 'keyboard_arrow_right', '/main/app-role', null, 1,'');
+      let system: FoodNode = new FoodNode(1, 'Hệ thống', 'security', null, [user, ], null,'all');
       let prCa: FoodNode = new FoodNode(21, 'Loại sản phẩm', 'keyboard_arrow_right', '/main/category', null, 2,'');
       let pr: FoodNode = new FoodNode(22, 'Sản phẩm', 'keyboard_arrow_right', '/main/product', null, 2,'');
       let newPost: FoodNode = new FoodNode(23, 'Tin tức', 'keyboard_arrow_right', '/main/new-post', null, 2,'');

@@ -18,7 +18,8 @@ namespace TreeShop.Api.Service
         Task<ProductMappingModel> GetByIdMapping(int id);
         Task<IQueryable<ProductMappingModel>> GetProductShop(string keyword);
         Task<List<OrderShopViewModel>> GetListOrderShop(List<OrderRequestModel> lst);
-
+        Task<bool> CheckQuantity(int quantity, int productId);
+        Task<Product> GetByIdNoTrasking(int id);
     }
     public class ProductService : IProductService
     {
@@ -100,6 +101,24 @@ namespace TreeShop.Api.Service
         public async Task<List<OrderShopViewModel>> GetListOrderShop(List<OrderRequestModel> lst)
         {
             return await _productRepository.GetListOrderShop(lst);
+        }
+
+        public async Task<bool> CheckQuantity(int quantity, int productId)
+        {
+            Product product = await _productRepository.GetByIdAsync(productId);
+            if(product.Quantity < quantity)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        public async Task<Product> GetByIdNoTrasking(int id)
+        {
+            return await _productRepository.GetByIdNoTrasking(id);
         }
     }
 }

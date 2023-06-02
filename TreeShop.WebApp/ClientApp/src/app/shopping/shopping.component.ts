@@ -19,6 +19,7 @@ export class ShoppingComponent implements OnInit {
     // let shopCart = localStorage.getItem(SystemConstants.SHOP_CART);
     // console.log(shopCart);
     this.getUser();
+    this.scrollToTop();
   }
   public onToggleSidenav = () => {
     // sidenav.toggle().emit();
@@ -40,5 +41,15 @@ export class ShoppingComponent implements OnInit {
   }
   logIn(){
     this.utilityService.navigate(UrlConstants.LOGIN);
+  }
+  scrollToTop() {
+    (function smoothscroll() {
+
+      const currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
+      if (currentScroll > 0) {
+        window.requestAnimationFrame(smoothscroll);
+        window.scrollTo(0, currentScroll - (currentScroll / 5));
+      }
+    })();
   }
 }

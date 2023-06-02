@@ -228,15 +228,19 @@ export class ShopCartComponent implements OnInit,AfterViewInit {
       debugger
       this.dataService.postShop('Order/Create', order).subscribe(data => {
         this.spinner.hide();
-
+        debugger
+        console.log(data);
         this.notification.printSuccessMessage('Đặt hàng thành công');
         // this.router.navigate([UrlConstants.LOGIN])
         this.isThanks = true;
         localStorage.removeItem(SystemConstants.SHOP_CART)
         this.onReset();
       }, err => {
+        debugger
+        console.log(err);
+        this.loadProductOrder();
         this.spinner.hide();
-        this.notification.printErrorMessage(err.error);
+        this.notification.printErrorMessage(err.error.text);
 
       });
 

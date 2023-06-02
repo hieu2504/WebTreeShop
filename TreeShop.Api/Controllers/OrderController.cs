@@ -21,17 +21,19 @@ namespace TreeShop.Api.Controllers
         #region Initial
         private readonly IOrderService _orderService;
         private readonly IOrderDetailService _orderDetailService;
+        private readonly IProductService _productService;
 
         private readonly IMapper _mapper;
         public static IWebHostEnvironment _environment;
 
 
-        public OrderController(IOrderService orderService, IMapper mapper, IWebHostEnvironment environment, IOrderDetailService orderDetailService)
+        public OrderController(IOrderService orderService, IMapper mapper, IWebHostEnvironment environment, IOrderDetailService orderDetailService, IProductService productService)
         {
             _orderService = orderService;
             _mapper = mapper;
             _environment = environment;
             _orderDetailService = orderDetailService;
+            _productService = productService;
         }
         #endregion Initial
 
@@ -73,6 +75,13 @@ namespace TreeShop.Api.Controllers
                     model.OrderDate = DateTime.Now;
                     model.TransactStatusId = 1;
                     model.PaymentId = 1;
+                    foreach (var itemcheck in orderViewModel.lstOrderDetails)
+                    {
+                        if (!await _productService.CheckQuantity((int)itemcheck.Quantity, (int)itemcheck.ProductId))
+                        {
+                            return CreatedAtAction(nameof(Create), "Có sản phẩm không đủ số lượng bạn cần, bạn hãy kiểm tra lại");
+                        }
+                    }
                     var rsOrder = await _orderService.Add(model);
                     if(rsOrder != null)
                     {
@@ -83,11 +92,14 @@ namespace TreeShop.Api.Controllers
                                 var orderDetail = _mapper.Map<OrderDetailViewModel, OrderDetail>(item);
                                 orderDetail.OrderId = rsOrder.OrderId;
                                 await _orderDetailService.Add(orderDetail);
+                                Product product = await _productService.GetByIdNoTrasking((int)orderDetail.ProductId);
+                                product.Quantity = product.Quantity - orderDetail.Quantity;
+                                await _productService.Update(product);
                             }
                         }
                         
                     }
-                    return CreatedAtAction(nameof(Create), new { id = model.OrderId }, model);
+                    return CreatedAtAction(nameof(Create), "Đặt hàng thành công");
                 }
                 catch (Exception ex)
                 {

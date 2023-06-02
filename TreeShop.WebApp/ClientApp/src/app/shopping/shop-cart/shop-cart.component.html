@@ -14,13 +14,14 @@
         <tr style="border-bottom: 1px solid #929292;" *ngFor="let product of orderShop;let indexOfelement=index;">
           <td style="display: flex;">
             <div style="display: flex;flex-direction: column;justify-content: center; padding-right: 8px;">
-              <button style="border-radius: 50%; width: 25px; height: 25px;" (click)="deleteProduct(indexOfelement, product.productId)">X</button>
+              <button class="btn-remove-product" (click)="deleteProduct(indexOfelement, product.productId)">X</button>
             </div>
             <div>
               <img class="img-tb-shop-cart" width="100px" height="100px" src="{{urlImage + product.productImages[0].imageLink}}" alt="" srcset="">
             </div>
             <div style="display: flex;flex-direction: column;justify-content: center; padding: 8px;">
               <p style="margin: 0 0 8px 0;">{{product.title}}</p>
+              <p style="margin: 0 0 8px 0;">Còn lại: {{product.quantity}}</p>
               <p class="shop-cart-tb-p-show" style="margin: 0 0 8px 0; font-weight:bold ;">{{formatCash(product.price.toString())}} <span style="text-decoration: underline;">đ</span></p>
               <p class="shop-cart-tb-p-show" style="margin: 0 0 8px 0; color: red;">- {{product.discount}}%</p>
             </div>

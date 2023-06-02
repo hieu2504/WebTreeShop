@@ -40,6 +40,7 @@ export class ProductComponent implements OnInit {
   ngOnInit(): void {
     this.loadCategory();
     this.loadProduct();
+    this.scrollToTop();
   }
 
   loadProduct(){
@@ -146,5 +147,16 @@ export class ProductComponent implements OnInit {
     this.paginator._intl.nextPageLabel = this.pagin.nextButton;
     this.paginator._intl.lastPageLabel = this.pagin.lastButton;
     this.paginator._intl.previousPageLabel = this.pagin.preButton;
+  }
+
+  scrollToTop() {
+    (function smoothscroll() {
+
+      const currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
+      if (currentScroll > 0) {
+        window.requestAnimationFrame(smoothscroll);
+        window.scrollTo(0, currentScroll - (currentScroll / 5));
+      }
+    })();
   }
 }

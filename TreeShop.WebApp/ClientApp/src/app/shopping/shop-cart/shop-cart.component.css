@@ -39,6 +39,20 @@
   margin-top: 20px;
 }
 
+.btn-remove-product{
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  border: none;
+  background-color: #DC4C64;
+  color: white;
+}
+
+.btn-remove-product:hover{
+  background-color: #db3854;
+  cursor: pointer;
+}
+
 @media(max-width: 950px){
   .shop-cart{
     display: block;

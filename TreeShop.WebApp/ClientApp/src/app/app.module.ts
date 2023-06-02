@@ -11,9 +11,10 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { AuthGuard } from './core/guards/auth.guard';
 import { HttpClientModule } from '@angular/common/http';
+import { OnlyNumberDirective } from './core/common/only-number.directive';
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,OnlyNumberDirective
   ],
   imports: [
     BrowserModule,

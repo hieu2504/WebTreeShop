@@ -99,7 +99,11 @@
       <main style="height: auto; min-height: 80vh;">
         <router-outlet></router-outlet>
 
-
+        <button
+        (click)="scrollToTop()"
+        class="button-scroll-to-top">
+        <mat-icon style="font-size: 20px; line-height: 24px;">arrow_upward</mat-icon>
+      </button>
       </main>
       <footer>
 

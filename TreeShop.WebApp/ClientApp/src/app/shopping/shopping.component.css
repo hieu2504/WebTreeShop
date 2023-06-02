@@ -146,3 +146,23 @@ footer ul li a:hover {
   height: 50px;
   border-radius: 50%;
 }
+
+.button-scroll-to-top {
+  position: fixed;
+  opacity: 1;
+  transition: all .2s ease-in-out;
+  z-index: 1030;
+  right: 30px;
+  bottom: 30px;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  background-color: #DC4C64;
+  color: white;
+  border: none;
+}
+
+.button-scroll-to-top:hover {
+  background-color: #db3854;
+  cursor: pointer;
+}

@@ -12,6 +12,7 @@ namespace TreeShop.Api.Repository
         Task<IQueryable<ProductMappingModel>> GetProductShop(string keyword);
         Task<ProductMappingModel> GetByIdMapping(int id);
         Task<List<OrderShopViewModel>> GetListOrderShop(List<OrderRequestModel> lst);
+        Task<Product> GetByIdNoTrasking(int id);
     }
     public class ProductRepository : RepositoryBase<Product>, IProductRepository
     {
@@ -179,7 +180,7 @@ namespace TreeShop.Api.Repository
                                  Discount = p.Discount,
                                  Title = p.Title,
                                  Quantity = p.Quantity,
-                                 OrderQuantity = item.OrderQuantity,
+                                 OrderQuantity = p.Quantity < item.OrderQuantity ? (int)p.Quantity : item.OrderQuantity,
                                  ProductImages = (from prImg in _context.ProductImages
                                                   where prImg.ProductId == p.ProductId
                                                   select prImg).ToList(),
@@ -188,6 +189,12 @@ namespace TreeShop.Api.Repository
             }
             
             return result;
+        }
+
+        public async Task<Product> GetByIdNoTrasking(int id)
+        {
+            var query = await (from p in _context.Products where p.ProductId == id select p).AsNoTracking().FirstOrDefaultAsync();
+            return query;
         }
     }
 }

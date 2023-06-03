@@ -92,14 +92,22 @@ namespace TreeShop.Api.Controllers
                                 var orderDetail = _mapper.Map<OrderDetailViewModel, OrderDetail>(item);
                                 orderDetail.OrderId = rsOrder.OrderId;
                                 await _orderDetailService.Add(orderDetail);
-                                Product product = await _productService.GetByIdNoTrasking((int)orderDetail.ProductId);
+                                Product product = await _productService.GetById((int)orderDetail.ProductId);
                                 product.Quantity = product.Quantity - orderDetail.Quantity;
-                                await _productService.Update(product);
+                                if(product.Quantity >= 0)
+                                {
+                                    await _productService.Update(product);
+                                }
+                                else
+                                {
+                                    // xoa order thanh cong
+                                }
+                                
                             }
                         }
                         
                     }
-                    return CreatedAtAction(nameof(Create), "Đặt hàng thành công");
+                    return CreatedAtAction(nameof(Create), new { id = model.OrderId }, model);
                 }
                 catch (Exception ex)
                 {

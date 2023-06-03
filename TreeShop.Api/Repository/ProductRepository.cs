@@ -193,7 +193,7 @@ namespace TreeShop.Api.Repository
 
         public async Task<Product> GetByIdNoTrasking(int id)
         {
-            var query = await (from p in _context.Products where p.ProductId == id select p).AsNoTracking().FirstOrDefaultAsync();
+            var query = await (from p in _context.Products where p.ProductId == id select p).FirstOrDefaultAsync();
             return query;
         }
     }

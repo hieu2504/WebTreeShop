@@ -83,10 +83,12 @@ export class HomeComponent implements OnInit {
         var item = {Id : productId, OrderQuantity: 1}
         this.lstShopCart.push(item);
       }
+      this.notificationService.printSuccessMessage('Thêm thành công');
       localStorage.setItem(SystemConstants.SHOP_CART, JSON.stringify(this.lstShopCart));
     }else{
       var item = {Id : productId, OrderQuantity: 1}
         this.lstShopCart.push(item);
+        this.notificationService.printSuccessMessage('Thêm thành công');
       localStorage.setItem(SystemConstants.SHOP_CART, JSON.stringify(this.lstShopCart));
     }
   }
@@ -122,5 +124,9 @@ export class HomeComponent implements OnInit {
         window.scrollTo(0, currentScroll - (currentScroll / 5));
       }
     })();
+  }
+
+  hetHang(){
+    this.notificationService.printErrorMessage('Sản phẩm đã hết hàng');
   }
 }

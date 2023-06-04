@@ -65,7 +65,7 @@ namespace TreeShop.Api.Controllers
         [HttpPost("Create")]
         [AllowAnonymous]
         public async Task<IActionResult> Create(OrderViewModel orderViewModel)
-        {
+            {
             if (ModelState.IsValid)
             {
                 
@@ -83,6 +83,7 @@ namespace TreeShop.Api.Controllers
                         }
                     }
                     var rsOrder = await _orderService.Add(model);
+                    List<OrderDetail> lstOrderDetail = new List<OrderDetail>();
                     if(rsOrder != null)
                     {
                         if (orderViewModel.lstOrderDetails.Count > 0)
@@ -91,16 +92,28 @@ namespace TreeShop.Api.Controllers
                             {
                                 var orderDetail = _mapper.Map<OrderDetailViewModel, OrderDetail>(item);
                                 orderDetail.OrderId = rsOrder.OrderId;
-                                await _orderDetailService.Add(orderDetail);
+                                var resOrderDetail = await _orderDetailService.Add(orderDetail);
+                                
                                 Product product = await _productService.GetById((int)orderDetail.ProductId);
                                 product.Quantity = product.Quantity - orderDetail.Quantity;
                                 if(product.Quantity >= 0)
                                 {
                                     await _productService.Update(product);
+                                    lstOrderDetail.Add(resOrderDetail);
                                 }
                                 else
                                 {
+                                    product.Quantity = product.Quantity + orderDetail.Quantity;
                                     // xoa order thanh cong
+                                    foreach (var itemOrDt in lstOrderDetail)
+                                    {
+                                        Product pro = await _productService.GetById((int)itemOrDt.ProductId);
+                                        pro.Quantity = pro.Quantity + pro.Quantity;
+                                        await _productService.Update(pro);
+                                        await _orderDetailService.Delete(itemOrDt.OrderDetailId);
+                                    }
+                                    await _orderService.Delete(rsOrder.OrderId);
+                                    return CreatedAtAction(nameof(Create), "Có sản phẩm không đủ số lượng bạn cần, bạn hãy kiểm tra lại");
                                 }
                                 
                             }

@@ -136,3 +136,27 @@
 .cart-botom p {
   margin-top: 8px;
 }
+.product-btn-add{
+  width: 130px;
+  border: 1px solid #86c200;
+  background-color: #86c200;
+  color: white;
+  margin-bottom: 16px !important;
+}
+.product-btn-hethang{
+  width: 130px;
+  border: 1px solid #ff3131;
+  background-color: #ff3131;
+  color: white;
+  margin-bottom: 16px !important;
+}
+
+.product-btn-add:hover{
+  background-color: white;
+  color: #86c200;
+}
+
+.product-btn-hethang:hover{
+  background-color: white;
+  color: #ff3131;
+}

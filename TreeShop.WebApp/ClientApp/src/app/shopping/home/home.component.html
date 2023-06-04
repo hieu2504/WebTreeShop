@@ -30,7 +30,8 @@
               <a style="cursor: pointer;" (click)="productDetail(product.productId)"><p class="title-product-name">{{product.title}}</p></a>
               <p class="product-price">{{formatCash(product.price.toString())}} đ</p>
               <p class="product-price-new">{{formatCashNewPrice(product.price,product.discount)}} đ ({{product.discount}}%)</p>
-              <button class="product-btn-add"  mat-raised-button (click)="addShopCart(product.productId)">THÊM VÀO GIỎ</button>
+              <button *ngIf="product.quantity>0" class="product-btn-add"  mat-raised-button (click)="addShopCart(product.productId)">THÊM VÀO GIỎ</button>
+              <button *ngIf="product.quantity==0" class="product-btn-hethang" (click)="hetHang()" mat-raised-button>HẾT HÀNG</button>
             </div>
 
 

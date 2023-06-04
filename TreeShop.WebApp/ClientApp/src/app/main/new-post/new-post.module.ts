@@ -7,7 +7,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { AuthenService } from 'src/app/core/services/authen.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { DataService } from 'src/app/core/services/data.service';
-import { EditorModule } from '@tinymce/tinymce-angular';
+import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
 const routes: Routes = [{path:'',component:NewPostComponent}]
 
 @NgModule({
@@ -21,7 +21,7 @@ const routes: Routes = [{path:'',component:NewPostComponent}]
     NgxSpinnerModule,
     EditorModule
   ],
-  providers:[AuthenService, NotificationService, DataService],
+  providers:[AuthenService, NotificationService, DataService,{ provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' }],
   schemas:[CUSTOM_ELEMENTS_SCHEMA],
 })
 export class NewPostModule { }

@@ -13,12 +13,14 @@ import { DataService } from '../core/services/data.service';
 import { NotificationService } from '../core/services/notification.service';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { NumberDirective } from '../core/common/numbers-only.directive';
+import { DirectivesModule } from '../core/common/directives.module';
 
 
 @NgModule({
   declarations: [
     MainComponent,
-    CheckRoleMenuDirective
+    CheckRoleMenuDirective,
   ],
   imports: [
     CommonModule,
@@ -26,8 +28,10 @@ import { FormsModule } from '@angular/forms';
     FormsModule,
     MainRoutingModule,
     MaterialModule,
+    DirectivesModule
   ],
   providers:[UltillityService, AuthenService, AuthGuard,DataService,NotificationService ],
-  schemas:[NO_ERRORS_SCHEMA]
+  schemas:[NO_ERRORS_SCHEMA],
+  exports:[]
 })
 export class MainModule { }

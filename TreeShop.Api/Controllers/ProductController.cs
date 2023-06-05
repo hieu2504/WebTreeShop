@@ -243,7 +243,7 @@ namespace TreeShop.Api.Controllers
         }
 
         [HttpGet("getlistpaging_shop")]
-        public async Task<IActionResult> GetListPagingShop(int page = 0, int pageSize = 10, string? keyword = null, bool? bestSellers = false)
+        public async Task<IActionResult> GetListPagingShop(int page = 0, int pageSize = 10, string? keyword = null, bool? bestSellers = false, int? catId = 0)
         {
             try
             {
@@ -251,6 +251,10 @@ namespace TreeShop.Api.Controllers
                 if ((bool)bestSellers)
                 {
                     model = model.Where(x => x.BestSellers == bestSellers);
+                }
+                if (catId != 0)
+                {
+                    model = model.Where(x => x.CatId == catId);
                 }
                 int totalRow = 0;
                     

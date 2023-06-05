@@ -19,12 +19,11 @@ export class ProductComponent implements OnInit {
   keyword: string = '';
   totalRow: number = 0;
   totalPage: number = 0;
-  products:any;
-  productShow:any;
+  products:any=[];
   lstShopCart:any = [];
   categories:any =[];
   categoryFilter:any="";
-  pageSizeOptions: number[] = [3, 12, 18];
+  pageSizeOptions: number[] = [6, 12, 18];
   pageSize = this.pageSizeOptions[0];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -60,7 +59,7 @@ export class ProductComponent implements OnInit {
           (data: any) => {
 
             this.products = data.items;
-            this.productShow = data.items;
+            // this.productShow = data.items;
             this.totalRow = data.totalCount;
             this.spinner.hide();
           },
@@ -122,8 +121,32 @@ export class ProductComponent implements OnInit {
   }
 
   filterProduct(catId: any, name:any){
-    this.productShow = this.products.filter((pro:any) => pro.catId ==catId);
-    this.categoryFilter = " / "+name.toUpperCase();
+    this.spinner.show();
+      this.dataService
+        .getShop(
+          'Product/getlistpaging_shop?page=' +
+          this.page +
+          '&pageSize=' +
+          this.pageSize +
+          '&keyword=' +
+          this.keyword+
+          '&catId='+catId
+        )
+        .subscribe(
+          (data: any) => {
+
+            this.products = data.items;
+            // this.productShow = data.items;
+            this.totalRow = data.totalCount;
+            this.spinner.hide();
+          },
+          (err) => {
+            this.notificationService.printErrorMessage(
+              'Không tải được danh sách!'
+            );
+            this.spinner.hide();
+          }
+        );
   }
 
   formatCash(str: any): string {
@@ -154,11 +177,14 @@ export class ProductComponent implements OnInit {
     this.loadProduct();
   }
   ngAfterViewInit() {
-    this.paginator._intl.itemsPerPageLabel = this.pagin.setLable;
-    this.paginator._intl.firstPageLabel = this.pagin.firstButton;
-    this.paginator._intl.nextPageLabel = this.pagin.nextButton;
-    this.paginator._intl.lastPageLabel = this.pagin.lastButton;
-    this.paginator._intl.previousPageLabel = this.pagin.preButton;
+    if(this.products.length>0){
+      this.paginator._intl.itemsPerPageLabel = this.pagin.setLable;
+      this.paginator._intl.firstPageLabel = this.pagin.firstButton;
+      this.paginator._intl.nextPageLabel = this.pagin.nextButton;
+      this.paginator._intl.lastPageLabel = this.pagin.lastButton;
+      this.paginator._intl.previousPageLabel = this.pagin.preButton;
+    }
+
   }
 
   scrollToTop() {
@@ -170,5 +196,9 @@ export class ProductComponent implements OnInit {
         window.scrollTo(0, currentScroll - (currentScroll / 5));
       }
     })();
+  }
+
+  search(){
+    this.loadProduct();
   }
 }

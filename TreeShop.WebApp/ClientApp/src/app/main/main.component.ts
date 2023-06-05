@@ -61,16 +61,16 @@ export class MainComponent implements OnInit, AfterViewInit {
 
       this.account = JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER) as string)
       let user: FoodNode = new FoodNode(11, 'Tài khoản quản trị', 'keyboard_arrow_right', '/main/app-user', null, 1,'4');
-      //let role: FoodNode = new FoodNode(12, 'Quyền người dùng', 'keyboard_arrow_right', '/main/app-role', null, 1,'');
-      let system: FoodNode = new FoodNode(1, 'Hệ thống', 'security', null, [user, ], null,'all');
-      let prCa: FoodNode = new FoodNode(21, 'Loại sản phẩm', 'keyboard_arrow_right', '/main/category', null, 2,'');
-      let pr: FoodNode = new FoodNode(22, 'Sản phẩm', 'keyboard_arrow_right', '/main/product', null, 2,'');
-      let newPost: FoodNode = new FoodNode(23, 'Tin tức', 'keyboard_arrow_right', '/main/new-post', null, 2,'');
-      let cus: FoodNode = new FoodNode(25, 'Khách', 'keyboard_arrow_right', '/main/customer', null, 2,'');
-      let od: FoodNode = new FoodNode(26, 'Đơn hàng', 'keyboard_arrow_right', '/main/order', null, 2,'');
-      let manage: FoodNode = new FoodNode(2, 'Quản lý', 'folder_open', null, [prCa,pr,cus,od,newPost], null,'');
-      let odStt: FoodNode = new FoodNode(31, 'Thống kê doanh thu', 'keyboard_arrow_right', '/main/revenue-statistic', null, 3,'');
-      let statistics: FoodNode = new FoodNode(3, 'Thống kê', 'stacked_line_chart', null, [odStt], null,'');
+      let role: FoodNode = new FoodNode(12, 'Quyền người dùng', 'keyboard_arrow_right', '/main/app-role', null, 1,'4');
+      let system: FoodNode = new FoodNode(1, 'Hệ thống', 'security', null, [user,role ], null,'all');
+      let prCa: FoodNode = new FoodNode(21, 'Loại sản phẩm', 'keyboard_arrow_right', '/main/category', null, 2,'4');
+      let pr: FoodNode = new FoodNode(22, 'Sản phẩm', 'keyboard_arrow_right', '/main/product', null, 2,'4');
+      let newPost: FoodNode = new FoodNode(23, 'Tin tức', 'keyboard_arrow_right', '/main/new-post', null, 2,'4');
+      let cus: FoodNode = new FoodNode(25, 'Khách', 'keyboard_arrow_right', '/main/customer', null, 2,'4');
+      let od: FoodNode = new FoodNode(26, 'Đơn hàng', 'keyboard_arrow_right', '/main/order', null, 2,'4');
+      let manage: FoodNode = new FoodNode(2, 'Quản lý', 'folder_open', null, [prCa,pr,cus,od,newPost], null,'4');
+      let odStt: FoodNode = new FoodNode(31, 'Thống kê doanh thu', 'keyboard_arrow_right', '/main/revenue-statistic', null, 3,'4');
+      let statistics: FoodNode = new FoodNode(3, 'Thống kê', 'stacked_line_chart', null, [odStt], null,'4');
       this.menu = [system, manage,statistics];
       this.dataSource.data = this.menu;
    }

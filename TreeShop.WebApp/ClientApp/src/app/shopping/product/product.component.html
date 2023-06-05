@@ -16,16 +16,26 @@
       </div>
     </div>
     <div class="content-right">
-      <div class="title-featured-plants">
-        <p style="text-align: left;margin-left: 16px;">TRANG CHỦ / SẢN PHẨM{{categoryFilter}}</p>
+      <div class="title-featured-plants" fxLayout.xl="row" fxLayout.lg="row" fxLayout.md="row" fxLayout.xs="column" >
+        <div fxFlex>
+          <p style="text-align: left;margin-left: 16px;">TRANG CHỦ / SẢN PHẨM{{categoryFilter}}</p>
+        </div>
 
+        <div fxFlex style="padding-left: 16px; padding-right: 16px; display: flex; align-items: center;">
+          <mat-form-field appearance="standard" ngClass.md="width100">
+            <mat-label>Tìm kiếm</mat-label>
+            <input matInput [(ngModel)]="keyword" placeholder="Nhập từ khóa..." #inputSearch>
+
+          </mat-form-field>
+          <button class="custom-button" (click)="search()" mat-raised-button color="primary" style="margin-left: 8px !important ; min-width: 50px !important;"><mat-icon>search</mat-icon></button>
+        </div>
       </div>
       <div class="product-featured-plants">
         <div
           fxLayout="row wrap"
           fxLayout.lt-sm="column"
           fxLayoutAlign="flex-start">
-        <ng-container *ngFor="let product of productShow">
+        <ng-container *ngFor="let product of products">
           <div  fxFlex="0 1 calc(33.3% - 32px)"
           fxFlex.lt-md="0 1 calc(50% - 32px)"
           fxFlex.lt-sm="100%"  class="product">
@@ -49,10 +59,16 @@
 
         </ng-container>
         </div>
-        <mat-paginator [pageSizeOptions]="pageSizeOptions" pageSize="pageSize" (page)="onChangePage($event)"
-        [pageIndex]="page" [length]="totalRow" showFirstLastButtons [disabled]="false"
-        aria-label="Select page of appRoles elements">
-      </mat-paginator>
+        <div *ngIf="products.length==0">
+          <h2>Không có sản phẩm nào</h2>
+        </div>
+        <div *ngIf="products.length>0">
+          <mat-paginator [pageSizeOptions]="pageSizeOptions" pageSize="pageSize" (page)="onChangePage($event)"
+          [pageIndex]="page" [length]="totalRow" showFirstLastButtons [disabled]="false"
+          aria-label="Select page of appRoles elements">
+        </mat-paginator>
+        </div>
+
       </div>
     </div>
   </div>

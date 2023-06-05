@@ -157,7 +157,7 @@
         <div fxFlex.gt-md="50" fxFlex.gt-sm="100" class="action-blurb">
           <mat-form-field appearance="outline">
             <mat-label>Tên sản phẩm</mat-label>
-            <input matInput placeholder="Tên sản phẩm" formControlName="name" #name maxlength="100" required>
+            <input matInput placeholder="Tên sản phẩm"  formControlName="name" #name maxlength="100" required>
             <mat-hint align="end">{{name.value.length}} / 100</mat-hint>
             <mat-error *ngIf="f('name').hasError('required')">
               Tên sản phẩm không được bỏ trống!
@@ -169,7 +169,7 @@
         <div fxFlex.gt-md="50" fxFlex.gt-sm="100" class="action-blurb">
           <mat-form-field appearance="outline">
             <mat-label>Mã sản phẩm</mat-label>
-            <input matInput placeholder="Tiêu đề" formControlName="code" #code maxlength="100" required>
+            <input matInput placeholder="Mã sản phẩm"  formControlName="code" #code maxlength="100" required>
             <mat-hint align="end">{{code.value.length}} / 100</mat-hint>
             <mat-error *ngIf="f('code').hasError('required')">
               Mã sản phẩm không được bỏ trống!
@@ -199,7 +199,7 @@
         <div fxFlex.gt-md="50" fxFlex.gt-sm="100" class="action-blurb">
           <mat-form-field appearance="outline">
             <mat-label>Giá</mat-label>
-            <input matInput placeholder="Giá" formControlName="price" #price type="number" required>
+            <input matInput placeholder="Giá" numbersOnly formControlName="price" #price type="number" required>
             <mat-error *ngIf="f('price').hasError('required')">
               Giá không được bỏ trống!
             </mat-error>
@@ -211,7 +211,7 @@
         <div fxFlex.gt-md="50" fxFlex.gt-sm="100" class="action-blurb">
           <mat-form-field appearance="outline">
             <mat-label>Số lượng</mat-label>
-            <input matInput placeholder="Số lượng" formControlName="quantity" #quantity type="number" required>
+            <input matInput placeholder="Số lượng" numbersOnly formControlName="quantity" #quantity type="number" required>
             <mat-error *ngIf="f('quantity').hasError('required')">
               Số lượng không được bỏ trống!
             </mat-error>
@@ -220,7 +220,7 @@
         <div fxFlex.gt-md="50" fxFlex.gt-sm="100" class="action-blurb">
           <mat-form-field appearance="outline">
             <mat-label>Khuyến mãi(%)</mat-label>
-            <input matInput placeholder="Khuyến mãi" formControlName="discount" #discount type="number">
+            <input matInput placeholder="Khuyến mãi" numbersOnly formControlName="discount" #discount type="number">
           </mat-form-field>
         </div>
       </div>

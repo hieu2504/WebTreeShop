@@ -213,11 +213,16 @@ export class ProductComponent implements OnInit {
       return;
     }
     if (this.filesToUpload.length == 0 && this.action == 'create') {
-      this.notificationService.printErrorMessage('Ảnh không được bỏ trống!');
+      this.notificationService.printErrorMessage('Ảnh không được bỏ trống');
       return;
     }
     if (this.filesToUpload.length == 0 && this.action == 'edit' && this.lstUnImage.length == this.model.productImages.length) {
-      this.notificationService.printErrorMessage('Ảnh không được bỏ trống!');
+      this.notificationService.printErrorMessage('Ảnh không được bỏ trống');
+      return;
+    }
+
+    if(this.form.controls['discount'].value>99){
+      this.notificationService.printErrorMessage('Giảm giá không được quá 99%');
       return;
     }
 
@@ -225,11 +230,11 @@ export class ProductComponent implements OnInit {
 
     this.formData.append('Code', this.form.controls['code'].value);
     this.formData.append('Name', this.form.controls['name'].value);
-    this.formData.append('Description', this.form.controls['description'].value);
+    this.formData.append('Description', this.form.controls['description'].value==null?"":this.form.controls['description'].value);
     this.formData.append('CatId', this.form.controls['catId'].value);
     this.formData.append('Price', this.form.controls['price'].value);
     this.formData.append('Discount', this.form.controls['discount'].value);
-    this.formData.append('Tags', this.form.controls['tags'].value);
+    this.formData.append('Tags', this.form.controls['tags'].value==null?"":this.form.controls['tags'].value);
     this.formData.append('Title', this.form.controls['title'].value);
     this.formData.append('Quantity', this.form.controls['quantity'].value);
     this.formData.append('IsActive', this.form.controls['isActive'].value);

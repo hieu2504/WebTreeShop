@@ -3,6 +3,7 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { SystemConstants } from '../core/common/system.constants';
 import { UltillityService } from '../core/services/ultillity.service';
 import { UrlConstants } from '../core/common/url.constants';
+import { CommonService } from '../core/services/common.service';
 
 @Component({
   selector: 'app-shopping',
@@ -12,7 +13,12 @@ import { UrlConstants } from '../core/common/url.constants';
 export class ShoppingComponent implements OnInit {
   countItem: any;
   userInfo:any;
-  constructor(    private utilityService: UltillityService) { }
+  data:any;
+  lstShopCart:any;
+  constructor(private utilityService: UltillityService,private service: CommonService) {
+
+    this.service.data$.subscribe(res => this.data = res)
+   }
 
 
   ngOnInit(): void {
@@ -20,6 +26,18 @@ export class ShoppingComponent implements OnInit {
     // console.log(shopCart);
     this.getUser();
     this.scrollToTop();
+    let shopCart = localStorage.getItem(SystemConstants.SHOP_CART);
+    this.lstShopCart = [];
+    if(shopCart!=null){
+      this.lstShopCart = JSON.parse(shopCart);
+      let totalQuantity = 0;
+      for(var i = 0; i < this.lstShopCart.length; i++) {
+          totalQuantity += this.lstShopCart[i].OrderQuantity;
+      }
+      this.service.changeData(totalQuantity+'');
+    }else{
+      this.service.changeData('0');
+    }
   }
   public onToggleSidenav = () => {
     // sidenav.toggle().emit();

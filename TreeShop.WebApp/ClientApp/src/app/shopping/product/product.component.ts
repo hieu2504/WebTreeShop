@@ -3,6 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { SystemConstants } from 'src/app/core/common/system.constants';
+import { CommonService } from 'src/app/core/services/common.service';
 import { DataService } from 'src/app/core/services/data.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { PaginatorCustomService } from 'src/app/core/services/paginator-custom.service';
@@ -32,7 +33,8 @@ export class ProductComponent implements OnInit {
     private pagin: PaginatorCustomService,
     private formBuilder: FormBuilder,
     private dataService: DataService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private service: CommonService
   ) {
     this.urlImage = SystemConstants.URL_IMAGE;
   }
@@ -90,11 +92,21 @@ export class ProductComponent implements OnInit {
       }
       this.notificationService.printSuccessMessage('Thêm thành công');
       localStorage.setItem(SystemConstants.SHOP_CART, JSON.stringify(this.lstShopCart));
+      let totalQuantity = 0;
+      for(var i = 0; i < this.lstShopCart.length; i++) {
+          totalQuantity += this.lstShopCart[i].OrderQuantity;
+      }
+      this.service.changeData(totalQuantity+'');
     }else{
       var item = {Id : productId, OrderQuantity: 1}
         this.lstShopCart.push(item);
         this.notificationService.printSuccessMessage('Thêm thành công');
       localStorage.setItem(SystemConstants.SHOP_CART, JSON.stringify(this.lstShopCart));
+      let totalQuantity = 0;
+      for(var i = 0; i < this.lstShopCart.length; i++) {
+          totalQuantity += this.lstShopCart[i].OrderQuantity;
+      }
+      this.service.changeData(totalQuantity+'');
     }
   }
 

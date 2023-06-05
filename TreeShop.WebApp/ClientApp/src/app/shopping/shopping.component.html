@@ -62,7 +62,19 @@
                     <a routerLink="new-post" >Tin tức</a>
                   </li>
                   <li>
-                    <a routerLink="shop-cart" ><mat-icon style="vertical-align: middle;">shopping_cart</mat-icon>{{countItem}}</a>
+                    <a  routerLink="shop-cart" >
+                      <div style="width: 35px;">
+                        <!-- <a style="position: absolute;
+                        z-index: -1;" routerLink="shop-cart" ><mat-icon style="vertical-align: middle; font-size: 50px;">shopping_cart</mat-icon>{{countItem}}</a>
+                        <p style="margin: 0; padding: 0;">555</p> -->
+
+                        <div id="absolute">
+                          <div class="centerd">
+                          <span>{{data}}</span>
+                          </div>
+                      </div>
+                      </div>
+                    </a>
                   </li>
                   <li>
                     <button mat-icon-button [matMenuTriggerFor]="dropMenu">

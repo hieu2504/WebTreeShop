@@ -1,6 +1,7 @@
 .headerShop a {
   text-decoration: none;
   color: #222 ;
+  font-size: 16px;
 }
 .headerShop a:hover,.headerShop a:active{
   color: #FC5F5F;
@@ -165,4 +166,21 @@ footer ul li a:hover {
 .button-scroll-to-top:hover {
   background-color: #db3854;
   cursor: pointer;
+}
+
+#absolute {
+  position:absolute;
+  width:35px;
+  height:35px;
+  background:url(../../assets/images/shop-cart.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  display:table;
+}
+
+.centerd {
+  display:table-cell;
+  padding-top: 4px;
+  vertical-align:middle;
+  text-align:center;
 }

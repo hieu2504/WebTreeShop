@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ShoppingComponent } from './shopping.component';
 import { RouterModule, Routes } from '@angular/router';
 import { MaterialModule } from '../main/material/material.module';
+import { CommonService } from '../core/services/common.service';
 const routes: Routes = [  { path: '', component: ShoppingComponent ,children: [
   {
     path: '', redirectTo: 'home', pathMatch: 'full',
@@ -55,6 +56,7 @@ const routes: Routes = [  { path: '', component: ShoppingComponent ,children: [
     CommonModule,
     MaterialModule,
     [RouterModule.forChild(routes)],
-  ]
+  ],
+  providers:[CommonService]
 })
 export class ShoppingModule { }

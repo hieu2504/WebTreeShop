@@ -218,6 +218,7 @@ export class ShopCartComponent implements OnInit,AfterViewInit {
         paymentId:this.paymentId,
         shippingAddress: this.form.controls['address'].value,
         note: this.form.controls['note'].value,
+        phoneNumber: this.form.controls['phoneNumber'].value,
         lstOrderDetails: [{}]
       }
       order.lstOrderDetails = [];

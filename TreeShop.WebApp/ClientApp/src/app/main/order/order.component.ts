@@ -104,6 +104,10 @@ export class OrderComponent implements OnInit,AfterViewInit {
   }
 
   loadData() {
+    if(this.fromDate > this.toDate){
+      this.notificationService.printErrorMessage('Thời gian từ ngày không được lớn hơn đến ngày');
+      return
+    }
     this.spinner.show();
 
     this.dataService.get('Order/getallorder?page=' + this.page + '&pageSize=' + this.pageSize + '&fromDate=' + this.fromDate + '&toDate='+this.toDate
@@ -195,7 +199,8 @@ export class OrderComponent implements OnInit,AfterViewInit {
       transactStatusId: this.form.controls['_transactStatusId'].value,
       payId: this.form.controls['_paymentId'].value,
       note: this.form.controls['_note'].value,
-      shippingAddress: this.form.controls['_shippingAddress'].value
+      shippingAddress: this.form.controls['_shippingAddress'].value,
+      phoneNumber:this.form.controls['_phoneNumber'].value
     };
     this.dataService.post('Order/UpdateOrder', orderUpdate).subscribe(
       (data) => {

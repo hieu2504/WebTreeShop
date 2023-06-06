@@ -87,7 +87,6 @@ export class RevenueStatisticComponent implements OnInit {
   }
 
   formatCash(str: any): string {
-
     return str
       .split('')
       .reverse()

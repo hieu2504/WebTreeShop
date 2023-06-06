@@ -29,6 +29,8 @@ namespace TreeShop.Api.Data
         public int? PaymentId { get; set; }
         [MaxLength(500)]
         public string? ShippingAddress { get; set; }
+        [MaxLength(15)]
+        public string? PhoneNumber { get; set; }
         public string? Note { get; set; }
         public virtual TransactStatus? TransactStatus { get; set; }
         public virtual Payment? Payments { get; set; }

@@ -39,7 +39,7 @@
         </div>
 
         <div class = "purchase-info">
-          <input [(ngModel)]="quantityPro" type="number" max="{{product.quantity}}" min = "{{quantityMin}}">
+          <input  [(ngModel)]="quantityPro" numbersOnly type="number" max="{{product.quantity}}" min = "{{quantityMin}}">
           <button type = "button" class = "btn" (click)="addShopCart(product.productId)">
             Thêm vào giỏ hàng <i class = "fas fa-shopping-cart"></i>
           </button>

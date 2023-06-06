@@ -17,6 +17,7 @@ namespace TreeShop.Api.ViewModel
         public int? PaymentId { get; set; }
         public string? ShippingAddress { get; set; }
         public string? Note { get; set; }
+        public string? PhoneNumber { get; set; }
         public List<OrderDetailViewModel> lstOrderDetails { get; set; }
     }
 }

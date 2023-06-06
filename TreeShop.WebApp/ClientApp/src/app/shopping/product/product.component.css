@@ -109,6 +109,8 @@
   display: inline-block;
   vertical-align: middle;
   border-radius: 8px;
+  max-height: 250px;
+  object-fit: cover;
 }
 @media(max-width: 800px){
   .content{

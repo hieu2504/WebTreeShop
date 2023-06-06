@@ -64,16 +64,17 @@ namespace TreeShop.Api.Service
             }
             if (!string.IsNullOrEmpty(phoneNumber))
             {
-                sql += " and apu.PhoneNumber like ''%" + phoneNumber + "%''";
+                sql += " and od.PhoneNumber like '%" + phoneNumber + "%'";
             }
             sql += " ";
             if (!string.IsNullOrEmpty(fullName))
             {
-                return (await _orderRepository.GetAllOrder(fromDate, toDate, sql)).Where(x => x.FullName.Contains(fullName));
+                return (await _orderRepository.GetAllOrder(fromDate, toDate, sql)).Where(x => x.FullName.ToLower().Contains(fullName.ToLower()));
             }
             else
             {
-                return await _orderRepository.GetAllOrder(fromDate, toDate, sql);
+                var res = await _orderRepository.GetAllOrder(fromDate, toDate, sql);
+                return res;
             }
 
         }

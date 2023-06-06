@@ -382,4 +382,12 @@ export class ProductComponent implements OnInit {
     var index = this.model.productImages.findIndex((x: any) => x.id == id);
     this.model.productImages[index].isActive = true;
   }
+  formatCash(str: any): string {
+    return str
+      .split('')
+      .reverse()
+      .reduce((prev: any, next: any, index: any) => {
+        return (index % 3 ? next : next + ',') + prev;
+      });
+  }
 }

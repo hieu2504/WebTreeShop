@@ -7,5 +7,6 @@
         public int? PayId { get; set; }
         public string Note { get; set; }
         public string ShippingAddress { get; set; }
+        public string? PhoneNumber { get; set; }
     }
 }

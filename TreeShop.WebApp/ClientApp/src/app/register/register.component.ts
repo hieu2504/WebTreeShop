@@ -77,7 +77,7 @@ addData() {
     this.dataService.postShop('ApplicationUser/create-custommer', user).subscribe(data => {
 
       this.spinner.hide();
-      this.notification.printSuccessMessage('Thêm mới thành công');
+      this.notification.printSuccessMessage('Đăng ký thành công');
       this.router.navigate([UrlConstants.LOGIN])
       this.onReset();
 

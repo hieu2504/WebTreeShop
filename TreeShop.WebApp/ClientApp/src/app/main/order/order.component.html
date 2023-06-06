@@ -1,6 +1,6 @@
 <mat-card>
   <div>
-    <mat-card-title color="primary">Loại sản phẩm</mat-card-title>
+    <mat-card-title color="primary">Đơn hàng</mat-card-title>
     <mat-divider></mat-divider>
     <br>
     <br>
@@ -57,7 +57,7 @@
         <mat-form-field appearance="outline" align="end">
           <mat-label>Số điện thoại</mat-label>
           <mat-icon matPrefix> phone</mat-icon>
-          <input type="tel" matInput placeholder="Số điện thoại" maxlength="15" #phoneNumber1 [(ngModel)]="phoneNumber">
+          <input type="tel" matInput numbersOnly placeholder="Số điện thoại" maxlength="15" #phoneNumber1 [(ngModel)]="phoneNumber">
           <mat-hint align="end">{{phoneNumber1.value.length}} / 15</mat-hint>
         </mat-form-field>
       </div>
@@ -154,9 +154,9 @@
         <div fxFlex.gt-md="50" fxFlex.gt-sm="100" class="action-blurb">
           <mat-form-field appearance="outline" align="end">
             <mat-label>Số điện thoại</mat-label>
-            <mat-icon matPrefix> phone</mat-icon>
-            <input readonly type="tel" matInput placeholder="Số điện thoại"
-              maxlength="15" #_phoneNumber formControlName="_phoneNumber" required>
+            <!-- <mat-icon matPrefix> phone</mat-icon> -->
+            <input type="tel" matInput placeholder="Số điện thoại"
+              maxlength="15" #_phoneNumber formControlName="_phoneNumber" numbersOnly required>
             <mat-hint align="end">{{_phoneNumber.value.length}} / 15</mat-hint>
             <mat-error *ngIf="f('_phoneNumber').hasError('required')">
               Số điện thoại không được bỏ trống

@@ -75,7 +75,7 @@
 
         <ng-container matColumnDef="price">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Giá</th>
-          <td mat-cell *matCellDef="let element">{{element.price}}</td>
+          <td mat-cell *matCellDef="let element">{{formatCash(element.price.toString())}}</td>
         </ng-container>
 
         <ng-container matColumnDef="quantity">
@@ -226,7 +226,7 @@
       </div>
         <mat-form-field appearance="outline">
           <mat-label>Mô tả</mat-label>
-          <textarea rows="3" matInput placeholder="Mô tả" formControlName="description" #description maxlength="250"></textarea>
+          <textarea rows="3" matInput placeholder="Mô tả" formControlName="description" #description maxlength="500"></textarea>
           <mat-hint align="end">{{description.value.length}} / 500</mat-hint>
         </mat-form-field>
 

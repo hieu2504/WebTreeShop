@@ -25,10 +25,13 @@ body{
     display: flex;
     width: 100%;
     transition: all 0.5s ease;
+
 }
 .content-product-detail .img-showcase img{
+    width: 100%;
     max-width: 100%;
     height: auto;
+    max-height: 500px;
 }
 .content-product-detail .img-select{
     display: flex;

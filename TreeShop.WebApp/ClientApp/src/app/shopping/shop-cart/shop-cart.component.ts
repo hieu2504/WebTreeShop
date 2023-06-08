@@ -85,6 +85,7 @@ export class ShopCartComponent implements OnInit,AfterViewInit {
   }
 
   loadProductOrder() {
+    this.totalAll = 0;
     let shopCart = localStorage.getItem(SystemConstants.SHOP_CART);
     if (shopCart != null) {
       this.spinner.show();
@@ -229,8 +230,6 @@ export class ShopCartComponent implements OnInit,AfterViewInit {
       debugger
       this.dataService.postShop('Order/Create', order).subscribe(data => {
         this.spinner.hide();
-        debugger
-        console.log(data);
         this.notification.printSuccessMessage('Đặt hàng thành công');
         // this.router.navigate([UrlConstants.LOGIN])
         this.isThanks = true;

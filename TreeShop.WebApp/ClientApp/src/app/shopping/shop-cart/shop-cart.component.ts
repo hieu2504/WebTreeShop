@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { SystemConstants } from 'src/app/core/common/system.constants';
 import { UrlConstants } from 'src/app/core/common/url.constants';
+import { CommonService } from 'src/app/core/services/common.service';
 import { DataService } from 'src/app/core/services/data.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 
@@ -16,12 +17,14 @@ export class ShopCartComponent implements OnInit,AfterViewInit {
   urlImage:any;
   lstShopCart:any =[];
   form!: FormGroup;
+
   constructor(
     private dataService: DataService,
     private notification: NotificationService,
     private formBuilder: FormBuilder,
     private spinner: NgxSpinnerService,
-    private router: Router
+    private router: Router,
+    private service: CommonService
   ) {
     this.urlImage = SystemConstants.URL_IMAGE;
 
@@ -87,21 +90,38 @@ export class ShopCartComponent implements OnInit,AfterViewInit {
   loadProductOrder() {
     this.totalAll = 0;
     let shopCart = localStorage.getItem(SystemConstants.SHOP_CART);
+
     if (shopCart != null) {
+      this.lstShopCart = JSON.parse(shopCart);
+      console.log(this.lstShopCart);
       this.spinner.show();
       this.dataService
         .getShop('Product/getlist_order_shop?strLstOrder=' + shopCart)
         .subscribe(
           (data: any) => {
             this.orderShop = data;
+            console.log(this.orderShop);
             this.orderShop.forEach((element:any) => {
               if(element.discount > 0){
                 this.totalAll += Math.round(element.price*element.orderQuantity - element.price*element.orderQuantity*element.discount/100);
               }else{
                 this.totalAll += Math.round(element.price*element.orderQuantity);
               }
+              for(let i = 0; i<this.lstShopCart.length;i++){
+                if(this.lstShopCart[i].Id == element.productId){
+                  if(this.lstShopCart[i].OrderQuantity > element.quantity){
+                    this.lstShopCart[i].OrderQuantity = element.quantity;
+                  }
+                  break;
+                }
+              }
             });
-
+            localStorage.setItem(SystemConstants.SHOP_CART, JSON.stringify(this.lstShopCart));
+            let totalQuantity = 0;
+            for(var i = 0; i < this.lstShopCart.length; i++) {
+              totalQuantity += this.lstShopCart[i].OrderQuantity;
+            }
+            this.service.changeData(totalQuantity+'');
             this.spinner.hide();
           },
           (err) => {
@@ -151,6 +171,11 @@ export class ShopCartComponent implements OnInit,AfterViewInit {
         }
       }
       localStorage.setItem(SystemConstants.SHOP_CART, JSON.stringify(this.lstShopCart));
+      let totalQuantity = 0;
+      for(var i = 0; i < this.lstShopCart.length; i++) {
+        totalQuantity += this.lstShopCart[i].OrderQuantity;
+      }
+      this.service.changeData(totalQuantity+'');
     }
   }
 
@@ -174,6 +199,13 @@ export class ShopCartComponent implements OnInit,AfterViewInit {
       var i = this.lstShopCart.findIndex((x:any)=>x.Id== this.orderShop[index].productId && x.OrderQuantity==this.orderShop[index].orderQuantity);
       this.lstShopCart.splice(i,1);
       localStorage.setItem(SystemConstants.SHOP_CART, JSON.stringify(this.lstShopCart));
+
+      //Set Số lượng trong giỏ hàng
+      let totalQuantity = 0;
+      for(var j = 0; j < this.lstShopCart.length; j++) {
+        totalQuantity += this.lstShopCart[i].OrderQuantity;
+      }
+      this.service.changeData(totalQuantity+'');
     }
     this.orderShop.splice(index,1);
     this.totalAll = 0;
@@ -233,7 +265,8 @@ export class ShopCartComponent implements OnInit,AfterViewInit {
         this.notification.printSuccessMessage('Đặt hàng thành công');
         // this.router.navigate([UrlConstants.LOGIN])
         this.isThanks = true;
-        localStorage.removeItem(SystemConstants.SHOP_CART)
+        localStorage.removeItem(SystemConstants.SHOP_CART);
+        this.service.changeData('0');
         this.onReset();
       }, err => {
         debugger

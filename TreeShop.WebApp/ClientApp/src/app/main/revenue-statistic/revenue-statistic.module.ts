@@ -7,6 +7,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { AuthenService } from 'src/app/core/services/authen.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { DataService } from 'src/app/core/services/data.service';
+import { DirectivesModule } from 'src/app/core/common/directives.module';
 
 const routes: Routes = [{path:'',component:RevenueStatisticComponent}]
 
@@ -18,7 +19,8 @@ const routes: Routes = [{path:'',component:RevenueStatisticComponent}]
     CommonModule,
     [RouterModule.forChild(routes)],
     MaterialModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    DirectivesModule
   ],
   providers:[AuthenService, NotificationService, DataService,DatePipe],
   schemas:[CUSTOM_ELEMENTS_SCHEMA],

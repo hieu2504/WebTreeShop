@@ -116,7 +116,7 @@
         <ng-container matColumnDef="action" stickyEnd>
           <th mat-header-cell *matHeaderCellDef class="action-col">Thao tác</th>
           <td mat-cell *matCellDef="let element">
-            <a href="javascript:void(0)" color="primary" matTooltip="Chỉnh sửa" (click)="openDialog(element)">
+            <a appCheckRoleBtn [roleNameBtn]="'UpdateOrder'" [users]="userRoles" href="javascript:void(0)" color="primary" matTooltip="Chỉnh sửa" (click)="openDialog(element)">
               <mat-icon>edit</mat-icon>
             </a>
           </td>

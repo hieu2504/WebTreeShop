@@ -141,4 +141,7 @@ mat-divider {
 .un-role-access{
   display: none !important;
 }
+.un-role-btn-access{
+  display: none !important;
+}
 

@@ -1,33 +1,30 @@
 import { Directive, ElementRef, HostBinding, HostListener, Input } from '@angular/core';
 import { SystemConstants } from './system.constants';
-
+// const users = JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER_ROLE)!);
 @Directive({
-  selector: '[appCheckRoleMenu]'
+  selector: '[appCheckRoleBtn]'
 })
-export class CheckRoleMenuDirective  {
+export class CheckRoleBtnDirective  {
 
   constructor(private el: ElementRef) { }
 
-  @Input() roleName = '';
+  @Input() roleNameBtn = '';
   @Input() users = [];
   @HostBinding('class') elementClass = '';
 
-  public checkRole(role: any, users:any){
+  public checkRole(role: any, users: any){
+    debugger
     if(users != null){
-      // if(this.roleName == 'all'){
-      //   this.elementClass = 'role-access';
-      //   return
-      // }
       if(users.find((x: any)=>x===role)){
-        this.elementClass = 'role-access';
+        this.elementClass = 'role-btn-access';
       }else{
-        this.elementClass = 'un-role-access';
+        this.elementClass = 'un-role-btn-access';
       }
     }
   }
 
   ngOnInit():void{
-    this.checkRole(this.roleName,this.users);
+    this.checkRole(this.roleNameBtn,this.users);
   }
 
 }

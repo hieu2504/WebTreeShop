@@ -2,3 +2,6 @@ th, td{
   padding: 8px !important;
   white-space: nowrap;
 }
+.un-role-btn-access{
+  display: none !important;
+}

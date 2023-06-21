@@ -32,8 +32,10 @@ export class AuthenService {
               localStorage.removeItem(SystemConstants.CURRENT_USER_ROLE);
               localStorage.setItem(SystemConstants.CURRENT_USER, JSON.stringify(this.user));
               //this.loadAllMenuUser(this.user);
-              this.userRoleValue();
+              //this.userRoleValue();
+
               return this.user;
+
             }else{
               localStorage.removeItem(SystemConstants.CURRENT_USER_SHOP);
               localStorage.setItem(SystemConstants.CURRENT_USER_SHOP, JSON.stringify(this.user));

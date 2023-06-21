@@ -56,7 +56,7 @@ export class ProductComponent implements OnInit {
   filesToUpload: File[] = [];
   formData = new FormData();
   lstUnImage: any = [];
-
+  userRoles:[];
   constructor(
     private spinner: NgxSpinnerService,
     private dialog: MatDialog,
@@ -79,6 +79,7 @@ export class ProductComponent implements OnInit {
       bestSellers: false,
     });
     this.urlImage = SystemConstants.URL_IMAGE;
+    this.userRoles = JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER_ROLE)!);
   }
   ngOnInit(): void {
     this.loadData();

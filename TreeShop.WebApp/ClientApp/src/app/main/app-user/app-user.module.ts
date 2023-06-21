@@ -10,6 +10,7 @@ import { AuthenService } from 'src/app/core/services/authen.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { DataService } from 'src/app/core/services/data.service';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { DirectivesModule } from 'src/app/core/common/directives.module';
 
 const routes: Routes = [{path:'',component:AppUserComponent}]
 
@@ -26,6 +27,7 @@ const routes: Routes = [{path:'',component:AppUserComponent}]
     NgxMatSelectSearchModule,
     NgxSpinnerModule,
     [RouterModule.forChild(routes)],
+    DirectivesModule
   ],
   providers:[AuthenService, NotificationService, DataService],
   schemas:[CUSTOM_ELEMENTS_SCHEMA]

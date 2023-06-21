@@ -49,7 +49,7 @@ export class OrderComponent implements OnInit,AfterViewInit {
   fullName: any;
   phoneNumber:any;
   totalAll: any = 0;
-
+  userRoles:[];
 
   constructor(private formBuilder: FormBuilder, private dialog: MatDialog,
     private http: HttpClient, private dataService: DataService, private datePipe: DatePipe,
@@ -64,6 +64,7 @@ export class OrderComponent implements OnInit,AfterViewInit {
       _shippingAddress:['',Validators.required],
       _note:['']
     });
+    this.userRoles = JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER_ROLE)!);
   }
 
   ngOnInit(): void {

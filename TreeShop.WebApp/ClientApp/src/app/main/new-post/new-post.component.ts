@@ -1,3 +1,4 @@
+import { UserRoles } from './../../core/common/userRole.pipe';
 import { SelectionModel } from '@angular/cdk/collections';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
@@ -40,12 +41,12 @@ export class NewPostComponent implements OnInit {
   pageSizeOptions: number[] = [5, 10, 25, 100];
   pageSize = this.pageSizeOptions[0];
   selection = new SelectionModel<any>(true, []);
-
+  userRoles = [];
   constructor(private formBuilder: FormBuilder, private dialog: MatDialog,
     private http: HttpClient, private dataService: DataService,
     private notificationService: NotificationService,private pagin: PaginatorCustomService, private spinner: NgxSpinnerService) {
     this.urlImage = SystemConstants.URL_IMAGE;
-
+    this.userRoles = JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER_ROLE)!);
   }
 
   ngOnInit(): void {

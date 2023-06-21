@@ -48,12 +48,13 @@ export class CategoryComponent implements OnInit {
   pageSizeOptions: number[] = [5, 10, 25, 100];
   pageSize = this.pageSizeOptions[0];
   selection = new SelectionModel<any>(true, []);
-
+  userRoles:any;
   constructor(private formBuilder: FormBuilder, private dialog: MatDialog,
     private http: HttpClient, private dataService: DataService,
     private notificationService: NotificationService,private pagin: PaginatorCustomService, private spinner: NgxSpinnerService) {
     this.urlImage = SystemConstants.URL_IMAGE;
 
+    this.userRoles = JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER_ROLE)!);
   }
 
   ngOnInit(): void {
@@ -69,6 +70,7 @@ export class CategoryComponent implements OnInit {
 
     );
 this.loadData();
+
   }
 
   public f = (controlName: string, errorName: string) =>{
@@ -285,6 +287,11 @@ this.loadData();
   }
 
   ngAfterViewInit() {
+    // const button = document.getElementsByClassName("role-btn-access")||HTMLButtonElement;
+    // for(let i = 0; i<button.length;i++){
+    //   button[i].removeAttribute('disabled');
+    // }
+
     this.paginator._intl.itemsPerPageLabel = this.pagin.setLable;
     this.paginator._intl.firstPageLabel = this.pagin.firstButton;
     this.paginator._intl.nextPageLabel = this.pagin.nextButton;

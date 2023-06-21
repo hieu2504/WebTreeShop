@@ -46,7 +46,7 @@
       </button>
       <div id="sidebar">
         <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="example-tree">
-          <mat-tree-node  *matTreeNodeDef="let node" matTreeNodeToggle appCheckRoleMenu [roleName]="node.role"  [style.display]="node.link==='home' ? 'none' : 'flex'">
+          <mat-tree-node  *matTreeNodeDef="let node" matTreeNodeToggle appCheckRoleMenu [roleName]="node.role" [users]="users"  [style.display]="node.link==='home' ? 'none' : 'flex'">
             <button  mat-icon-button disabled></button>
             <mat-icon >{{node.icon}}</mat-icon>
             <a class="tree-main" mat-menu-item routerLink="{{node.link}}" > {{node.menuName}}</a>

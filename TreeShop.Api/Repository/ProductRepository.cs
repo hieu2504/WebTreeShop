@@ -78,6 +78,7 @@ namespace TreeShop.Api.Repository
         public async Task<ProductMappingModel> GetByIdMapping(int id)
         {
             var query = await (from p in _context.Products
+                               join cat in _context.Categories on p.CatId equals cat.CatId
                          where p.ProductId == id
                          select new ProductMappingModel
                          {
@@ -95,6 +96,7 @@ namespace TreeShop.Api.Repository
                              Tags = p.Tags,
                              Title = p.Title,
                              Quantity = p.Quantity,
+                             CategoryName = cat.Name,
                              ProductImages = (from prImg in _context.ProductImages
                                               where prImg.ProductId == id
                                               select prImg).ToList(),

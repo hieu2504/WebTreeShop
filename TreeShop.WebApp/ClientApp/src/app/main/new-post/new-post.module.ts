@@ -8,6 +8,7 @@ import { AuthenService } from 'src/app/core/services/authen.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { DataService } from 'src/app/core/services/data.service';
 import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
+import { DirectivesModule } from 'src/app/core/common/directives.module';
 const routes: Routes = [{path:'',component:NewPostComponent}]
 
 @NgModule({
@@ -19,7 +20,8 @@ const routes: Routes = [{path:'',component:NewPostComponent}]
     [RouterModule.forChild(routes)],
     MaterialModule,
     NgxSpinnerModule,
-    EditorModule
+    EditorModule,
+    DirectivesModule
   ],
   providers:[AuthenService, NotificationService, DataService,{ provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' }],
   schemas:[CUSTOM_ELEMENTS_SCHEMA],

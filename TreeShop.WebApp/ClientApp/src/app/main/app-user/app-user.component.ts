@@ -19,6 +19,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { SelectionModel } from '@angular/cdk/collections';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UrlConstants } from 'src/app/core/common/url.constants';
+import { SystemConstants } from 'src/app/core/common/system.constants';
 
 export interface AppRole {
   id: string;
@@ -83,7 +84,7 @@ export class AppUserComponent implements OnInit, AfterViewInit, OnDestroy {
   isAllChecked = false;
   filteredOptions!: Observable<any[]>;
   users: any;
-
+  userRoles=[];
   constructor(
     private dataService: DataService,
     public dialog: MatDialog,
@@ -95,7 +96,7 @@ export class AppUserComponent implements OnInit, AfterViewInit, OnDestroy {
     this.form = this.formBuilder.group({
       id: '',
       userName: ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
-      password: ['', Validators.compose([Validators.required,Validators.maxLength(50), Validators.minLength(6)])],
+      password: ['', Validators.compose([Validators.required,Validators.maxLength(50), Validators.minLength(8)])],
       fullName: ['', Validators.compose([Validators.required, Validators.maxLength(100)])],
       phoneNumber: '',
       email: ['', Validators.compose([Validators.email, Validators.maxLength(50)])],
@@ -106,7 +107,7 @@ export class AppUserComponent implements OnInit, AfterViewInit, OnDestroy {
       updatedDate: ''
       //emId:['', Validators.compose([Validators.required])]
     });
-
+    this.userRoles = JSON.parse(localStorage.getItem(SystemConstants.CURRENT_USER_ROLE)!);
   }
 
   ngOnInit() {
@@ -176,7 +177,7 @@ export class AppUserComponent implements OnInit, AfterViewInit, OnDestroy {
     // filter the roles
     this.filteredRolesMulti.next(
       this.appRoles.filter(
-        (appRole) => appRole.name.toLowerCase().indexOf(search) > -1
+        (appRole) => appRole.description.toLowerCase().indexOf(search) > -1
       )
     );
   }

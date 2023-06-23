@@ -72,6 +72,10 @@ export class ProductDetailComponent implements OnInit {
       this.notificationService.printErrorMessage('Số lượng không hợp lệ')
       return
     }
+    if(this.quantityPro > this.product.quantity){
+      this.notificationService.printErrorMessage('Không đủ số lượng');
+      return;
+    }
     console.log();
     this.lstShopCart = [];
     let shopCart = localStorage.getItem(SystemConstants.SHOP_CART);
